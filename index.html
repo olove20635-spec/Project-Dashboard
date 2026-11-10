@@ -11,14 +11,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261110-v8-ui">
+<meta name="dashboard-build" content="20261110-v12-polished">
 <title>Project Dashboard</title>
-<link rel="manifest" href="./manifest.json?build=20261110-v9-stable">
+<link rel="manifest" href="./manifest.json?build=20261110-v12-polished">
+
 
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261110-v9-stable";
+  var BUILD = "20261110-v12-polished";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -2051,7 +2052,7 @@ body{background:var(--v8-bg);}
 .detail-buttons,.secondary-actions{isolation:isolate;}
 .detail-buttons button,.secondary-actions button{position:relative!important;z-index:999!important;pointer-events:auto!important;touch-action:manipulation!important;}
 
-/* ===== V11 POPUP / DETAIL FIX ===== */
+/* ===== V12 POPUP / DETAIL FIX ===== */
 /* Keep secondary dialogs above the project detail and center them on phones. */
 #projectModal,#taskModal,#backgroundModal,#confirmModal{z-index:320;}
 @media(max-width:600px){
@@ -2062,7 +2063,7 @@ body{background:var(--v8-bg);}
   #detailModal .detail-hero{padding-top:calc(22px + env(safe-area-inset-top))!important;}
 }
 
-/* ===== V11 MOBILE SAFE AREA + ACTION + TIME BAR ===== */
+/* ===== V12 MOBILE SAFE AREA + ACTION + TIME BAR ===== */
 .time-remaining-wrap{margin-top:10px}.time-remaining-bar{height:7px;border-radius:999px;background:#edf0f5;overflow:hidden}.time-remaining-bar>div{height:100%;border-radius:inherit;background:linear-gradient(90deg,#6737b7,#8a63d2);transition:width .3s ease}.time-remaining-caption{margin-top:6px;font-size:10px;color:#7b8798;font-weight:700}.time-remaining-wrap.overdue .time-remaining-bar>div{background:#dc252b}.time-remaining-wrap.done .time-remaining-bar>div{background:#0b8a50}
 #detailBackgroundBtn,#detailExportBtn{pointer-events:auto!important;touch-action:manipulation!important;position:relative!important;z-index:1001!important}
 @media(max-width:600px){
@@ -2073,6 +2074,14 @@ body{background:var(--v8-bg);}
   .modern-kpi:nth-child(4){min-height:124px!important;}
 }
 
+
+/* ===== V12 POLISHED MOBILE UI ===== */
+.modern-kpi.timeline-kpi{grid-column:1/-1;min-height:138px!important;border-top:4px solid #6737b7!important}
+.timeline-dates{display:flex;align-items:center;gap:10px;margin-top:8px;font-weight:850;font-size:16px;color:#152238}.timeline-arrow{color:#8b97a8;font-size:18px}.timeline-meta{display:flex;justify-content:space-between;gap:10px;margin-top:8px;font-size:10px;font-weight:750;color:#7b8798}.timeline-bar{height:9px;border-radius:999px;background:#edf0f5;overflow:hidden;margin-top:10px}.timeline-bar>div{height:100%;border-radius:inherit;background:linear-gradient(90deg,#173d7a,#6d49c7);transition:width .3s ease}.timeline-kpi.overdue .timeline-bar>div{background:linear-gradient(90deg,#ef7a45,#dc252b)}
+.modern-kpi-icon{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:12px;background:#f1f5fb;font-size:19px;margin-bottom:8px}.contractor-icon{display:flex;align-items:center;justify-content:center}
+#exportReadyModal{z-index:700}.export-ready-card{width:min(92vw,430px);background:#fff;border-radius:28px;box-shadow:0 30px 80px rgba(3,18,40,.28);overflow:hidden;border:1px solid rgba(255,255,255,.6)}.export-ready-head{padding:24px 24px 18px;background:linear-gradient(135deg,#061d3d,#164d8c);color:#fff}.export-ready-icon{width:52px;height:52px;border-radius:17px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:14px}.export-ready-head h3{margin:0;font-size:21px}.export-ready-head p{margin:6px 0 0;font-size:12px;color:rgba(255,255,255,.72)}.export-ready-actions{padding:18px;display:grid;grid-template-columns:1fr 1.35fr;gap:10px}.export-ready-actions .btn{min-height:52px;border-radius:15px}.export-share{background:linear-gradient(135deg,#2f66d7,#123d7d);color:#fff}.export-download{background:#eef2f7;color:#23334a}
+#backgroundModal .modal-box{border:1px solid rgba(255,255,255,.7);box-shadow:0 28px 80px rgba(3,18,40,.28)}#backgroundModal .modal-head{background:linear-gradient(135deg,#061d3d,#164d8c);border-radius:22px 22px 16px 16px}#backgroundModal .bg-preview{border-radius:18px;overflow:hidden;background:#e9eef5}
+@media(max-width:600px){#detailModal{padding-top:calc(env(safe-area-inset-top) + 16px)!important}#detailModal .detail-box{height:calc(100dvh - env(safe-area-inset-top) - 16px)!important;max-height:calc(100dvh - env(safe-area-inset-top) - 16px)!important}.modern-kpi-grid{grid-template-columns:1fr 1fr!important}.export-ready-card{margin:auto}.timeline-dates{font-size:15px}}
 </style>
 </head>
 
@@ -2501,6 +2510,12 @@ body{background:var(--v8-bg);}
   </div>
 </div>
 
+<div id="exportReadyModal" class="modal">
+  <div class="export-ready-card">
+    <div class="export-ready-head"><div class="export-ready-icon">↗</div><h3>Export พร้อมแล้ว</h3><p>เลือกแชร์ภาพหรือบันทึกไฟล์ลงเครื่อง</p></div>
+    <div class="export-ready-actions"><button class="btn export-download" onclick="closeExportReady()">ปิด</button><button class="btn export-share" id="exportShareBtn" onclick="sharePreparedExport()">แชร์ / บันทึกภาพ</button></div>
+  </div>
+</div>
 <script>
 
 /* STORAGE */
@@ -4693,7 +4708,7 @@ function saveProject(){
 
 
 /* ==================================================
-   RESTORED PROJECT / TASK / BACKGROUND ACTIONS (V11)
+   RESTORED PROJECT / TASK / BACKGROUND ACTIONS (V12)
 ================================================== */
 
 function editProject(){
@@ -5053,6 +5068,29 @@ async function deleteTask(
     project.id
   );
 
+}
+
+function updateBackgroundPreview(){
+  const preview=document.getElementById("bgPreview"), text=document.getElementById("bgPreviewText"), guide=document.getElementById("bgGuide"), slider=document.getElementById("bgPositionSlider"), value=document.getElementById("bgPositionValue");
+  if(!preview) return;
+  const has=!!pendingBackgroundImage && !pendingBackgroundRemove;
+  preview.style.backgroundImage=has?`url(${JSON.stringify(pendingBackgroundImage)})`:"";
+  preview.style.backgroundSize="cover"; preview.style.backgroundPosition=`center ${pendingBackgroundPosition}%`;
+  if(text) text.style.display=has?"none":""; if(guide) guide.style.display=has?"block":"none";
+  if(slider) slider.value=String(Math.round(pendingBackgroundPosition)); if(value) value.textContent=Math.round(pendingBackgroundPosition)+"%";
+}
+function changeBackgroundPosition(value){ pendingBackgroundPosition=clamp(Number(value)||0,0,100); updateBackgroundPreview(); }
+function removeProjectBackground(){ pendingBackgroundRemove=true; pendingBackgroundImage=""; updateBackgroundPreview(); }
+async function changeProjectBackground(event){
+  const file=event?.target?.files?.[0]; if(!file) return;
+  if(!file.type.startsWith("image/")){ alert("กรุณาเลือกไฟล์รูปภาพ"); return; }
+  try{
+    const data=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file);});
+    const img=await loadCanvasImage(data); const maxW=1600,maxH=1200,scale=Math.min(1,maxW/img.width,maxH/img.height);
+    const c=document.createElement("canvas");c.width=Math.max(1,Math.round(img.width*scale));c.height=Math.max(1,Math.round(img.height*scale));
+    const x=c.getContext("2d");x.drawImage(img,0,0,c.width,c.height); pendingBackgroundImage=c.toDataURL("image/jpeg",.82); pendingBackgroundRemove=false; updateBackgroundPreview();
+    c.width=1;c.height=1;
+  }catch(err){ console.error(err); alert("ไม่สามารถอ่านรูปภาพนี้ได้ กรุณาลองรูปอื่น"); }
 }
 
 function openBackgroundEditor(){
@@ -5762,41 +5800,12 @@ function openDetail(id){
         </div>
 
 
-        <div class="modern-kpi">
-
-          <div class="modern-kpi-icon">
-            📅
-          </div>
-
-          <div class="modern-kpi-label">
-            กำหนดเสร็จ
-          </div>
-
-          <div class="modern-kpi-value">
-            ${formatDate(project.endDate)}
-          </div>
-
-        </div>
-
-
-        <div class="modern-kpi ${days.cls}">
-
-          <div class="modern-kpi-icon">
-            ◷
-          </div>
-
-          <div class="modern-kpi-label">
-            ระยะเวลาคงเหลือ
-          </div>
-
-          <div class="modern-kpi-value">
-            ${days.text}
-          </div>
-          <div class="time-remaining-wrap ${days.cls}">
-            <div class="time-remaining-bar"><div style="width:${schedule.valid ? schedule.remainingPct : (days.cls === "overdue" ? 100 : 0)}%"></div></div>
-            <div class="time-remaining-caption">${schedule.valid ? schedule.label : (project.endDate ? days.text : "ยังไม่ได้กำหนดวันเริ่ม/สิ้นสุด")}</div>
-          </div>
-
+        <div class="modern-kpi timeline-kpi ${days.cls}">
+          <div class="modern-kpi-icon">◷</div>
+          <div class="modern-kpi-label">ระยะเวลาโครงการ</div>
+          <div class="timeline-dates"><span>${formatDate(project.startDate)}</span><span class="timeline-arrow">→</span><span>${formatDate(project.endDate)}</span></div>
+          <div class="timeline-bar"><div style="width:${schedule.valid ? schedule.elapsedPct : 0}%"></div></div>
+          <div class="timeline-meta"><span>${schedule.valid ? `ผ่านไป ${Math.max(0, schedule.total-schedule.remaining)} จาก ${schedule.total} วัน` : "กรุณาระบุวันเริ่มต้นและวันสิ้นสุด"}</span><strong>${days.text}</strong></div>
         </div>
 
       </div>
@@ -6102,6 +6111,17 @@ function closeDetail(animated=false){
 }
 
 
+let preparedExportBlob=null, preparedExportName="", preparedExportTitle="";
+function closeExportReady(){ const m=document.getElementById("exportReadyModal"); if(m){m.classList.remove("show");m.style.display="";} }
+async function sharePreparedExport(){
+  if(!preparedExportBlob) return;
+  const file=new File([preparedExportBlob],preparedExportName||"project-dashboard.png",{type:"image/png"});
+  if(navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))){
+    try{ await navigator.share({files:[file],title:preparedExportTitle}); return; }catch(e){ if(e?.name==="AbortError") return; console.warn(e); }
+  }
+  const u=URL.createObjectURL(preparedExportBlob),a=document.createElement("a");a.href=u;a.download=preparedExportName||"project-dashboard.png";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),30000);
+}
+
 async function exportProjectImage(){
 
   if(exportProjectBusy){ return; }
@@ -6250,41 +6270,11 @@ async function exportProjectImage(){
     }, "image/png");
   });
 
-  const file = new File([blob], fileName, {type:"image/png"});
-  let shared = false;
-
-  // On phones/tablets, go straight to the native Share Sheet.
-  // Do not navigate to a blob preview page.
-  if(isMobile && navigator.share){
-    try{
-      if(!navigator.canShare || navigator.canShare({files:[file]})){
-        await navigator.share({
-          files:[file],
-          title: project.name || "Project Dashboard"
-        });
-        shared = true;
-      }
-    }catch(shareError){
-      // AbortError = user closed the share sheet; do not force-open a preview.
-      if(shareError && shareError.name === "AbortError"){
-        shared = true;
-      }else{
-        console.warn("Share failed, fallback to download:", shareError);
-      }
-    }
-  }
-
-  if(!shared){
-    const objectUrl = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = objectUrl;
-    link.download = fileName;
-    link.rel = "noopener";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    setTimeout(() => URL.revokeObjectURL(objectUrl), 30000);
-  }
+  preparedExportBlob = blob;
+  preparedExportName = fileName;
+  preparedExportTitle = project.name || "Project Dashboard";
+  const ready=document.getElementById("exportReadyModal");
+  if(ready){ ready.classList.add("show"); ready.style.display="flex"; }
 
   // Release the large backing store as soon as possible.
   canvas.width = 1; canvas.height = 1;
@@ -6292,7 +6282,7 @@ async function exportProjectImage(){
 
   }catch(error){
     console.error("Export error:", error);
-    alert("Export ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
+    alert("Export ไม่สำเร็จ: " + (error?.message || "กรุณาลองใหม่อีกครั้ง"));
   }finally{
     exportProjectBusy = false;
     if(exportButton){ exportButton.disabled = false; exportButton.textContent = exportButtonText || "Export 16:9"; }
