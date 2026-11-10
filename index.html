@@ -2615,26 +2615,42 @@ function normalizeProject(project){
     project.contractorPhone || "";
 
 
-  // Preserve all original fields. Missing description + remark identifies
-  // the older note=description / remark=remark layout.
-  if(project._textFieldsVersion !== 2){
-    const hasDescription = Object.prototype.hasOwnProperty.call(project, "description");
-    const hasRemark = Object.prototype.hasOwnProperty.call(project, "remark");
-    project._originalTextFields = {
-      description: project.description,
-      note: project.note,
-      remark: project.remark
-    };
-    if(!hasDescription && hasRemark){
-      project.description = String(project.note ?? "");
-      project.note = String(project.remark ?? "");
-    }else{
-      project.description = String(project.description ?? "");
-      project.note = String(project.note ?? project.remark ?? "");
-    }
-    // A note-only record is ambiguous: retain it as note without guessing.
-    project._textFieldsVersion = 2;
+  // Canonical text schema:
+  // note   = รายละเอียดโครงการ
+  // remark = หมายเหตุ
+  // Compatibility:
+  // 1) current canonical: note + remark
+  // 2) mistaken older build: description + note
+  // 3) legacy build: note only (note was project description)
+  const hasRemark =
+    Object.prototype.hasOwnProperty.call(project, "remark");
+
+  const legacyDescription =
+    typeof project.description === "string"
+      ? project.description.trim()
+      : "";
+
+  let descriptionText = "";
+  let remarkText = "";
+
+  if(hasRemark){
+    descriptionText = String(project.note ?? "");
+    remarkText = String(project.remark ?? "");
   }
+  else if(legacyDescription !== ""){
+    descriptionText = String(project.description ?? "");
+    remarkText = String(project.note ?? "");
+  }
+  else{
+    descriptionText = String(project.note ?? "");
+    remarkText = "";
+  }
+
+  project.note = descriptionText;
+  project.remark = remarkText;
+  delete project.description;
+  delete project._textFieldsVersion;
+  delete project._originalTextFields;
 
   if(!Array.isArray(project.tasks)){
     project.tasks = [];
@@ -2732,6 +2748,9 @@ function loadData(){
     }
 
   });
+
+  // Persist the migrated canonical schema so future loads stay consistent.
+  saveData();
 
 }
 
@@ -4120,7 +4139,7 @@ function openProjectModal(
       "projectDescription"
     )
     .value =
-      project?.description ||
+      project?.remark ||
       "";
 
 
@@ -4301,7 +4320,7 @@ function saveProject(){
         100
       ),
 
-    description:
+    note:
       document
         .getElementById(
           "projectDescription"
@@ -4309,7 +4328,7 @@ function saveProject(){
         .value
         .trim(),
 
-    note:
+    remark:
       document
         .getElementById(
           "projectNote"
@@ -4341,10 +4360,9 @@ function saveProject(){
       data
     );
 
-    if(Object.prototype.hasOwnProperty.call(project, "remark")){
-      project.remark = project.note;
-    }
-    project._textFieldsVersion = 2;
+    delete project.description;
+    delete project._textFieldsVersion;
+    delete project._originalTextFields;
     project.tasks =
       tasks;
 
@@ -4360,7 +4378,6 @@ function saveProject(){
       id:Date.now(),
 
       ...data,
-      _textFieldsVersion: 2,
 
       tasks:[],
 
@@ -4824,7 +4841,7 @@ function openDetail(id){
 
 
       ${
-        project.description
+        project.note
           ? `
 
             <div class="project-text-card">
@@ -4834,7 +4851,7 @@ function openDetail(id){
               </div>
 
               <div class="project-text-content">
-                ${escapeHTML(project.description)}
+                ${escapeHTML(project.note)}
               </div>
 
             </div>
@@ -4845,7 +4862,7 @@ function openDetail(id){
 
 
       ${
-        project.note
+        project.remark
           ? `
 
             <div class="project-note-card">
@@ -4855,7 +4872,7 @@ function openDetail(id){
               </div>
 
               <div class="project-text-content">
-                ${escapeHTML(project.note)}
+                ${escapeHTML(project.remark)}
               </div>
 
             </div>
@@ -7173,7 +7190,7 @@ else{
 function getProjectDescription(project){
 
   return String(
-    project?.description || ""
+    project?.note || ""
   ).trim();
 
 }
@@ -7182,7 +7199,7 @@ function getProjectDescription(project){
 function getProjectRemark(project){
 
   return String(
-    project?.note || ""
+    project?.remark || ""
   ).trim();
 
 }
