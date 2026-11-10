@@ -9,7 +9,6 @@
 <meta name="apple-mobile-web-app-title" content="Projects">
 
 <title>Project Dashboard</title>
-
 <link rel="manifest" href="./manifest.json">
 
 <style>
@@ -24,11 +23,11 @@
   --accent:#3976d3;
   --accent2:#5b8fe0;
 
-  --bg:#f3f5f8;
-  --card:#ffffff;
+  --bg:#f2f4f8;
+  --card:#fff;
   --text:#18202e;
   --muted:#8d96a6;
-  --line:#e8ebf0;
+  --line:#e7ebf1;
 
   --green:#1d9b63;
   --greenBg:#e8f7ef;
@@ -45,7 +44,7 @@
   --gray:#7b8492;
   --grayBg:#f0f1f3;
 
-  --shadow:0 10px 35px rgba(24,32,46,.08);
+  --shadow:0 12px 35px rgba(24,32,46,.08);
 }
 
 html,body{
@@ -53,23 +52,14 @@ html,body{
   min-height:100%;
   background:var(--bg);
   color:var(--text);
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Tahoma,
-    Arial,
-    sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;
 }
 
 body{
   padding-bottom:calc(90px + env(safe-area-inset-bottom));
 }
 
-button,
-input,
-select,
-textarea{
+button,input,select,textarea{
   font-family:inherit;
 }
 
@@ -77,48 +67,46 @@ button{
   cursor:pointer;
 }
 
-/* ==================================================
-   HEADER
-================================================== */
+/* HEADER */
 
 .header{
   position:relative;
   overflow:hidden;
   color:#fff;
-
-  background:
-    radial-gradient(
-      circle at 90% 0%,
-      rgba(91,143,224,.35),
-      transparent 36%
-    ),
-    linear-gradient(
-      145deg,
-      #121a2b,
-      #263750
-    );
-
   padding:
     calc(18px + env(safe-area-inset-top))
     18px
     26px;
 
   border-radius:0 0 30px 30px;
+
+  background:
+    radial-gradient(
+      circle at 90% 0%,
+      rgba(91,143,224,.38),
+      transparent 36%
+    ),
+    linear-gradient(
+      145deg,
+      #111a2c,
+      #263a59
+    );
+
+  box-shadow:0 10px 30px rgba(20,29,45,.14);
 }
 
 .topbar{
   position:relative;
   z-index:2;
-
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
   gap:16px;
 }
 
 .eyebrow{
   font-size:10px;
-  font-weight:700;
+  font-weight:750;
   letter-spacing:1.7px;
   opacity:.55;
 }
@@ -133,40 +121,32 @@ button{
   flex:none;
   width:44px;
   height:44px;
-
-  border:1px solid rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.10);
   border-radius:14px;
-
-  background:rgba(255,255,255,.11);
   color:#fff;
-
+  background:rgba(255,255,255,.11);
   font-size:27px;
   line-height:1;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
 }
 
-/* ==================================================
-   HEADER KPI
-================================================== */
+/* HEADER KPI */
 
 .kpi-grid{
   position:relative;
   z-index:2;
-
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:9px;
-
   margin-top:22px;
 }
 
 .kpi{
   min-width:0;
-
   padding:13px 14px;
-
   border:1px solid rgba(255,255,255,.07);
   border-radius:18px;
-
   background:rgba(255,255,255,.085);
   backdrop-filter:blur(10px);
   -webkit-backdrop-filter:blur(10px);
@@ -179,9 +159,8 @@ button{
 
 .kpi-value{
   margin-top:4px;
-
   font-size:22px;
-  font-weight:800;
+  font-weight:850;
   line-height:1.25;
 }
 
@@ -189,14 +168,11 @@ button{
   font-size:19px;
 }
 
-/* ==================================================
-   OVERALL PROGRESS
-================================================== */
+/* OVERALL */
 
 .overall{
   position:relative;
   z-index:2;
-
   margin-top:19px;
 }
 
@@ -218,11 +194,8 @@ button{
 
 .overall-bar{
   height:9px;
-
   margin-top:8px;
-
   overflow:hidden;
-
   border-radius:30px;
   background:rgba(255,255,255,.13);
 }
@@ -230,43 +203,31 @@ button{
 .overall-fill{
   width:0;
   height:100%;
-
   border-radius:30px;
-
-  background:linear-gradient(
-    90deg,
-    #fff,
-    #dfeaff
-  );
-
+  background:linear-gradient(90deg,#fff,#dfeaff);
   transition:width .35s ease;
 }
 
-/* ==================================================
-   CONTENT
-================================================== */
+/* CONTENT */
 
 .content{
   width:100%;
   max-width:760px;
-
   margin:auto;
   padding:20px 13px;
 }
 
 .section-head{
   display:flex;
-  justify-content:space-between;
   align-items:center;
-
+  justify-content:space-between;
   margin-bottom:13px;
 }
 
 .section-head h2{
   margin:0;
-
   font-size:18px;
-  font-weight:800;
+  font-weight:850;
 }
 
 .section-head span{
@@ -275,36 +236,38 @@ button{
 }
 
 .project-list{
+  position:relative;
   display:grid;
   gap:13px;
 }
 
-/* ==================================================
-   PROJECT CARD
-================================================== */
+/* PROJECT CARD */
 
 .project-card{
   --bg-y:50%;
 
   position:relative;
   overflow:hidden;
-
   min-height:210px;
-
   padding:17px;
 
   border:1px solid rgba(24,32,46,.035);
   border-radius:23px;
 
   background:#fff;
-
   box-shadow:var(--shadow);
 
   cursor:pointer;
 
+  touch-action:pan-y;
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+
   transition:
     transform .18s ease,
-    box-shadow .18s ease;
+    box-shadow .18s ease,
+    opacity .18s ease;
 }
 
 .project-card:active{
@@ -313,7 +276,6 @@ button{
 
 .project-card.has-bg{
   color:#fff;
-
   background-size:cover;
   background-repeat:no-repeat;
   background-position:center var(--bg-y);
@@ -321,17 +283,15 @@ button{
 
 .project-card.has-bg::before{
   content:"";
-
   position:absolute;
   inset:0;
-
   z-index:0;
 
   background:
     linear-gradient(
       125deg,
-      rgba(11,18,31,.90) 0%,
-      rgba(11,18,31,.67) 54%,
+      rgba(11,18,31,.91) 0%,
+      rgba(11,18,31,.68) 54%,
       rgba(11,18,31,.45) 100%
     );
 }
@@ -339,6 +299,34 @@ button{
 .project-card > *{
   position:relative;
   z-index:1;
+}
+
+.project-card.dragging{
+  z-index:50;
+  opacity:.92;
+  transform:scale(1.025);
+  box-shadow:0 25px 60px rgba(15,28,48,.28);
+}
+
+.project-card.drop-before::after,
+.project-card.drop-after::after{
+  content:"";
+  position:absolute;
+  z-index:20;
+  left:12px;
+  right:12px;
+  height:4px;
+  border-radius:999px;
+  background:var(--accent);
+  box-shadow:0 0 0 4px rgba(57,118,211,.13);
+}
+
+.project-card.drop-before::after{
+  top:2px;
+}
+
+.project-card.drop-after::after{
+  bottom:2px;
 }
 
 .card-head{
@@ -353,17 +341,16 @@ button{
 }
 
 .project-name{
+  padding-right:8px;
   font-size:17px;
-  font-weight:800;
+  font-weight:850;
   line-height:1.42;
 }
 
 .project-location{
   margin-top:4px;
-
   font-size:11px;
   line-height:1.45;
-
   color:var(--muted);
 }
 
@@ -371,9 +358,7 @@ button{
   display:flex;
   align-items:center;
   gap:5px;
-
   margin-top:6px;
-
   font-size:10px;
   color:#6d7787;
 }
@@ -383,25 +368,65 @@ button{
   color:rgba(255,255,255,.76);
 }
 
-/* ==================================================
-   STATUS
-================================================== */
+/* DRAG HANDLE */
+
+.drag-handle{
+  position:absolute !important;
+  z-index:10 !important;
+  top:50%;
+  right:6px;
+
+  width:25px;
+  height:48px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  transform:translateY(-50%);
+
+  border-radius:13px;
+
+  color:#9aa4b2;
+  background:rgba(255,255,255,.75);
+
+  font-size:16px;
+  font-weight:900;
+  letter-spacing:-3px;
+
+  opacity:.42;
+
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+
+.project-card.has-bg .drag-handle{
+  color:#fff;
+  background:rgba(10,17,30,.34);
+}
+
+.project-card:hover .drag-handle{
+  opacity:.9;
+}
+
+/* STATUS */
 
 .status{
   display:inline-flex;
   align-items:center;
+  justify-content:center;
 
   width:max-content;
   max-width:100%;
 
-  white-space:nowrap;
-
   padding:6px 9px;
 
-  border-radius:30px;
+  border-radius:999px;
+
+  white-space:nowrap;
 
   font-size:9px;
-  font-weight:800;
+  font-weight:850;
 }
 
 .status.active{
@@ -429,15 +454,12 @@ button{
   background:var(--orangeBg);
 }
 
-/* ==================================================
-   CARD PROGRESS
-================================================== */
+/* CARD PROGRESS */
 
 .progress-row{
   display:flex;
   justify-content:space-between;
   align-items:flex-end;
-
   margin-top:18px;
 }
 
@@ -457,26 +479,16 @@ button{
 
 .card-bar{
   height:8px;
-
   margin-top:7px;
-
   overflow:hidden;
-
   border-radius:30px;
-
   background:#edf0f3;
 }
 
 .card-fill{
   height:100%;
-
   border-radius:30px;
-
-  background:linear-gradient(
-    90deg,
-    var(--navy),
-    var(--accent)
-  );
+  background:linear-gradient(90deg,var(--navy),var(--accent));
 }
 
 .project-card.has-bg .card-bar{
@@ -486,10 +498,6 @@ button{
 .project-card.has-bg .card-fill{
   background:#fff;
 }
-
-/* ==================================================
-   DAYS
-================================================== */
 
 .time-left{
   display:flex;
@@ -503,7 +511,6 @@ button{
   border-radius:13px;
 
   background:#f6f7f9;
-
   color:#697181;
 
   font-size:10px;
@@ -511,10 +518,8 @@ button{
 
 .time-left strong{
   color:var(--text);
-
   font-size:12px;
-  font-weight:800;
-
+  font-weight:850;
   text-align:right;
 }
 
@@ -541,10 +546,6 @@ button{
   background:rgba(255,255,255,.92);
 }
 
-/* ==================================================
-   CARD FOOTER
-================================================== */
-
 .card-bottom{
   display:flex;
   justify-content:space-between;
@@ -562,7 +563,7 @@ button{
 
 .project-value{
   font-size:13px;
-  font-weight:800;
+  font-weight:850;
 }
 
 .detail-link{
@@ -574,13 +575,8 @@ button{
   color:rgba(255,255,255,.72);
 }
 
-/* ==================================================
-   EMPTY
-================================================== */
-
 .empty{
   padding:55px 20px;
-
   text-align:center;
   color:var(--muted);
 }
@@ -590,16 +586,12 @@ button{
   font-size:40px;
 }
 
-/* ==================================================
-   FLOATING BUTTON
-================================================== */
+/* FAB */
 
 .fab{
   position:fixed;
-
   right:20px;
   bottom:calc(22px + env(safe-area-inset-bottom));
-
   z-index:20;
 
   width:59px;
@@ -609,27 +601,19 @@ button{
   border-radius:20px;
 
   color:#fff;
-  background:linear-gradient(
-    145deg,
-    var(--navy),
-    #2d405f
-  );
+  background:linear-gradient(145deg,var(--navy),#2d405f);
 
   font-size:29px;
 
   box-shadow:0 12px 30px rgba(23,32,51,.30);
 }
 
-/* ==================================================
-   MODAL
-================================================== */
+/* MODAL */
 
 .modal{
   display:none;
-
   position:fixed;
   inset:0;
-
   z-index:100;
 
   align-items:center;
@@ -640,10 +624,10 @@ button{
     15px
     calc(18px + env(safe-area-inset-bottom));
 
-  background:rgba(8,15,28,.58);
+  background:rgba(7,14,27,.68);
 
-  backdrop-filter:blur(5px);
-  -webkit-backdrop-filter:blur(5px);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
 }
 
 .modal.show{
@@ -652,54 +636,120 @@ button{
 
 .modal-box,
 .detail-box{
+  position:relative;
+
   width:100%;
-  max-width:570px;
-  max-height:91vh;
+  max-width:590px;
+  max-height:92vh;
 
   overflow-y:auto;
+  overflow-x:hidden;
+
   -webkit-overflow-scrolling:touch;
 
-  border-radius:25px;
+  border:1px solid rgba(255,255,255,.72);
+  border-radius:27px;
 
-  background:#fff;
+  background:#f4f6f9;
 
-  box-shadow:0 30px 70px rgba(0,0,0,.22);
+  box-shadow:
+    0 35px 90px rgba(5,12,25,.32),
+    0 8px 30px rgba(5,12,25,.15);
 }
 
 .modal-box{
-  padding:20px;
+  padding:0 20px 22px;
 }
 
-.detail-box{
-  padding:0;
-}
+/* MODERN MODAL HEADER */
 
-.modal-head{
+.modal-box > .modal-head{
+  position:sticky;
+  top:0;
+  z-index:30;
+
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:12px;
 
-  margin-bottom:18px;
+  margin:0 -20px 18px;
+  padding:19px 20px 17px;
+
+  color:#fff;
+
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(91,143,224,.42),
+      transparent 48%
+    ),
+    linear-gradient(
+      135deg,
+      #141d30,
+      #2c405f
+    );
+
+  border-radius:26px 26px 19px 19px;
+
+  box-shadow:0 8px 25px rgba(23,32,51,.12);
 }
 
 .modal-head h2{
   margin:0;
+  font-size:20px;
+  font-weight:850;
+}
+
+.modal-box > .modal-head h2{
+  color:#fff;
+}
+
+.close{
+  flex:none;
+
+  width:38px;
+  height:38px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:0;
+
+  border:0;
+  border-radius:13px;
+
+  background:#eef0f3;
+
+  color:#343b47;
 
   font-size:20px;
-  font-weight:800;
+  line-height:1;
+}
+
+.modal-box > .modal-head .close{
+  color:#fff;
+  background:rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.10);
+}
+
+/* DETAIL CLOSE */
+
+.detail-box{
+  padding:0;
 }
 
 .detail-box > .modal-head{
   position:sticky;
   top:0;
-
-  z-index:30;
-
-  justify-content:flex-end;
+  z-index:50;
 
   height:0;
   margin:0;
+
+  display:flex;
+  justify-content:flex-end;
 
   overflow:visible;
 }
@@ -708,40 +758,20 @@ button{
   position:absolute;
   top:14px;
   right:14px;
+  z-index:60;
 
   color:#fff;
-  background:rgba(10,17,30,.52);
+  background:rgba(8,15,27,.56);
 
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.16);
+
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+
+  box-shadow:0 5px 18px rgba(0,0,0,.18);
 }
 
-.close{
-  flex:none;
-
-  width:36px;
-  height:36px;
-
-  border:0;
-  border-radius:12px;
-
-  background:#f0f1f3;
-
-  font-size:19px;
-}
-
-/* ==================================================
-   FORM
-================================================== */
-
-label{
-  display:block;
-
-  margin:14px 0 6px;
-
-  font-size:11px;
-  font-weight:750;
-}
+/* FORM */
 
 .form-section-title{
   display:flex;
@@ -750,22 +780,26 @@ label{
 
   margin:22px 0 4px;
 
-  color:#556174;
+  color:#56647a;
 
   font-size:10px;
-  font-weight:800;
+  font-weight:850;
   letter-spacing:.7px;
   text-transform:uppercase;
 }
 
 .form-section-title::after{
   content:"";
-
   flex:1;
-
   height:1px;
+  background:#dfe4eb;
+}
 
-  background:var(--line);
+label{
+  display:block;
+  margin:14px 0 6px;
+  font-size:11px;
+  font-weight:750;
 }
 
 input,
@@ -775,26 +809,34 @@ textarea{
 
   padding:12px 13px;
 
-  border:1.5px solid #e1e5ea;
+  border:1.5px solid #dfe4eb;
   border-radius:13px;
 
   outline:none;
 
-  background:#fafbfc;
+  background:#fff;
 
-  font-size:15px;
   color:var(--text);
+  font-size:15px;
+
+  box-shadow:0 2px 7px rgba(24,32,46,.025);
+
+  transition:
+    border-color .18s ease,
+    box-shadow .18s ease,
+    background .18s ease;
 }
 
 input:focus,
 select:focus,
 textarea:focus{
-  border-color:#8ea0bd;
+  border-color:#8aa5cf;
   background:#fff;
+  box-shadow:0 0 0 4px rgba(57,118,211,.08);
 }
 
 textarea{
-  min-height:82px;
+  min-height:90px;
   resize:vertical;
 }
 
@@ -813,11 +855,11 @@ textarea{
 
 input[type="range"]{
   padding:0;
+  box-shadow:none;
 }
 
 .progress-number{
   text-align:center;
-
   font-size:16px;
   font-weight:850;
 }
@@ -828,7 +870,7 @@ input[type="range"]{
 
   border-radius:12px;
 
-  background:#f1f5fb;
+  background:#edf3fc;
   color:#60708b;
 
   font-size:10px;
@@ -839,43 +881,43 @@ input[type="range"]{
   display:grid;
   grid-template-columns:1fr 1.7fr;
   gap:9px;
-
   margin-top:23px;
 }
 
 .btn{
-  border:0;
-  border-radius:13px;
+  min-height:46px;
 
-  padding:14px 10px;
+  border:0;
+  border-radius:14px;
+
+  padding:13px 10px;
 
   font-size:13px;
-  font-weight:800;
+  font-weight:850;
 }
 
 .cancel{
   color:#555d69;
-  background:#eef0f3;
+  background:#e9edf2;
 }
 
 .save{
   color:#fff;
-  background:var(--navy);
+  background:linear-gradient(145deg,#172033,#2e4568);
 }
 
-/* ==================================================
-   DETAIL HERO
-================================================== */
+/* DETAIL HERO */
 
 .detail-hero{
   --bg-y:50%;
 
   position:relative;
+  isolation:isolate;
   overflow:hidden;
 
-  min-height:260px;
+  min-height:285px;
 
-  padding:24px 22px;
+  padding:24px 22px 22px;
 
   color:#fff;
 
@@ -897,27 +939,23 @@ input[type="range"]{
 
 .detail-hero.has-bg::before{
   content:"";
-
   position:absolute;
   inset:0;
-
-  z-index:0;
+  z-index:-1;
 
   background:
     linear-gradient(
       180deg,
-      rgba(8,14,25,.16) 0%,
-      rgba(8,14,25,.30) 38%,
-      rgba(8,14,25,.91) 100%
+      rgba(8,14,25,.12) 0%,
+      rgba(8,14,25,.23) 35%,
+      rgba(8,14,25,.82) 76%,
+      rgba(8,14,25,.96) 100%
     );
 }
 
-.detail-hero > *{
-  position:relative;
-  z-index:1;
-}
-
 .detail-hero-top{
+  position:relative;
+
   display:flex;
   justify-content:space-between;
   align-items:flex-end;
@@ -929,18 +967,74 @@ input[type="range"]{
   flex:1;
 }
 
+/* STATUS DETAIL TOP RIGHT */
+
+.detail-status{
+  position:absolute;
+  top:17px;
+  right:62px;
+  z-index:15;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  width:auto;
+  max-width:190px;
+
+  padding:7px 12px;
+
+  border-radius:999px;
+
+  white-space:nowrap;
+
+  font-size:9px;
+  font-weight:850;
+
+  box-shadow:0 5px 18px rgba(0,0,0,.13);
+}
+
+.detail-status.active{
+  color:#2467c8;
+  background:rgba(237,245,255,.96);
+}
+
+.detail-status.done{
+  color:#168653;
+  background:rgba(232,247,239,.96);
+}
+
+.detail-status.delay{
+  color:#d54444;
+  background:rgba(255,237,237,.96);
+}
+
+.detail-status.wait{
+  color:#68717d;
+  background:rgba(242,243,245,.96);
+}
+
+.detail-status.pause{
+  color:#d67c13;
+  background:rgba(255,244,228,.96);
+}
+
 .detail-title{
-  margin-top:10px;
+  margin:0;
 
   font-size:24px;
   line-height:1.35;
-  font-weight:850;
+  font-weight:900;
+
+  overflow-wrap:anywhere;
+
+  text-shadow:0 2px 12px rgba(0,0,0,.20);
 }
 
 .detail-location{
-  margin-top:5px;
+  margin-top:6px;
 
-  color:rgba(255,255,255,.76);
+  color:rgba(255,255,255,.77);
 
   font-size:12px;
   line-height:1.45;
@@ -949,15 +1043,13 @@ input[type="range"]{
 .detail-contractor-line{
   margin-top:7px;
 
-  color:rgba(255,255,255,.82);
+  color:rgba(255,255,255,.84);
 
   font-size:11px;
   line-height:1.4;
 }
 
-/* ==================================================
-   HERO DONUT
-================================================== */
+/* HERO DONUT */
 
 .hero-donut{
   --progress:0;
@@ -965,8 +1057,8 @@ input[type="range"]{
   position:relative;
   flex:none;
 
-  width:116px;
-  height:116px;
+  width:112px;
+  height:112px;
 
   border-radius:50%;
 
@@ -980,7 +1072,7 @@ input[type="range"]{
       rgba(255,255,255,.20) 0
     );
 
-  box-shadow:0 8px 30px rgba(0,0,0,.16);
+  box-shadow:0 8px 30px rgba(0,0,0,.17);
 }
 
 .hero-donut::before{
@@ -988,12 +1080,12 @@ input[type="range"]{
 
   position:absolute;
 
-  width:89px;
-  height:89px;
+  width:86px;
+  height:86px;
 
   border-radius:50%;
 
-  background:rgba(20,30,48,.90);
+  background:rgba(20,30,48,.91);
 
   backdrop-filter:blur(8px);
   -webkit-backdrop-filter:blur(8px);
@@ -1002,7 +1094,6 @@ input[type="range"]{
 .hero-donut-content{
   position:relative;
   z-index:2;
-
   text-align:center;
 }
 
@@ -1021,19 +1112,24 @@ input[type="range"]{
   color:rgba(255,255,255,.62);
 }
 
-/* ==================================================
-   DETAIL BODY
-================================================== */
+/* DETAIL BODY */
 
 .modern-detail-body{
-  padding:18px;
+  padding:16px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #f2f4f8,
+      #f7f8fa
+    );
 }
 
 .main-progress-card{
   padding:16px;
 
-  border:1px solid #edf0f4;
-  border-radius:18px;
+  border:1px solid #e8edf3;
+  border-radius:19px;
 
   background:#fff;
 
@@ -1044,7 +1140,6 @@ input[type="range"]{
   display:flex;
   justify-content:space-between;
   align-items:center;
-
   margin-bottom:10px;
 }
 
@@ -1061,36 +1156,24 @@ input[type="range"]{
 
 .main-progress-bar{
   height:11px;
-
   overflow:hidden;
-
   border-radius:30px;
-
   background:#edf0f4;
 }
 
 .main-progress-fill{
   height:100%;
-
   border-radius:30px;
-
-  background:linear-gradient(
-    90deg,
-    var(--navy),
-    var(--accent)
-  );
+  background:linear-gradient(90deg,var(--navy),var(--accent));
 }
 
-/* ==================================================
-   MODERN KPI
-================================================== */
+/* DETAIL KPI */
 
 .modern-kpi-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:10px;
-
-  margin-top:12px;
+  margin-top:11px;
 }
 
 .modern-kpi{
@@ -1098,7 +1181,7 @@ input[type="range"]{
 
   padding:14px;
 
-  border:1px solid #edf0f4;
+  border:1px solid #e8edf3;
   border-radius:17px;
 
   background:#fff;
@@ -1156,30 +1239,29 @@ input[type="range"]{
   color:var(--green);
 }
 
-/* ==================================================
-   CONTRACTOR
-================================================== */
+/* CONTRACTOR */
 
 .contractor-card{
-  margin-top:12px;
+  margin-top:11px;
   padding:15px;
 
-  border:1px solid #e8edf3;
+  border:1px solid #e2e8f0;
   border-radius:18px;
 
   background:
     linear-gradient(
       145deg,
-      #f8fafc,
+      #fff,
       #f2f6fb
     );
+
+  box-shadow:0 5px 18px rgba(24,32,46,.04);
 }
 
 .contractor-head{
   display:flex;
   align-items:center;
   gap:10px;
-
   margin-bottom:11px;
 }
 
@@ -1202,13 +1284,11 @@ input[type="range"]{
 
 .contractor-label{
   color:var(--muted);
-
   font-size:9px;
 }
 
 .contractor-name{
   margin-top:2px;
-
   font-size:14px;
   font-weight:850;
 }
@@ -1221,43 +1301,36 @@ input[type="range"]{
 
 .contractor-contact{
   padding:9px 10px;
-
   border-radius:11px;
-
-  background:rgba(255,255,255,.76);
+  background:rgba(255,255,255,.82);
 }
 
 .contractor-contact small{
   display:block;
-
   margin-bottom:3px;
-
   color:var(--muted);
-
   font-size:8px;
 }
 
 .contractor-contact strong{
   display:block;
-
   font-size:11px;
   line-height:1.35;
-
   overflow-wrap:anywhere;
 }
 
-/* ==================================================
-   PROJECT DESCRIPTION / NOTE
-================================================== */
+/* TEXT */
 
 .project-text-card{
-  margin-top:12px;
+  margin-top:11px;
   padding:14px;
 
-  border:1px solid #edf0f4;
-  border-radius:16px;
+  border:1px solid #e8edf3;
+  border-radius:17px;
 
   background:#fff;
+
+  box-shadow:0 4px 15px rgba(24,32,46,.035);
 }
 
 .project-text-title{
@@ -1266,7 +1339,7 @@ input[type="range"]{
   color:#687385;
 
   font-size:10px;
-  font-weight:800;
+  font-weight:850;
 }
 
 .project-text-content{
@@ -1282,10 +1355,15 @@ input[type="range"]{
   margin-top:10px;
   padding:14px;
 
-  border:1px solid #ffe3b7;
-  border-radius:16px;
+  border:1px solid #f3d7a8;
+  border-radius:17px;
 
-  background:#fff9ef;
+  background:
+    linear-gradient(
+      145deg,
+      #fffaf1,
+      #fff6e7
+    );
 }
 
 .project-note-card .project-text-title{
@@ -1296,9 +1374,7 @@ input[type="range"]{
   color:#755124;
 }
 
-/* ==================================================
-   TASK OVERVIEW
-================================================== */
+/* TASK OVERVIEW */
 
 .task-overview{
   display:grid;
@@ -1306,13 +1382,15 @@ input[type="range"]{
   gap:16px;
   align-items:center;
 
-  margin-top:18px;
+  margin-top:16px;
   padding:16px;
 
-  border:1px solid #edf0f4;
+  border:1px solid #e8edf3;
   border-radius:19px;
 
   background:#fff;
+
+  box-shadow:0 4px 18px rgba(24,32,46,.035);
 }
 
 .task-donut{
@@ -1354,7 +1432,6 @@ input[type="range"]{
 .task-donut-content{
   position:relative;
   z-index:2;
-
   text-align:center;
 }
 
@@ -1365,15 +1442,12 @@ input[type="range"]{
 
 .task-donut-label{
   margin-top:2px;
-
   color:var(--muted);
-
   font-size:8px;
 }
 
 .task-overview-title{
   margin-bottom:9px;
-
   font-size:13px;
   font-weight:850;
 }
@@ -1396,9 +1470,7 @@ input[type="range"]{
 .legend-dot{
   width:8px;
   height:8px;
-
   flex:none;
-
   border-radius:50%;
 }
 
@@ -1408,9 +1480,7 @@ input[type="range"]{
 .legend-dot.delay{background:var(--red);}
 .legend-dot.pause{background:var(--orange);}
 
-/* ==================================================
-   TASK LIST
-================================================== */
+/* TASK */
 
 .task-section{
   margin-top:19px;
@@ -1429,7 +1499,6 @@ input[type="range"]{
 
 .task-summary{
   color:var(--muted);
-
   font-size:10px;
   font-weight:600;
 }
@@ -1442,7 +1511,7 @@ input[type="range"]{
 .task{
   padding:14px;
 
-  border:1px solid #e9edf2;
+  border:1px solid #e7ebf1;
   border-radius:16px;
 
   background:#fff;
@@ -1458,7 +1527,6 @@ input[type="range"]{
 
 .task-name{
   min-width:0;
-
   font-size:12px;
   font-weight:800;
   line-height:1.45;
@@ -1466,7 +1534,6 @@ input[type="range"]{
 
 .task-pct{
   flex:none;
-
   font-size:13px;
   font-weight:900;
 }
@@ -1513,39 +1580,22 @@ input[type="range"]{
 
 .task-bar{
   height:7px;
-
   margin-top:9px;
-
   overflow:hidden;
-
   border-radius:20px;
-
   background:#edf0f3;
 }
 
 .task-bar div{
   height:100%;
-
   border-radius:20px;
-
   background:var(--blue);
 }
 
-.task.status-done .task-bar div{
-  background:var(--green);
-}
-
-.task.status-delay .task-bar div{
-  background:var(--red);
-}
-
-.task.status-wait .task-bar div{
-  background:#a4abb5;
-}
-
-.task.status-pause .task-bar div{
-  background:var(--orange);
-}
+.task.status-done .task-bar div{background:var(--green);}
+.task.status-delay .task-bar div{background:var(--red);}
+.task.status-wait .task-bar div{background:#a4abb5;}
+.task.status-pause .task-bar div{background:var(--orange);}
 
 .task-note{
   margin-top:8px;
@@ -1565,7 +1615,6 @@ input[type="range"]{
 .task-actions{
   display:flex;
   gap:15px;
-
   margin-top:10px;
 }
 
@@ -1573,27 +1622,18 @@ input[type="range"]{
 .task-delete{
   font-size:9px;
   font-weight:700;
-
   cursor:pointer;
 }
 
-.task-edit{
-  color:var(--blue);
-}
+.task-edit{color:var(--blue);}
+.task-delete{color:var(--red);}
 
-.task-delete{
-  color:var(--red);
-}
-
-/* ==================================================
-   DETAIL ACTIONS
-================================================== */
+/* ACTIONS */
 
 .detail-buttons{
   display:grid;
   grid-template-columns:.8fr 1fr 1.5fr;
   gap:8px;
-
   margin-top:18px;
 }
 
@@ -1604,25 +1644,24 @@ input[type="range"]{
 
 .edit-btn{
   color:var(--text);
-  background:#eef0f3;
+  background:#e9edf2;
 }
 
 .task-btn{
   color:#fff;
-  background:var(--navy);
+  background:linear-gradient(145deg,#172033,#2e4568);
 }
 
 .secondary-actions{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:8px;
-
   margin-top:9px;
 }
 
 .background-btn{
   color:#315e9e;
-  background:#eef3fb;
+  background:#eaf1fb;
 }
 
 .export-btn{
@@ -1630,9 +1669,7 @@ input[type="range"]{
   background:#2d6cdf;
 }
 
-/* ==================================================
-   BACKGROUND EDITOR
-================================================== */
+/* BACKGROUND */
 
 .bg-preview{
   --bg-y:50%;
@@ -1651,7 +1688,7 @@ input[type="range"]{
   border:1px dashed #d8dde5;
   border-radius:18px;
 
-  background-color:#f3f5f8;
+  background-color:#eef1f5;
   background-size:cover;
   background-repeat:no-repeat;
   background-position:center var(--bg-y);
@@ -1717,7 +1754,7 @@ input[type="range"]{
 
   border-radius:14px;
 
-  background:#f6f8fb;
+  background:#edf1f6;
 }
 
 .bg-position-head{
@@ -1734,15 +1771,12 @@ input[type="range"]{
 
 .bg-position-head strong{
   color:var(--text);
-
   font-size:11px;
 }
 
 .bg-note{
   margin-top:9px;
-
   color:var(--muted);
-
   font-size:10px;
   line-height:1.5;
 }
@@ -1751,7 +1785,6 @@ input[type="range"]{
   display:grid;
   grid-template-columns:1fr 1.4fr;
   gap:9px;
-
   margin-top:15px;
 }
 
@@ -1760,9 +1793,71 @@ input[type="range"]{
   background:var(--redBg);
 }
 
-/* ==================================================
-   MOBILE
-================================================== */
+/* MOBILE */
+
+@media(max-width:600px){
+
+  .modal{
+    align-items:flex-end;
+    padding:
+      8px
+      7px
+      calc(7px + env(safe-area-inset-bottom));
+  }
+
+  .modal-box,
+  .detail-box{
+    max-width:none;
+    max-height:94vh;
+    border-radius:26px 26px 18px 18px;
+  }
+
+  .modal-box{
+    padding:0 15px 18px;
+  }
+
+  .modal-box > .modal-head{
+    margin:0 -15px 17px;
+    padding:18px 16px 16px;
+    border-radius:25px 25px 18px 18px;
+  }
+
+  .detail-hero{
+    min-height:270px;
+    padding:20px 17px 19px;
+  }
+
+  .detail-status{
+    top:14px;
+    right:58px;
+  }
+
+  .detail-title{
+    font-size:21px;
+  }
+
+  .hero-donut{
+    width:100px;
+    height:100px;
+  }
+
+  .hero-donut::before{
+    width:77px;
+    height:77px;
+  }
+
+  .hero-donut-value{
+    font-size:22px;
+  }
+
+  .modern-detail-body{
+    padding:12px;
+  }
+
+  .project-card .drag-handle{
+    opacity:.48;
+  }
+}
 
 @media(max-width:430px){
 
@@ -1774,28 +1869,6 @@ input[type="range"]{
   .content{
     padding-left:10px;
     padding-right:10px;
-  }
-
-  .detail-title{
-    font-size:21px;
-  }
-
-  .hero-donut{
-    width:103px;
-    height:103px;
-  }
-
-  .hero-donut::before{
-    width:79px;
-    height:79px;
-  }
-
-  .hero-donut-value{
-    font-size:22px;
-  }
-
-  .modern-detail-body{
-    padding:13px;
   }
 
   .task-overview{
@@ -1817,7 +1890,6 @@ input[type="range"]{
   .contractor-contact-grid{
     grid-template-columns:1fr;
   }
-
 }
 
 @media(max-width:360px){
@@ -1827,13 +1899,13 @@ input[type="range"]{
   }
 
   .hero-donut{
-    width:92px;
-    height:92px;
+    width:90px;
+    height:90px;
   }
 
   .hero-donut::before{
-    width:70px;
-    height:70px;
+    width:69px;
+    height:69px;
   }
 
   .hero-donut-value{
@@ -1847,40 +1919,24 @@ input[type="range"]{
   .task-overview{
     grid-template-columns:1fr;
   }
-
-  .task-legend{
-    grid-template-columns:1fr 1fr;
-  }
-
 }
 </style>
 </head>
 
 <body>
 
-<!-- ==================================================
-     HEADER
-================================================== -->
-
 <header class="header">
 
   <div class="topbar">
-
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
       <h1>Project Dashboard</h1>
     </div>
 
-    <button
-      class="add-top"
-      onclick="openProjectModal()"
-      aria-label="เพิ่มโครงการ"
-    >
+    <button class="add-top" onclick="openProjectModal()" aria-label="เพิ่มโครงการ">
       +
     </button>
-
   </div>
-
 
   <div class="kpi-grid">
 
@@ -1906,119 +1962,64 @@ input[type="range"]{
 
   </div>
 
-
   <div class="overall">
 
     <div class="overall-top">
-
-      <div class="overall-label">
-        ความคืบหน้ารวม
-      </div>
-
-      <div
-        class="overall-percent"
-        id="overallPercent"
-      >
-        0%
-      </div>
-
+      <div class="overall-label">ความคืบหน้ารวม</div>
+      <div class="overall-percent" id="overallPercent">0%</div>
     </div>
 
     <div class="overall-bar">
-      <div
-        id="overallFill"
-        class="overall-fill"
-      ></div>
+      <div id="overallFill" class="overall-fill"></div>
     </div>
 
   </div>
 
 </header>
 
-
-<!-- ==================================================
-     PROJECT LIST
-================================================== -->
-
 <main class="content">
 
   <div class="section-head">
-
     <h2>โครงการของฉัน</h2>
-
     <span id="todayText"></span>
-
   </div>
 
-  <div
-    id="projectList"
-    class="project-list"
-  ></div>
+  <div id="projectList" class="project-list"></div>
 
 </main>
 
-
-<button
-  class="fab"
-  onclick="openProjectModal()"
-  aria-label="เพิ่มโครงการ"
->
+<button class="fab" onclick="openProjectModal()" aria-label="เพิ่มโครงการ">
   +
 </button>
 
+<!-- PROJECT MODAL -->
 
-<!-- ==================================================
-     PROJECT FORM
-================================================== -->
-
-<div
-  id="projectModal"
-  class="modal"
->
+<div id="projectModal" class="modal">
 
   <div class="modal-box">
 
     <div class="modal-head">
-
-      <h2 id="projectModalTitle">
-        เพิ่มโครงการ
-      </h2>
-
-      <button
-        class="close"
-        onclick="closeProjectModal()"
-      >
-        ×
-      </button>
-
+      <h2 id="projectModalTitle">เพิ่มโครงการ</h2>
+      <button class="close" onclick="closeProjectModal()">×</button>
     </div>
 
-
-    <div class="form-section-title">
-      ข้อมูลโครงการ
-    </div>
-
+    <div class="form-section-title">ข้อมูลโครงการ</div>
 
     <label>ชื่อโครงการ</label>
-
     <input
       id="projectName"
       type="text"
       placeholder="เช่น งานติดตั้งระบบไฟฟ้าโรงคัดไข่"
     >
 
-
     <label>สถานที่ / ลูกค้า</label>
-
     <input
       id="projectLocation"
       type="text"
       placeholder="เช่น โรงคัดไข่นครปฐม"
     >
 
-
     <label>มูลค่าโครงการ (บาท)</label>
-
     <input
       id="projectValue"
       type="number"
@@ -2027,115 +2028,63 @@ input[type="range"]{
       placeholder="เช่น 339000"
     >
 
-
-    <!-- CONTRACTOR -->
-
-    <div class="form-section-title">
-      บริษัทรับเหมา
-    </div>
-
+    <div class="form-section-title">บริษัทรับเหมา</div>
 
     <label>ชื่อบริษัทรับเหมา</label>
-
     <input
       id="contractorCompany"
       type="text"
       placeholder="เช่น ABC Engineering Co., Ltd."
     >
 
-
     <div class="two">
 
       <div>
-
         <label>ผู้ประสานงาน</label>
-
         <input
           id="contractorContact"
           type="text"
           placeholder="ชื่อผู้ติดต่อ"
         >
-
       </div>
 
-
       <div>
-
         <label>เบอร์โทรศัพท์</label>
-
         <input
           id="contractorPhone"
           type="tel"
           inputmode="tel"
           placeholder="08x-xxx-xxxx"
         >
-
       </div>
 
     </div>
 
-
-    <!-- SCHEDULE -->
-
-    <div class="form-section-title">
-      แผนงาน
-    </div>
-
+    <div class="form-section-title">แผนงาน</div>
 
     <div class="two">
 
       <div>
-
         <label>วันที่เริ่ม</label>
-
-        <input
-          id="startDate"
-          type="date"
-        >
-
+        <input id="startDate" type="date">
       </div>
 
-
       <div>
-
         <label>กำหนดเสร็จ</label>
-
-        <input
-          id="endDate"
-          type="date"
-        >
-
+        <input id="endDate" type="date">
       </div>
 
     </div>
 
-
     <label>สถานะ</label>
 
     <select id="projectStatus">
-
-      <option value="active">
-        กำลังดำเนินการ
-      </option>
-
-      <option value="wait">
-        ยังไม่เริ่ม
-      </option>
-
-      <option value="done">
-        เสร็จแล้ว
-      </option>
-
-      <option value="delay">
-        ล่าช้า
-      </option>
-
-      <option value="pause">
-        พักงาน
-      </option>
-
+      <option value="active">กำลังดำเนินการ</option>
+      <option value="wait">ยังไม่เริ่ม</option>
+      <option value="done">เสร็จแล้ว</option>
+      <option value="delay">ล่าช้า</option>
+      <option value="pause">พักงาน</option>
     </select>
-
 
     <label>ความคืบหน้า</label>
 
@@ -2150,32 +2099,21 @@ input[type="range"]{
         oninput="updateProgressLabel()"
       >
 
-      <div
-        id="progressLabel"
-        class="progress-number"
-      >
+      <div id="progressLabel" class="progress-number">
         0%
       </div>
 
     </div>
-
 
     <div
       id="projectProgressHint"
       class="auto-progress-info"
       style="display:none;"
     >
-      โครงการนี้มีรายการงานแล้ว
-      ความคืบหน้าจะคำนวณจากรายการงานอัตโนมัติ
+      โครงการนี้มีรายการงานแล้ว ความคืบหน้าจะคำนวณจากรายการงานอัตโนมัติ
     </div>
 
-
-    <!-- DESCRIPTION + NOTE -->
-
-    <div class="form-section-title">
-      รายละเอียด
-    </div>
-
+    <div class="form-section-title">รายละเอียด</div>
 
     <label>รายละเอียดโครงการ</label>
 
@@ -2184,7 +2122,6 @@ input[type="range"]{
       placeholder="รายละเอียด ขอบเขตงาน หรือข้อมูลสำคัญของโครงการ"
     ></textarea>
 
-
     <label>หมายเหตุ</label>
 
     <textarea
@@ -2192,50 +2129,29 @@ input[type="range"]{
       placeholder="หมายเหตุ ปัญหา สิ่งที่ต้องติดตาม หรือข้อมูลเพิ่มเติม"
     ></textarea>
 
-
     <div class="modal-buttons">
 
-      <button
-        class="btn cancel"
-        onclick="closeProjectModal()"
-      >
+      <button class="btn cancel" onclick="closeProjectModal()">
         ยกเลิก
       </button>
 
-      <button
-        class="btn save"
-        onclick="saveProject()"
-      >
+      <button class="btn save" onclick="saveProject()">
         บันทึก
       </button>
 
     </div>
 
   </div>
-
 </div>
 
+<!-- DETAIL -->
 
-<!-- ==================================================
-     PROJECT DETAIL
-================================================== -->
-
-<div
-  id="detailModal"
-  class="modal"
->
+<div id="detailModal" class="modal">
 
   <div class="detail-box">
 
     <div class="modal-head">
-
-      <button
-        class="close"
-        onclick="closeDetail()"
-      >
-        ×
-      </button>
-
+      <button class="close" onclick="closeDetail()">×</button>
     </div>
 
     <div id="detailContent"></div>
@@ -2244,15 +2160,9 @@ input[type="range"]{
 
 </div>
 
+<!-- TASK MODAL -->
 
-<!-- ==================================================
-     TASK FORM
-================================================== -->
-
-<div
-  id="taskModal"
-  class="modal"
->
+<div id="taskModal" class="modal">
 
   <div class="modal-box">
 
@@ -2262,15 +2172,13 @@ input[type="range"]{
         เพิ่มรายการงาน
       </h2>
 
-      <button
-        class="close"
-        onclick="closeTaskModal()"
-      >
+      <button class="close" onclick="closeTaskModal()">
         ×
       </button>
 
     </div>
 
+    <div class="form-section-title">ข้อมูลรายการงาน</div>
 
     <label>รายการงาน</label>
 
@@ -2280,36 +2188,18 @@ input[type="range"]{
       placeholder="เช่น ติดตั้ง Duct"
     >
 
-
     <label>สถานะงาน</label>
 
     <select
       id="taskStatus"
       onchange="taskStatusChanged()"
     >
-
-      <option value="active">
-        กำลังดำเนินการ
-      </option>
-
-      <option value="wait">
-        ยังไม่เริ่ม
-      </option>
-
-      <option value="done">
-        เสร็จแล้ว
-      </option>
-
-      <option value="delay">
-        ล่าช้า
-      </option>
-
-      <option value="pause">
-        พักงาน
-      </option>
-
+      <option value="active">กำลังดำเนินการ</option>
+      <option value="wait">ยังไม่เริ่ม</option>
+      <option value="done">เสร็จแล้ว</option>
+      <option value="delay">ล่าช้า</option>
+      <option value="pause">พักงาน</option>
     </select>
-
 
     <label>ความคืบหน้า</label>
 
@@ -2333,7 +2223,6 @@ input[type="range"]{
 
     </div>
 
-
     <label>หมายเหตุ</label>
 
     <textarea
@@ -2341,20 +2230,13 @@ input[type="range"]{
       placeholder="รายละเอียด ปัญหา หรือสิ่งที่ต้องติดตาม"
     ></textarea>
 
-
     <div class="modal-buttons">
 
-      <button
-        class="btn cancel"
-        onclick="closeTaskModal()"
-      >
+      <button class="btn cancel" onclick="closeTaskModal()">
         ยกเลิก
       </button>
 
-      <button
-        class="btn save"
-        onclick="saveTask()"
-      >
+      <button class="btn save" onclick="saveTask()">
         บันทึกงาน
       </button>
 
@@ -2364,23 +2246,15 @@ input[type="range"]{
 
 </div>
 
+<!-- BACKGROUND -->
 
-<!-- ==================================================
-     PROJECT BACKGROUND EDITOR
-================================================== -->
-
-<div
-  id="backgroundModal"
-  class="modal"
->
+<div id="backgroundModal" class="modal">
 
   <div class="modal-box">
 
     <div class="modal-head">
 
-      <h2>
-        ภาพพื้นหลังโครงการ
-      </h2>
+      <h2>ภาพพื้นหลังโครงการ</h2>
 
       <button
         class="close"
@@ -2390,7 +2264,6 @@ input[type="range"]{
       </button>
 
     </div>
-
 
     <div
       id="bgPreview"
@@ -2409,10 +2282,7 @@ input[type="range"]{
 
     </div>
 
-
-    <label>
-      เลือก / เปลี่ยนภาพ
-    </label>
+    <label>เลือก / เปลี่ยนภาพ</label>
 
     <input
       id="backgroundFile"
@@ -2421,14 +2291,11 @@ input[type="range"]{
       onchange="changeProjectBackground(event)"
     >
 
-
     <div class="bg-position-panel">
 
       <div class="bg-position-head">
 
-        <span>
-          ตำแหน่งภาพแนวตั้ง
-        </span>
+        <span>ตำแหน่งภาพแนวตั้ง</span>
 
         <strong id="bgPositionValue">
           50%
@@ -2447,20 +2314,11 @@ input[type="range"]{
 
     </div>
 
-
     <div class="bg-note">
-
-      เลือกภาพแล้วสามารถลากภาพขึ้น–ลง
-      หรือใช้ Slider เพื่อจัดตำแหน่งก่อนบันทึก
-
+      เลือกภาพแล้วสามารถลากภาพขึ้น–ลง หรือใช้ Slider เพื่อจัดตำแหน่งก่อนบันทึก
       <br>
-
-      0% = ด้านบน,
-      50% = กึ่งกลาง,
-      100% = ด้านล่าง
-
+      0% = ด้านบน, 50% = กึ่งกลาง, 100% = ด้านล่าง
     </div>
-
 
     <div class="bg-buttons">
 
@@ -2484,18 +2342,9 @@ input[type="range"]{
 
 </div>
 
-
 <script>
 
-/*
-==================================================
-PART 2 ต่อจากตรงนี้
-ห้ามใส่ </script> หรือ </html> ตอนต่อ PART 2
-==================================================
-*/
-/* ==================================================
-   STORAGE / STATE
-================================================== */
+/* STORAGE */
 
 const STORAGE_KEY =
   "personal-project-dashboard-v1";
@@ -2506,15 +2355,17 @@ const PROJECT_BG_KEY =
 const PROJECT_BG_POSITION_KEY =
   "personal-project-dashboard-project-bg-position-v1";
 
+const PROJECT_ORDER_KEY =
+  "personal-project-dashboard-project-order-v1";
+
 
 let projects = [];
+let storageWriteBlocked = false;
+const ORIGINAL_BACKUP_KEY = STORAGE_KEY + "-before-text-fields-v2";
 
 let editingProjectId = null;
 let selectedProjectId = null;
 let editingTaskId = null;
-
-
-/* Background editor temporary state */
 
 let pendingBackgroundImage = "";
 let pendingBackgroundPosition = 50;
@@ -2526,11 +2377,314 @@ let bgDragStartPosition = 50;
 
 
 /* ==================================================
-   LOAD / SAVE
+   HELPERS
 ================================================== */
+
+function clamp(value,min,max){
+
+  return Math.min(
+    max,
+    Math.max(
+      min,
+      Number(value) || 0
+    )
+  );
+
+}
+
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+function statusText(status){
+
+  return ({
+    active:"กำลังดำเนินการ",
+    wait:"ยังไม่เริ่ม",
+    done:"เสร็จแล้ว",
+    delay:"ล่าช้า",
+    pause:"พักงาน"
+  })[status] || status;
+
+}
+
+
+function taskStatusText(status){
+
+  return statusText(status);
+
+}
+
+
+function money(value){
+
+  return "฿" +
+    Number(value || 0)
+      .toLocaleString("th-TH");
+
+}
+
+
+function compactMoney(value){
+
+  const n =
+    Number(value || 0);
+
+  if(n >= 1000000){
+
+    return "฿" +
+      (n / 1000000)
+        .toLocaleString(
+          "th-TH",
+          {
+            maximumFractionDigits:2
+          }
+        ) +
+      " M";
+
+  }
+
+  if(n >= 1000){
+
+    return "฿" +
+      (n / 1000)
+        .toLocaleString(
+          "th-TH",
+          {
+            maximumFractionDigits:1
+          }
+        ) +
+      " K";
+
+  }
+
+  return money(n);
+
+}
+
+
+function formatDate(value){
+
+  if(!value){
+    return "-";
+  }
+
+  const p =
+    String(value)
+      .split("-");
+
+  if(p.length !== 3){
+    return value;
+  }
+
+  return (
+    Number(p[2]) +
+    "/" +
+    Number(p[1]) +
+    "/" +
+    String(
+      Number(p[0]) + 543
+    ).slice(-2)
+  );
+
+}
+
+
+function daysInfo(project){
+
+  if(project.status === "done"){
+
+    return {
+      text:"เสร็จแล้ว",
+      short:"เสร็จแล้ว",
+      cls:"done"
+    };
+
+  }
+
+  if(!project.endDate){
+
+    return {
+      text:"ไม่ระบุกำหนดเสร็จ",
+      short:"ไม่ระบุกำหนด",
+      cls:""
+    };
+
+  }
+
+  const today =
+    new Date();
+
+  today.setHours(0,0,0,0);
+
+  const end =
+    new Date(
+      project.endDate +
+      "T00:00:00"
+    );
+
+  const days =
+    Math.round(
+      (end - today) /
+      86400000
+    );
+
+  if(days > 0){
+
+    return {
+      text:"เหลืออีก " + days + " วัน",
+      short:"เหลือ " + days + " วัน",
+      cls:""
+    };
+
+  }
+
+  if(days === 0){
+
+    return {
+      text:"ครบกำหนดวันนี้",
+      short:"ครบกำหนดวันนี้",
+      cls:""
+    };
+
+  }
+
+  return {
+    text:"เกินกำหนด " + Math.abs(days) + " วัน",
+    short:"เกิน " + Math.abs(days) + " วัน",
+    cls:"overdue"
+  };
+
+}
+
+
+/* ==================================================
+   DATA MIGRATION
+================================================== */
+
+function normalizeProject(project){
+
+  if(
+    !project ||
+    typeof project !== "object"
+  ){
+    return null;
+  }
+
+  project.name =
+    project.name || "";
+
+  project.location =
+    project.location || "";
+
+  project.value =
+    Number(project.value || 0);
+
+  project.startDate =
+    project.startDate || "";
+
+  project.endDate =
+    project.endDate || "";
+
+  project.status =
+    project.status || "active";
+
+  project.progress =
+    clamp(
+      project.progress || 0,
+      0,
+      100
+    );
+
+  project.contractorCompany =
+    project.contractorCompany || "";
+
+  project.contractorContact =
+    project.contractorContact || "";
+
+  project.contractorPhone =
+    project.contractorPhone || "";
+
+
+  // Preserve all original fields. Missing description + remark identifies
+  // the older note=description / remark=remark layout.
+  if(project._textFieldsVersion !== 2){
+    const hasDescription = Object.prototype.hasOwnProperty.call(project, "description");
+    const hasRemark = Object.prototype.hasOwnProperty.call(project, "remark");
+    project._originalTextFields = {
+      description: project.description,
+      note: project.note,
+      remark: project.remark
+    };
+    if(!hasDescription && hasRemark){
+      project.description = String(project.note ?? "");
+      project.note = String(project.remark ?? "");
+    }else{
+      project.description = String(project.description ?? "");
+      project.note = String(project.note ?? project.remark ?? "");
+    }
+    // A note-only record is ambiguous: retain it as note without guessing.
+    project._textFieldsVersion = 2;
+  }
+
+  if(!Array.isArray(project.tasks)){
+    project.tasks = [];
+  }
+
+  project.tasks =
+    project.tasks
+      .map(task => {
+
+        if(
+          !task ||
+          typeof task !== "object"
+        ){
+          return null;
+        }
+
+        task.name =
+          task.name || "";
+
+        task.progress =
+          clamp(
+            task.progress || 0,
+            0,
+            100
+          );
+
+        task.status =
+          task.status ||
+          (
+            task.progress >= 100
+              ? "done"
+              : "active"
+          );
+
+        task.note =
+          task.note || "";
+
+        return task;
+
+      })
+      .filter(Boolean);
+
+  return project;
+
+}
+
 
 function loadData(){
 
+  storageWriteBlocked = false;
   try{
 
     const raw =
@@ -2544,7 +2698,10 @@ function loadData(){
         : [];
 
     if(!Array.isArray(projects)){
-      projects = [];
+      throw new Error("Stored project data is not an array");
+    }
+    if(raw && !localStorage.getItem(ORIGINAL_BACKUP_KEY)){
+      localStorage.setItem(ORIGINAL_BACKUP_KEY, raw);
     }
 
   }
@@ -2555,129 +2712,33 @@ function loadData(){
       error
     );
 
+    storageWriteBlocked = true;
+    alert("ไม่สามารถอ่านหรือสำรองข้อมูลเดิมได้ ระบบจะไม่เขียนทับข้อมูล กรุณาสำรองข้อมูลเดิมก่อนใช้งานต่อ");
     projects = [];
 
   }
 
-
-  /*
-    Normalize ข้อมูลเก่า
-    เพื่อให้ Project เดิมยังใช้งานได้
-  */
-
   projects =
-    projects.map(project => {
+    projects
+      .map(normalizeProject)
+      .filter(Boolean);
 
-      if(!project || typeof project !== "object"){
-        return null;
-      }
+  applySavedProjectOrder();
 
+  projects.forEach(project => {
 
-      project.name =
-        project.name || "";
+    if(project.tasks.length){
+      recalculateProject(project);
+    }
 
-      project.location =
-        project.location || "";
-
-      project.value =
-        Number(project.value || 0);
-
-      project.startDate =
-        project.startDate || "";
-
-      project.endDate =
-        project.endDate || "";
-
-      project.status =
-        project.status || "active";
-
-      project.progress =
-        Number(project.progress || 0);
-
-
-      /*
-        ข้อมูลใหม่
-      */
-
-      project.contractorCompany =
-        project.contractorCompany || "";
-
-      project.contractorContact =
-        project.contractorContact || "";
-
-      project.contractorPhone =
-        project.contractorPhone || "";
-
-      project.description =
-        project.description || "";
-
-
-      /*
-        note เดิมยังเก็บเหมือนเดิม
-      */
-
-      project.note =
-        project.note || "";
-
-
-      if(!Array.isArray(project.tasks)){
-        project.tasks = [];
-      }
-
-
-      project.tasks =
-        project.tasks.map(task => {
-
-          if(!task || typeof task !== "object"){
-            return null;
-          }
-
-          task.name =
-            task.name || "";
-
-          task.progress =
-            Number(task.progress || 0);
-
-          task.status =
-            task.status ||
-            (
-              task.progress >= 100
-                ? "done"
-                : "active"
-            );
-
-          task.note =
-            task.note || "";
-
-          return task;
-
-        }).filter(Boolean);
-
-
-      /*
-        ถ้ามี Task ให้คำนวณ Progress ใหม่
-      */
-
-      if(project.tasks.length > 0){
-
-        recalculateProject(
-          project
-        );
-
-      }
-
-
-      return project;
-
-    }).filter(Boolean);
-
-
-  saveData();
+  });
 
 }
 
 
 function saveData(){
+
+  if(storageWriteBlocked) return;
 
   try{
 
@@ -2700,275 +2761,139 @@ function saveData(){
 
 
 /* ==================================================
-   GENERAL HELPERS
+   PROJECT ORDER
 ================================================== */
 
-function escapeHTML(value){
+function getProjectOrder(){
 
-  return String(
-    value ?? ""
-  )
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+  try{
+
+    const value =
+      JSON.parse(
+        localStorage.getItem(
+          PROJECT_ORDER_KEY
+        ) || "[]"
+      );
+
+    return Array.isArray(value)
+      ? value
+      : [];
+
+  }
+  catch(error){
+
+    return [];
+
+  }
 
 }
 
 
-function clamp(
-  value,
-  min,
-  max
-){
+function saveProjectOrder(){
 
-  return Math.min(
-    max,
-    Math.max(
-      min,
-      Number(value) || 0
-    )
+  if(storageWriteBlocked) return;
+
+  try{
+
+    localStorage.setItem(
+      PROJECT_ORDER_KEY,
+      JSON.stringify(
+        projects.map(
+          project =>
+            String(project.id)
+        )
+      )
+    );
+
+  }
+  catch(error){
+
+    console.error(
+      "Save project order:",
+      error
+    );
+
+  }
+
+}
+
+
+function applySavedProjectOrder(){
+
+  const order =
+    getProjectOrder();
+
+  if(!order.length){
+    return;
+  }
+
+  const position =
+    new Map();
+
+  order.forEach(
+    (id,index) => {
+
+      position.set(
+        String(id),
+        index
+      );
+
+    }
   );
 
-}
+  const originalPosition =
+    new Map();
 
+  projects.forEach(
+    (project,index) => {
 
-/* ==================================================
-   STATUS
-================================================== */
+      originalPosition.set(
+        String(project.id),
+        index
+      );
 
-function statusText(status){
-
-  const map = {
-
-    active:"กำลังดำเนินการ",
-    wait:"ยังไม่เริ่ม",
-    done:"เสร็จแล้ว",
-    delay:"ล่าช้า",
-    pause:"พักงาน"
-
-  };
-
-  return map[status] || status;
-
-}
-
-
-function taskStatusText(status){
-
-  const map = {
-
-    active:"กำลังดำเนินการ",
-    wait:"ยังไม่เริ่ม",
-    done:"เสร็จแล้ว",
-    delay:"ล่าช้า",
-    pause:"พักงาน"
-
-  };
-
-  return map[status] || status;
-
-}
-
-
-/* ==================================================
-   DATE
-================================================== */
-
-function formatDate(value){
-
-  if(!value){
-    return "-";
-  }
-
-
-  const p =
-    String(value)
-      .split("-");
-
-
-  if(p.length !== 3){
-    return value;
-  }
-
-
-  return (
-    Number(p[2]) +
-    "/" +
-    Number(p[1]) +
-    "/" +
-    String(
-      Number(p[0]) + 543
-    ).slice(-2)
+    }
   );
 
-}
+  projects.sort(
+    (a,b) => {
 
+      const aKey =
+        String(a.id);
 
-/* ==================================================
-   DAYS REMAINING
-================================================== */
+      const bKey =
+        String(b.id);
 
-function daysInfo(project){
+      const aHas =
+        position.has(aKey);
 
-  if(project.status === "done"){
+      const bHas =
+        position.has(bKey);
 
-    return {
+      if(aHas && bHas){
 
-      text:"เสร็จแล้ว",
-      short:"เสร็จแล้ว",
-      cls:"done"
+        return (
+          position.get(aKey) -
+          position.get(bKey)
+        );
 
-    };
+      }
 
-  }
+      if(aHas){
+        return -1;
+      }
 
+      if(bHas){
+        return 1;
+      }
 
-  if(!project.endDate){
+      return (
+        originalPosition.get(aKey) -
+        originalPosition.get(bKey)
+      );
 
-    return {
-
-      text:"ไม่ระบุกำหนดเสร็จ",
-      short:"ไม่ระบุกำหนด",
-      cls:""
-
-    };
-
-  }
-
-
-  const today =
-    new Date();
-
-  today.setHours(
-    0,0,0,0
+    }
   );
-
-
-  const end =
-    new Date(
-      project.endDate +
-      "T00:00:00"
-    );
-
-
-  const days =
-    Math.round(
-      (end - today) /
-      86400000
-    );
-
-
-  if(days > 0){
-
-    return {
-
-      text:
-        "เหลืออีก " +
-        days +
-        " วัน",
-
-      short:
-        "เหลือ " +
-        days +
-        " วัน",
-
-      cls:""
-
-    };
-
-  }
-
-
-  if(days === 0){
-
-    return {
-
-      text:"ครบกำหนดวันนี้",
-      short:"ครบกำหนดวันนี้",
-      cls:""
-
-    };
-
-  }
-
-
-  return {
-
-    text:
-      "เกินกำหนด " +
-      Math.abs(days) +
-      " วัน",
-
-    short:
-      "เกิน " +
-      Math.abs(days) +
-      " วัน",
-
-    cls:"overdue"
-
-  };
-
-}
-
-
-/* ==================================================
-   MONEY
-================================================== */
-
-function money(value){
-
-  return "฿" +
-    Number(
-      value || 0
-    ).toLocaleString(
-      "th-TH"
-    );
-
-}
-
-
-function compactMoney(value){
-
-  const n =
-    Number(value || 0);
-
-
-  if(n >= 1000000){
-
-    return "฿" +
-      (n / 1000000)
-        .toLocaleString(
-          "th-TH",
-          {
-            maximumFractionDigits:2
-          }
-        ) +
-      " M";
-
-  }
-
-
-  if(n >= 1000){
-
-    return "฿" +
-      (n / 1000)
-        .toLocaleString(
-          "th-TH",
-          {
-            maximumFractionDigits:1
-          }
-        ) +
-      " K";
-
-  }
-
-
-  return "฿" +
-    n.toLocaleString(
-      "th-TH"
-    );
 
 }
 
@@ -2999,21 +2924,17 @@ function getBackgrounds(){
 
 function getProjectBackground(id){
 
-  const backgrounds =
-    getBackgrounds();
-
   return (
-    backgrounds[String(id)] ||
+    getBackgrounds()[
+      String(id)
+    ] ||
     ""
   );
 
 }
 
 
-function setProjectBackground(
-  id,
-  image
-){
+function setProjectBackground(id,image){
 
   const backgrounds =
     getBackgrounds();
@@ -3046,10 +2967,6 @@ function deleteProjectBackground(id){
 }
 
 
-/* ==================================================
-   BACKGROUND POSITION STORAGE
-================================================== */
-
 function getBackgroundPositions(){
 
   try{
@@ -3075,17 +2992,14 @@ function getProjectBackgroundPosition(id){
   const positions =
     getBackgroundPositions();
 
-
   const value =
     Number(
       positions[String(id)]
     );
 
-
   if(!Number.isFinite(value)){
     return 50;
   }
-
 
   return clamp(
     value,
@@ -3104,14 +3018,12 @@ function setProjectBackgroundPosition(
   const positions =
     getBackgroundPositions();
 
-
   positions[String(id)] =
     clamp(
       position,
       0,
       100
     );
-
 
   localStorage.setItem(
     PROJECT_BG_POSITION_KEY,
@@ -3126,11 +3038,9 @@ function deleteProjectBackgroundPosition(id){
   const positions =
     getBackgroundPositions();
 
-
   delete positions[
     String(id)
   ];
-
 
   localStorage.setItem(
     PROJECT_BG_POSITION_KEY,
@@ -3141,7 +3051,7 @@ function deleteProjectBackgroundPosition(id){
 
 
 /* ==================================================
-   PROJECT PROGRESS
+   PROGRESS
 ================================================== */
 
 function calculateProjectProgress(project){
@@ -3151,8 +3061,7 @@ function calculateProjectProgress(project){
       ? project.tasks
       : [];
 
-
-  if(tasks.length === 0){
+  if(!tasks.length){
 
     return clamp(
       project.progress || 0,
@@ -3161,7 +3070,6 @@ function calculateProjectProgress(project){
     );
 
   }
-
 
   const total =
     tasks.reduce(
@@ -3172,7 +3080,6 @@ function calculateProjectProgress(project){
         ),
       0
     );
-
 
   return clamp(
     Math.round(
@@ -3192,23 +3099,19 @@ function recalculateProject(project){
     return;
   }
 
-
   const tasks =
     Array.isArray(project.tasks)
       ? project.tasks
       : [];
 
-
-  if(tasks.length === 0){
+  if(!tasks.length){
     return;
   }
-
 
   project.progress =
     calculateProjectProgress(
       project
     );
-
 
   const allDone =
     tasks.every(
@@ -3218,14 +3121,12 @@ function recalculateProject(project){
         ) >= 100
     );
 
-
   if(allDone){
 
     project.progress = 100;
     project.status = "done";
 
   }
-
   else if(
     project.status === "done"
   ){
@@ -3238,10 +3139,6 @@ function recalculateProject(project){
 }
 
 
-/* ==================================================
-   TASK SUMMARY
-================================================== */
-
 function getTaskSummary(project){
 
   const tasks =
@@ -3249,30 +3146,26 @@ function getTaskSummary(project){
       ? project.tasks
       : [];
 
-
   const summary = {
-
     total:tasks.length,
-
     done:0,
     active:0,
     wait:0,
     delay:0,
     pause:0
-
   };
-
 
   tasks.forEach(task => {
 
     const status =
       task.status ||
       (
-        Number(task.progress || 0) >= 100
+        Number(
+          task.progress || 0
+        ) >= 100
           ? "done"
           : "active"
       );
-
 
     if(
       Object.prototype
@@ -3289,44 +3182,520 @@ function getTaskSummary(project){
 
   });
 
-
   return summary;
 
 }
 
 
 /* ==================================================
-   RENDER DASHBOARD
+   SORT / LONG PRESS
+================================================== */
+
+let sortState = {
+  card:null,
+  id:null,
+  pointerId:null,
+  startX:0,
+  startY:0,
+  timer:null,
+  sorting:false,
+  target:null,
+  before:true,
+  blockClick:false
+};
+
+
+function clearSortMarks(){
+
+  document
+    .querySelectorAll(
+      ".drop-before,.drop-after"
+    )
+    .forEach(card => {
+
+      card.classList.remove(
+        "drop-before",
+        "drop-after"
+      );
+
+    });
+
+}
+
+
+function cancelSort(){
+
+  if(sortState.timer){
+
+    clearTimeout(
+      sortState.timer
+    );
+
+  }
+
+  if(sortState.card){
+
+    sortState.card
+      .classList
+      .remove(
+        "dragging"
+      );
+
+  }
+
+  clearSortMarks();
+
+  sortState.card = null;
+  sortState.id = null;
+  sortState.pointerId = null;
+  sortState.timer = null;
+  sortState.sorting = false;
+  sortState.target = null;
+
+}
+
+
+function startSort(){
+
+  if(!sortState.card){
+    return;
+  }
+
+  sortState.sorting = true;
+  sortState.blockClick = true;
+
+  sortState.card
+    .classList
+    .add(
+      "dragging"
+    );
+
+  if(navigator.vibrate){
+
+    try{
+      navigator.vibrate(25);
+    }
+    catch(error){}
+
+  }
+
+}
+
+
+function findSortTarget(
+  clientX,
+  clientY
+){
+
+  const cards =
+    Array.from(
+      document.querySelectorAll(
+        "#projectList .project-card"
+      )
+    );
+
+  let best = null;
+  let bestDistance = Infinity;
+
+  cards.forEach(card => {
+
+    if(card === sortState.card){
+      return;
+    }
+
+    const rect =
+      card.getBoundingClientRect();
+
+    if(
+      clientX < rect.left - 40 ||
+      clientX > rect.right + 40
+    ){
+      return;
+    }
+
+    const center =
+      rect.top +
+      rect.height / 2;
+
+    const distance =
+      Math.abs(
+        clientY -
+        center
+      );
+
+    if(distance < bestDistance){
+
+      bestDistance =
+        distance;
+
+      best = {
+        card,
+        before:
+          clientY < center
+      };
+
+    }
+
+  });
+
+  return best;
+
+}
+
+
+function moveSort(
+  clientX,
+  clientY
+){
+
+  clearSortMarks();
+
+  const target =
+    findSortTarget(
+      clientX,
+      clientY
+    );
+
+  sortState.target =
+    target
+      ? target.card
+      : null;
+
+  sortState.before =
+    target
+      ? target.before
+      : true;
+
+  if(target){
+
+    target.card
+      .classList
+      .add(
+        target.before
+          ? "drop-before"
+          : "drop-after"
+      );
+
+  }
+
+  const edge = 80;
+
+  if(clientY < edge){
+
+    window.scrollBy(
+      0,
+      -12
+    );
+
+  }
+  else if(
+    clientY >
+    window.innerHeight -
+    edge
+  ){
+
+    window.scrollBy(
+      0,
+      12
+    );
+
+  }
+
+}
+
+
+function commitSort(){
+
+  if(
+    !sortState.card ||
+    !sortState.target
+  ){
+    return;
+  }
+
+  const sourceId =
+    String(
+      sortState.card.dataset.id
+    );
+
+  const targetId =
+    String(
+      sortState.target.dataset.id
+    );
+
+  const sourceIndex =
+    projects.findIndex(
+      project =>
+        String(project.id) ===
+        sourceId
+    );
+
+  if(sourceIndex < 0){
+    return;
+  }
+
+  const moved =
+    projects.splice(
+      sourceIndex,
+      1
+    )[0];
+
+  let targetIndex =
+    projects.findIndex(
+      project =>
+        String(project.id) ===
+        targetId
+    );
+
+  if(targetIndex < 0){
+
+    projects.splice(
+      sourceIndex,
+      0,
+      moved
+    );
+
+    return;
+
+  }
+
+  if(!sortState.before){
+    targetIndex++;
+  }
+
+  projects.splice(
+    targetIndex,
+    0,
+    moved
+  );
+
+  saveData();
+  saveProjectOrder();
+
+}
+
+
+function setupCardSorting(
+  card,
+  projectId
+){
+
+  card.dataset.id =
+    String(projectId);
+
+  const handle =
+    document.createElement(
+      "div"
+    );
+
+  handle.className =
+    "drag-handle";
+
+  handle.textContent =
+    "⋮⋮";
+
+  card.appendChild(handle);
+
+
+  card.addEventListener(
+    "pointerdown",
+    function(event){
+
+      if(
+        event.button !== undefined &&
+        event.button !== 0
+      ){
+        return;
+      }
+
+      sortState.card =
+        card;
+
+      sortState.id =
+        projectId;
+
+      sortState.pointerId =
+        event.pointerId;
+
+      sortState.startX =
+        event.clientX;
+
+      sortState.startY =
+        event.clientY;
+
+      sortState.sorting =
+        false;
+
+      sortState.target =
+        null;
+
+      const delay =
+        event.pointerType === "mouse"
+          ? 250
+          : 480;
+
+      sortState.timer =
+        setTimeout(
+          startSort,
+          delay
+        );
+
+    }
+  );
+
+
+  card.addEventListener(
+    "pointermove",
+    function(event){
+
+      if(
+        sortState.card !== card ||
+        sortState.pointerId !==
+        event.pointerId
+      ){
+        return;
+      }
+
+      const dx =
+        event.clientX -
+        sortState.startX;
+
+      const dy =
+        event.clientY -
+        sortState.startY;
+
+      const distance =
+        Math.sqrt(
+          dx * dx +
+          dy * dy
+        );
+
+      if(
+        !sortState.sorting &&
+        distance > 12
+      ){
+
+        clearTimeout(
+          sortState.timer
+        );
+
+        sortState.timer = null;
+
+        return;
+
+      }
+
+      if(!sortState.sorting){
+        return;
+      }
+
+      event.preventDefault();
+
+      moveSort(
+        event.clientX,
+        event.clientY
+      );
+
+    },
+    {
+      passive:false
+    }
+  );
+
+
+  function finish(event){
+
+    if(
+      sortState.card !== card
+    ){
+      return;
+    }
+
+    if(
+      event &&
+      event.pointerId !== undefined &&
+      sortState.pointerId !==
+      event.pointerId
+    ){
+      return;
+    }
+
+    const wasSorting =
+      sortState.sorting;
+
+    if(wasSorting){
+      commitSort();
+    }
+
+    cancelSort();
+
+    if(wasSorting){
+
+      setTimeout(
+        () => {
+
+          sortState.blockClick =
+            false;
+
+          render();
+
+        },
+        30
+      );
+
+    }
+
+  }
+
+
+  card.addEventListener(
+    "pointerup",
+    finish
+  );
+
+  card.addEventListener(
+    "pointercancel",
+    finish
+  );
+
+  card.addEventListener(
+    "contextmenu",
+    function(event){
+
+      if(
+        sortState.card === card
+      ){
+        event.preventDefault();
+      }
+
+    }
+  );
+
+}
+
+
+/* ==================================================
+   RENDER
 ================================================== */
 
 function render(){
+
+  applySavedProjectOrder();
 
   const list =
     document.getElementById(
       "projectList"
     );
 
-
   list.innerHTML = "";
-
 
   projects.forEach(project => {
 
-    if(
-      Array.isArray(project.tasks) &&
-      project.tasks.length > 0
-    ){
-
-      recalculateProject(
-        project
-      );
-
+    if(project.tasks.length){
+      recalculateProject(project);
     }
 
   });
-
-
-  /* KPI */
 
   document
     .getElementById(
@@ -3380,21 +3749,17 @@ function render(){
       ).length;
 
 
-  const progressTotal =
-    projects.reduce(
-      (sum,project) =>
-        sum +
-        Number(
-          project.progress || 0
-        ),
-      0
-    );
-
-
   const overall =
     projects.length
       ? Math.round(
-          progressTotal /
+          projects.reduce(
+            (sum,project) =>
+              sum +
+              Number(
+                project.progress || 0
+              ),
+            0
+          ) /
           projects.length
         )
       : 0;
@@ -3416,9 +3781,7 @@ function render(){
       overall + "%";
 
 
-  /* EMPTY */
-
-  if(projects.length === 0){
+  if(!projects.length){
 
     list.innerHTML = `
 
@@ -3443,14 +3806,10 @@ function render(){
 
     `;
 
-    saveData();
-
     return;
 
   }
 
-
-  /* PROJECT CARDS */
 
   projects.forEach(project => {
 
@@ -3459,30 +3818,25 @@ function render(){
         "div"
       );
 
-
     const progress =
       clamp(
-        project.progress || 0,
+        project.progress,
         0,
         100
       );
 
-
     const days =
       daysInfo(project);
-
 
     const background =
       getProjectBackground(
         project.id
       );
 
-
     const bgPosition =
       getProjectBackgroundPosition(
         project.id
       );
-
 
     card.className =
       "project-card" +
@@ -3492,12 +3846,10 @@ function render(){
           : ""
       );
 
-
     card.style.setProperty(
       "--bg-y",
       bgPosition + "%"
     );
-
 
     if(background){
 
@@ -3506,14 +3858,6 @@ function render(){
 
     }
 
-
-    card.onclick =
-      () =>
-        openDetail(
-          project.id
-        );
-
-
     card.innerHTML = `
 
       <div class="card-head">
@@ -3521,59 +3865,38 @@ function render(){
         <div>
 
           <div class="project-name">
-
-            ${escapeHTML(
-              project.name
-            )}
-
+            ${escapeHTML(project.name)}
           </div>
 
-
           <div class="project-location">
-
             ${escapeHTML(
               project.location ||
               "ไม่ระบุสถานที่"
             )}
-
           </div>
-
 
           ${
             project.contractorCompany
               ? `
-
                 <div class="project-contractor">
-
                   <span>🏢</span>
-
                   <span>
                     ${escapeHTML(
                       project.contractorCompany
                     )}
                   </span>
-
                 </div>
-
               `
               : ""
           }
 
         </div>
 
-
-        <div
-          class="status ${project.status}"
-        >
-
-          ${statusText(
-            project.status
-          )}
-
+        <div class="status ${project.status}">
+          ${statusText(project.status)}
         </div>
 
       </div>
-
 
       <div class="progress-row">
 
@@ -3587,33 +3910,18 @@ function render(){
 
       </div>
 
-
       <div class="card-bar">
-
         <div
           class="card-fill"
-          style="
-            width:${progress}%
-          "
+          style="width:${progress}%"
         ></div>
-
       </div>
 
-
-      <div
-        class="
-          time-left
-          ${days.cls}
-        "
-      >
+      <div class="time-left ${days.cls}">
 
         <span>
-
           กำหนดเสร็จ
-          ${formatDate(
-            project.endDate
-          )}
-
+          ${formatDate(project.endDate)}
         </span>
 
         <strong>
@@ -3622,15 +3930,10 @@ function render(){
 
       </div>
 
-
       <div class="card-bottom">
 
         <div class="project-value">
-
-          ${money(
-            project.value
-          )}
-
+          ${money(project.value)}
         </div>
 
         <div class="detail-link">
@@ -3642,12 +3945,39 @@ function render(){
     `;
 
 
-    list.appendChild(
-      card
+    card.addEventListener(
+      "click",
+      function(event){
+
+        if(
+          sortState.blockClick ||
+          sortState.sorting
+        ){
+
+          event.preventDefault();
+          event.stopPropagation();
+
+          return;
+
+        }
+
+        openDetail(
+          project.id
+        );
+
+      }
     );
 
-  });
 
+    setupCardSorting(
+      card,
+      project.id
+    );
+
+
+    list.appendChild(card);
+
+  });
 
   saveData();
 
@@ -3655,7 +3985,7 @@ function render(){
 
 
 /* ==================================================
-   PROJECT MODAL
+   PROJECT FORM
 ================================================== */
 
 function openProjectModal(
@@ -3665,15 +3995,14 @@ function openProjectModal(
   editingProjectId =
     projectId;
 
-
   const project =
     projectId
       ? projects.find(
-          project =>
-            project.id === projectId
+          item =>
+            item.id ===
+            projectId
         )
       : null;
-
 
   if(
     projectId &&
@@ -3681,7 +4010,6 @@ function openProjectModal(
   ){
     return;
   }
-
 
   document
     .getElementById(
@@ -3721,8 +4049,6 @@ function openProjectModal(
         : "";
 
 
-  /* CONTRACTOR */
-
   document
     .getElementById(
       "contractorCompany"
@@ -3749,8 +4075,6 @@ function openProjectModal(
       project?.contractorPhone ||
       "";
 
-
-  /* DATES */
 
   document
     .getElementById(
@@ -3784,14 +4108,12 @@ function openProjectModal(
     .value =
       project
         ? clamp(
-            project.progress || 0,
+            project.progress,
             0,
             100
           )
         : 0;
 
-
-  /* DESCRIPTION */
 
   document
     .getElementById(
@@ -3835,7 +4157,6 @@ function openProjectModal(
 
   updateProgressLabel();
 
-
   document
     .getElementById(
       "projectModal"
@@ -3843,6 +4164,10 @@ function openProjectModal(
     .classList.add(
       "show"
     );
+
+  resetModalScroll(
+    "projectModal"
+  );
 
 }
 
@@ -3857,7 +4182,6 @@ function closeProjectModal(){
       "show"
     );
 
-
   editingProjectId = null;
 
 }
@@ -3865,27 +4189,20 @@ function closeProjectModal(){
 
 function updateProgressLabel(){
 
-  const value =
-    document
-      .getElementById(
-        "projectProgress"
-      )
-      .value;
-
-
   document
     .getElementById(
       "progressLabel"
     )
     .textContent =
-      value + "%";
+      document
+        .getElementById(
+          "projectProgress"
+        )
+        .value +
+      "%";
 
 }
 
-
-/* ==================================================
-   SAVE PROJECT
-================================================== */
 
 function saveProject(){
 
@@ -3897,7 +4214,6 @@ function saveProject(){
       .value
       .trim();
 
-
   if(!name){
 
     alert(
@@ -3908,11 +4224,9 @@ function saveProject(){
 
   }
 
-
   const data = {
 
-    name:name,
-
+    name,
 
     location:
       document
@@ -3921,7 +4235,6 @@ function saveProject(){
         )
         .value
         .trim(),
-
 
     value:
       Number(
@@ -3932,7 +4245,6 @@ function saveProject(){
           .value || 0
       ),
 
-
     contractorCompany:
       document
         .getElementById(
@@ -3940,7 +4252,6 @@ function saveProject(){
         )
         .value
         .trim(),
-
 
     contractorContact:
       document
@@ -3950,7 +4261,6 @@ function saveProject(){
         .value
         .trim(),
 
-
     contractorPhone:
       document
         .getElementById(
@@ -3959,14 +4269,12 @@ function saveProject(){
         .value
         .trim(),
 
-
     startDate:
       document
         .getElementById(
           "startDate"
         )
         .value,
-
 
     endDate:
       document
@@ -3975,14 +4283,12 @@ function saveProject(){
         )
         .value,
 
-
     status:
       document
         .getElementById(
           "projectStatus"
         )
         .value,
-
 
     progress:
       clamp(
@@ -3995,7 +4301,6 @@ function saveProject(){
         100
       ),
 
-
     description:
       document
         .getElementById(
@@ -4003,7 +4308,6 @@ function saveProject(){
         )
         .value
         .trim(),
-
 
     note:
       document
@@ -4020,43 +4324,35 @@ function saveProject(){
 
     const project =
       projects.find(
-        project =>
-          project.id ===
+        item =>
+          item.id ===
           editingProjectId
       );
 
+    if(!project){
+      return;
+    }
 
-    if(project){
+    const tasks =
+      project.tasks || [];
 
-      const hasTasks =
-        !!project.tasks?.length;
+    Object.assign(
+      project,
+      data
+    );
 
+    if(Object.prototype.hasOwnProperty.call(project, "remark")){
+      project.remark = project.note;
+    }
+    project._textFieldsVersion = 2;
+    project.tasks =
+      tasks;
 
-      if(hasTasks){
-
-        delete data.progress;
-
-      }
-
-
-      Object.assign(
-        project,
-        data
-      );
-
-
-      if(hasTasks){
-
-        recalculateProject(
-          project
-        );
-
-      }
-
+    if(tasks.length){
+      recalculateProject(project);
     }
 
   }
-
   else{
 
     projects.unshift({
@@ -4064,6 +4360,7 @@ function saveProject(){
       id:Date.now(),
 
       ...data,
+      _textFieldsVersion: 2,
 
       tasks:[],
 
@@ -4075,8 +4372,8 @@ function saveProject(){
 
   }
 
-
   saveData();
+  saveProjectOrder();
 
   closeProjectModal();
 
@@ -4086,7 +4383,7 @@ function saveProject(){
 
 
 /* ==================================================
-   PROJECT DETAIL
+   DETAIL
 ================================================== */
 
 function openDetail(id){
@@ -4094,98 +4391,63 @@ function openDetail(id){
   selectedProjectId =
     id;
 
-
   const project =
     projects.find(
-      project =>
-        project.id === id
+      item =>
+        item.id === id
     );
-
 
   if(!project){
     return;
   }
 
-
-  if(
-    !Array.isArray(
-      project.tasks
-    )
-  ){
-
-    project.tasks = [];
-
+  if(project.tasks.length){
+    recalculateProject(project);
   }
-
-
-  if(
-    project.tasks.length > 0
-  ){
-
-    recalculateProject(
-      project
-    );
-
-  }
-
 
   const tasks =
     project.tasks;
 
-
   const progress =
     clamp(
-      project.progress || 0,
+      project.progress,
       0,
       100
     );
 
-
   const days =
-    daysInfo(
-      project
-    );
-
+    daysInfo(project);
 
   const background =
     getProjectBackground(
       project.id
     );
 
-
   const bgPosition =
     getProjectBackgroundPosition(
       project.id
     );
 
-
   const summary =
-    getTaskSummary(
-      project
-    );
-
+    getTaskSummary(project);
 
   const completedTasks =
     summary.done;
 
-
   const taskDonePercent =
     summary.total
       ? Math.round(
-          (
-            completedTasks /
-            summary.total
-          ) * 100
+          completedTasks /
+          summary.total *
+          100
         )
       : 0;
 
 
-  /* TASK HTML */
-
   let taskHTML = "";
 
 
-  if(tasks.length === 0){
+  if(!tasks.length){
 
     taskHTML = `
 
@@ -4198,26 +4460,22 @@ function openDetail(id){
         border:1px dashed #dfe4ea;
         border-radius:15px;
       ">
-
         ยังไม่มีรายการงาน
-
       </div>
 
     `;
 
   }
-
   else{
 
     tasks.forEach(task => {
 
       const taskProgress =
         clamp(
-          task.progress || 0,
+          task.progress,
           0,
           100
         );
-
 
       const taskStatus =
         task.status ||
@@ -4227,105 +4485,56 @@ function openDetail(id){
             : "active"
         );
 
-
       taskHTML += `
 
-        <div
-          class="
-            task
-            status-${taskStatus}
-          "
-        >
+        <div class="task status-${taskStatus}">
 
           <div class="task-row">
 
             <div class="task-name">
-
-              ${escapeHTML(
-                task.name
-              )}
-
+              ${escapeHTML(task.name)}
             </div>
 
-
             <div class="task-pct">
-
               ${taskProgress}%
-
             </div>
 
           </div>
 
-
           <div class="task-meta">
 
-            <span
-              class="
-                task-status
-                ${taskStatus}
-              "
-            >
-
-              ${taskStatusText(
-                taskStatus
-              )}
-
+            <span class="task-status ${taskStatus}">
+              ${taskStatusText(taskStatus)}
             </span>
 
           </div>
 
-
           <div class="task-bar">
-
-            <div
-              style="
-                width:${taskProgress}%
-              "
-            ></div>
-
+            <div style="width:${taskProgress}%"></div>
           </div>
-
 
           ${
             task.note
               ? `
-
                 <div class="task-note">
-
-                  ${escapeHTML(
-                    task.note
-                  )}
-
+                  ${escapeHTML(task.note)}
                 </div>
-
               `
               : ""
           }
-
 
           <div class="task-actions">
 
             <span
               class="task-edit"
-              onclick="
-                editTask(
-                  event,
-                  ${task.id}
-                )
-              "
+              onclick="editTask(event,${task.id})"
             >
               แก้ไข
             </span>
 
-
             <span
               class="task-delete"
-              onclick="
-                deleteTask(
-                  event,
-                  ${task.id}
-                )
-              "
+              onclick="deleteTask(event,${task.id})"
             >
               ลบรายการ
             </span>
@@ -4357,86 +4566,60 @@ function openDetail(id){
 
   detail.innerHTML = `
 
-    <!-- HERO -->
-
     <div
       id="detailHero"
       class="
         detail-hero
-        ${
-          background
-            ? "has-bg"
-            : ""
-        }
+        ${background ? "has-bg" : ""}
       "
       style="
         --bg-y:${bgPosition}%;
+        ${
+          background
+            ? `background-image:url("${background}");`
+            : ""
+        }
       "
     >
+
+      <div class="detail-status ${project.status}">
+        ${statusText(project.status)}
+      </div>
 
       <div class="detail-hero-top">
 
         <div class="detail-main">
 
-          <div
-            class="
-              status
-              ${project.status}
-            "
-          >
-
-            ${statusText(
-              project.status
-            )}
-
-          </div>
-
-
           <div class="detail-title">
-
-            ${escapeHTML(
-              project.name
-            )}
-
+            ${escapeHTML(project.name)}
           </div>
-
 
           <div class="detail-location">
-
             📍
             ${escapeHTML(
               project.location ||
               "ไม่ระบุสถานที่"
             )}
-
           </div>
-
 
           ${
             project.contractorCompany
               ? `
-
                 <div class="detail-contractor-line">
-
                   🏢
                   ${escapeHTML(
                     project.contractorCompany
                   )}
-
                 </div>
-
               `
               : ""
           }
 
         </div>
 
-
         <div
           class="hero-donut"
-          style="
-            --progress:${progress};
-          "
+          style="--progress:${progress};"
         >
 
           <div class="hero-donut-content">
@@ -4458,12 +4641,7 @@ function openDetail(id){
     </div>
 
 
-    <!-- BODY -->
-
     <div class="modern-detail-body">
-
-
-      <!-- MAIN PROGRESS -->
 
       <div class="main-progress-card">
 
@@ -4479,41 +4657,29 @@ function openDetail(id){
 
         </div>
 
-
         <div class="main-progress-bar">
 
           <div
             class="main-progress-fill"
-            style="
-              width:${progress}%
-            "
+            style="width:${progress}%"
           ></div>
 
         </div>
 
-
         ${
-          tasks.length > 0
+          tasks.length
             ? `
-
-              <div
-                class="auto-progress-info"
-              >
-
+              <div class="auto-progress-info">
                 คำนวณจาก
                 ${tasks.length}
                 รายการงานอัตโนมัติ
-
               </div>
-
             `
             : ""
         }
 
       </div>
 
-
-      <!-- KPI -->
 
       <div class="modern-kpi-grid">
 
@@ -4528,11 +4694,7 @@ function openDetail(id){
           </div>
 
           <div class="modern-kpi-value">
-
-            ${money(
-              project.value
-            )}
-
+            ${money(project.value)}
           </div>
 
         </div>
@@ -4549,10 +4711,7 @@ function openDetail(id){
           </div>
 
           <div class="modern-kpi-value">
-
-            ${completedTasks}/${tasks.length}
-            งาน
-
+            ${completedTasks}/${tasks.length} งาน
           </div>
 
         </div>
@@ -4569,22 +4728,13 @@ function openDetail(id){
           </div>
 
           <div class="modern-kpi-value">
-
-            ${formatDate(
-              project.endDate
-            )}
-
+            ${formatDate(project.endDate)}
           </div>
 
         </div>
 
 
-        <div
-          class="
-            modern-kpi
-            ${days.cls}
-          "
-        >
+        <div class="modern-kpi ${days.cls}">
 
           <div class="modern-kpi-icon">
             ◷
@@ -4595,17 +4745,13 @@ function openDetail(id){
           </div>
 
           <div class="modern-kpi-value">
-
             ${days.text}
-
           </div>
 
         </div>
 
       </div>
 
-
-      <!-- CONTRACTOR -->
 
       ${
         contractorExists
@@ -4626,18 +4772,15 @@ function openDetail(id){
                   </div>
 
                   <div class="contractor-name">
-
                     ${escapeHTML(
                       project.contractorCompany ||
                       "-"
                     )}
-
                   </div>
 
                 </div>
 
               </div>
-
 
               <div class="contractor-contact-grid">
 
@@ -4648,16 +4791,13 @@ function openDetail(id){
                   </small>
 
                   <strong>
-
                     ${escapeHTML(
                       project.contractorContact ||
                       "-"
                     )}
-
                   </strong>
 
                 </div>
-
 
                 <div class="contractor-contact">
 
@@ -4666,12 +4806,10 @@ function openDetail(id){
                   </small>
 
                   <strong>
-
                     ${escapeHTML(
                       project.contractorPhone ||
                       "-"
                     )}
-
                   </strong>
 
                 </div>
@@ -4684,8 +4822,6 @@ function openDetail(id){
           : ""
       }
 
-
-      <!-- DESCRIPTION -->
 
       ${
         project.description
@@ -4698,11 +4834,7 @@ function openDetail(id){
               </div>
 
               <div class="project-text-content">
-
-                ${escapeHTML(
-                  project.description
-                )}
-
+                ${escapeHTML(project.description)}
               </div>
 
             </div>
@@ -4711,8 +4843,6 @@ function openDetail(id){
           : ""
       }
 
-
-      <!-- NOTE -->
 
       ${
         project.note
@@ -4725,11 +4855,7 @@ function openDetail(id){
               </div>
 
               <div class="project-text-content">
-
-                ${escapeHTML(
-                  project.note
-                )}
-
+                ${escapeHTML(project.note)}
               </div>
 
             </div>
@@ -4738,8 +4864,6 @@ function openDetail(id){
           : ""
       }
 
-
-      <!-- TASK SUMMARY -->
 
       <div class="task-overview">
 
@@ -4755,9 +4879,7 @@ function openDetail(id){
             <div class="task-donut-content">
 
               <div class="task-donut-value">
-
                 ${completedTasks}/${summary.total}
-
               </div>
 
               <div class="task-donut-label">
@@ -4777,62 +4899,35 @@ function openDetail(id){
             สรุปรายการงาน
           </div>
 
-
           <div class="task-legend">
 
             <div class="task-legend-item">
-
               <span class="legend-dot done"></span>
-
-              เสร็จ
-              ${summary.done}
-
+              เสร็จแล้ว ${summary.done}
             </div>
 
-
             <div class="task-legend-item">
-
               <span class="legend-dot active"></span>
-
-              ดำเนินการ
-              ${summary.active}
-
+              ดำเนินการ ${summary.active}
             </div>
 
-
             <div class="task-legend-item">
-
               <span class="legend-dot wait"></span>
-
-              ยังไม่เริ่ม
-              ${summary.wait}
-
+              ยังไม่เริ่ม ${summary.wait}
             </div>
-
 
             <div class="task-legend-item">
-
               <span class="legend-dot delay"></span>
-
-              ล่าช้า
-              ${summary.delay}
-
+              ล่าช้า ${summary.delay}
             </div>
-
 
             ${
               summary.pause
                 ? `
-
                   <div class="task-legend-item">
-
                     <span class="legend-dot pause"></span>
-
-                    พักงาน
-                    ${summary.pause}
-
+                    พักงาน ${summary.pause}
                   </div>
-
                 `
                 : ""
             }
@@ -4844,8 +4939,6 @@ function openDetail(id){
       </div>
 
 
-      <!-- TASK LIST -->
-
       <div class="task-section">
 
         <div class="task-title">
@@ -4855,25 +4948,17 @@ function openDetail(id){
           </span>
 
           <span class="task-summary">
-
-            ${summary.total}
-            รายการ
-
+            ${tasks.length} รายการ
           </span>
 
         </div>
 
-
         <div class="task-list">
-
           ${taskHTML}
-
         </div>
 
       </div>
 
-
-      <!-- ACTIONS -->
 
       <div class="detail-buttons">
 
@@ -4884,20 +4969,18 @@ function openDetail(id){
           ลบ
         </button>
 
-
         <button
           class="btn edit-btn"
-          onclick="editCurrentProject()"
+          onclick="editProject()"
         >
           แก้ไข
         </button>
-
 
         <button
           class="btn task-btn"
           onclick="openTaskModal()"
         >
-          + เพิ่มงาน
+          + เพิ่มรายการงาน
         </button>
 
       </div>
@@ -4907,24 +4990,16 @@ function openDetail(id){
 
         <button
           class="btn background-btn"
-          onclick="openBackgroundModal()"
+          onclick="openBackgroundEditor()"
         >
-
-          🖼️
-          ${
-            background
-              ? "จัดตำแหน่งภาพ"
-              : "เพิ่มภาพพื้นหลัง"
-          }
-
+          ภาพพื้นหลัง
         </button>
-
 
         <button
           class="btn export-btn"
           onclick="exportProjectImage()"
         >
-          📸 Export 16:9
+          Export 16:9
         </button>
 
       </div>
@@ -4932,22 +5007,6 @@ function openDetail(id){
     </div>
 
   `;
-
-
-  if(background){
-
-    document
-      .getElementById(
-        "detailHero"
-      )
-      .style
-      .backgroundImage =
-        `url("${background}")`;
-
-  }
-
-
-  saveData();
 
 
   document
@@ -4958,12 +5017,16 @@ function openDetail(id){
       "show"
     );
 
+
+  resetModalScroll(
+    "detailModal"
+  );
+
+
+  saveData();
+
 }
 
-
-/* ==================================================
-   DETAIL CLOSE / EDIT
-================================================== */
 
 function closeDetail(){
 
@@ -4978,74 +5041,57 @@ function closeDetail(){
 }
 
 
-function editCurrentProject(){
+function editProject(){
 
   const id =
     selectedProjectId;
 
-
   closeDetail();
 
-  openProjectModal(
-    id
-  );
+  openProjectModal(id);
 
 }
 
-
-/* ==================================================
-   DELETE PROJECT
-================================================== */
 
 function deleteProject(){
 
   const project =
     projects.find(
-      project =>
-        project.id ===
+      item =>
+        item.id ===
         selectedProjectId
     );
-
 
   if(!project){
     return;
   }
 
-
   if(
     !confirm(
-      'ลบโครงการ "' +
-      project.name +
-      '" ใช่หรือไม่?'
+      `ต้องการลบโครงการ "${project.name}" ใช่หรือไม่?`
     )
   ){
-
     return;
-
   }
 
-
-  deleteProjectBackground(
-    project.id
-  );
-
-
-  deleteProjectBackgroundPosition(
-    project.id
-  );
-
+  const id =
+    selectedProjectId;
 
   projects =
     projects.filter(
-      project =>
-        project.id !==
-        selectedProjectId
+      item =>
+        item.id !== id
     );
 
+  deleteProjectBackground(id);
+  deleteProjectBackgroundPosition(id);
 
   saveData();
+  saveProjectOrder();
 
   closeDetail();
+
+  selectedProjectId = null;
 
   render();
 
@@ -5053,40 +5099,32 @@ function deleteProject(){
 
 
 /* ==================================================
-   TASK MODAL
+   TASKS
 ================================================== */
 
 function openTaskModal(
   taskId = null
 ){
 
-  if(!selectedProjectId){
-    return;
-  }
-
-
   const project =
     projects.find(
-      project =>
-        project.id ===
+      item =>
+        item.id ===
         selectedProjectId
     );
-
 
   if(!project){
     return;
   }
 
-
   editingTaskId =
     taskId;
-
 
   const task =
     taskId
       ? project.tasks.find(
-          task =>
-            task.id === taskId
+          item =>
+            item.id === taskId
         )
       : null;
 
@@ -5125,7 +5163,7 @@ function openTaskModal(
     .value =
       task
         ? clamp(
-            task.progress || 0,
+            task.progress,
             0,
             100
           )
@@ -5151,6 +5189,11 @@ function openTaskModal(
       "show"
     );
 
+
+  resetModalScroll(
+    "taskModal"
+  );
+
 }
 
 
@@ -5164,7 +5207,6 @@ function closeTaskModal(){
       "show"
     );
 
-
   editingTaskId = null;
 
 }
@@ -5172,27 +5214,20 @@ function closeTaskModal(){
 
 function updateTaskLabel(){
 
-  const value =
-    document
-      .getElementById(
-        "taskProgress"
-      )
-      .value;
-
-
   document
     .getElementById(
       "taskProgressLabel"
     )
     .textContent =
-      value + "%";
+      document
+        .getElementById(
+          "taskProgress"
+        )
+        .value +
+      "%";
 
 }
 
-
-/* ==================================================
-   TASK STATUS AUTO
-================================================== */
 
 function taskStatusChanged(){
 
@@ -5203,52 +5238,43 @@ function taskStatusChanged(){
       )
       .value;
 
-
-  const slider =
+  const progress =
     document
       .getElementById(
         "taskProgress"
       );
 
-
   if(status === "done"){
 
-    slider.value = 100;
+    progress.value = 100;
 
   }
-
   else if(
-    status === "wait"
+    status === "wait" &&
+    Number(progress.value) === 100
   ){
 
-    slider.value = 0;
+    progress.value = 0;
 
   }
-
 
   updateTaskLabel();
 
 }
 
 
-/* ==================================================
-   SAVE TASK
-================================================== */
-
 function saveTask(){
 
   const project =
     projects.find(
-      project =>
-        project.id ===
+      item =>
+        item.id ===
         selectedProjectId
     );
-
 
   if(!project){
     return;
   }
-
 
   const name =
     document
@@ -5258,17 +5284,15 @@ function saveTask(){
       .value
       .trim();
 
-
   if(!name){
 
     alert(
-      "กรุณาใส่รายการงาน"
+      "กรุณาใส่ชื่อรายการงาน"
     );
 
     return;
 
   }
-
 
   let progress =
     clamp(
@@ -5281,7 +5305,6 @@ function saveTask(){
       100
     );
 
-
   let status =
     document
       .getElementById(
@@ -5289,34 +5312,23 @@ function saveTask(){
       )
       .value;
 
-
-  /*
-    ให้ Progress และ Status สอดคล้องกัน
-  */
-
-  if(progress >= 100){
-
+  if(status === "done"){
     progress = 100;
-    status = "done";
-
   }
 
-  else if(
-    status === "done"
+  if(
+    progress >= 100
   ){
-
-    progress = 100;
-
+    status = "done";
   }
-
 
   const data = {
 
-    name:name,
+    name,
 
-    status:status,
+    status,
 
-    progress:progress,
+    progress,
 
     note:
       document
@@ -5333,11 +5345,10 @@ function saveTask(){
 
     const task =
       project.tasks.find(
-        task =>
-          task.id ===
+        item =>
+          item.id ===
           editingTaskId
       );
-
 
     if(task){
 
@@ -5349,28 +5360,19 @@ function saveTask(){
     }
 
   }
-
   else{
 
     project.tasks.push({
 
       id:Date.now(),
 
-      ...data,
-
-      createdAt:
-        new Date()
-          .toISOString()
+      ...data
 
     });
 
   }
 
-
-  recalculateProject(
-    project
-  );
-
+  recalculateProject(project);
 
   saveData();
 
@@ -5385,103 +5387,65 @@ function saveTask(){
 }
 
 
-/* ==================================================
-   EDIT TASK
-================================================== */
-
 function editTask(
   event,
   taskId
 ){
 
-  if(event){
+  event.stopPropagation();
 
-    event.stopPropagation();
-
-  }
-
-
-  openTaskModal(
-    taskId
-  );
+  openTaskModal(taskId);
 
 }
 
-
-/* ==================================================
-   DELETE TASK
-================================================== */
 
 function deleteTask(
   event,
   taskId
 ){
 
-  if(event){
-
-    event.stopPropagation();
-
-  }
-
+  event.stopPropagation();
 
   const project =
     projects.find(
-      project =>
-        project.id ===
+      item =>
+        item.id ===
         selectedProjectId
     );
-
 
   if(!project){
     return;
   }
 
-
   const task =
     project.tasks.find(
-      task =>
-        task.id === taskId
+      item =>
+        item.id === taskId
     );
-
 
   if(!task){
     return;
   }
 
-
   if(
     !confirm(
-      'ลบรายการ "' +
-      task.name +
-      '" ใช่หรือไม่?'
+      `ต้องการลบรายการ "${task.name}" ใช่หรือไม่?`
     )
   ){
-
     return;
-
   }
-
 
   project.tasks =
     project.tasks.filter(
-      task =>
-        task.id !== taskId
+      item =>
+        item.id !== taskId
     );
 
+  if(project.tasks.length){
 
-  /*
-    ถ้ายังมี Task
-    ให้คำนวณใหม่
-  */
-
-  if(project.tasks.length > 0){
-
-    recalculateProject(
-      project
-    );
+    recalculateProject(project);
 
   }
-
 
   saveData();
 
@@ -5498,28 +5462,24 @@ function deleteTask(
    BACKGROUND EDITOR
 ================================================== */
 
-function openBackgroundModal(){
+function openBackgroundEditor(){
 
   if(!selectedProjectId){
     return;
   }
-
 
   pendingBackgroundImage =
     getProjectBackground(
       selectedProjectId
     );
 
-
   pendingBackgroundPosition =
     getProjectBackgroundPosition(
       selectedProjectId
     );
 
-
   pendingBackgroundRemove =
     false;
-
 
   document
     .getElementById(
@@ -5527,17 +5487,7 @@ function openBackgroundModal(){
     )
     .value = "";
 
-
-  document
-    .getElementById(
-      "bgPositionSlider"
-    )
-    .value =
-      pendingBackgroundPosition;
-
-
   updateBackgroundPreview();
-
 
   document
     .getElementById(
@@ -5547,15 +5497,14 @@ function openBackgroundModal(){
       "show"
     );
 
+  resetModalScroll(
+    "backgroundModal"
+  );
+
 }
 
 
 function cancelBackgroundEditor(){
-
-  pendingBackgroundImage = "";
-  pendingBackgroundPosition = 50;
-  pendingBackgroundRemove = false;
-
 
   document
     .getElementById(
@@ -5565,12 +5514,13 @@ function cancelBackgroundEditor(){
       "show"
     );
 
+  pendingBackgroundImage = "";
+  pendingBackgroundPosition = 50;
+  pendingBackgroundRemove = false;
+  bgDragging = false;
+
 }
 
-
-/* ==================================================
-   PREVIEW BACKGROUND
-================================================== */
 
 function updateBackgroundPreview(){
 
@@ -5579,30 +5529,25 @@ function updateBackgroundPreview(){
       "bgPreview"
     );
 
-
   const text =
     document.getElementById(
       "bgPreviewText"
     );
-
 
   const guide =
     document.getElementById(
       "bgGuide"
     );
 
-
-  const positionLabel =
-    document.getElementById(
-      "bgPositionValue"
-    );
-
-
   const slider =
     document.getElementById(
       "bgPositionSlider"
     );
 
+  const value =
+    document.getElementById(
+      "bgPositionValue"
+    );
 
   pendingBackgroundPosition =
     clamp(
@@ -5611,21 +5556,20 @@ function updateBackgroundPreview(){
       100
     );
 
+  preview.style.setProperty(
+    "--bg-y",
+    pendingBackgroundPosition +
+    "%"
+  );
 
   slider.value =
     pendingBackgroundPosition;
 
-
-  positionLabel.textContent =
+  value.textContent =
     Math.round(
       pendingBackgroundPosition
-    ) + "%";
-
-
-  preview.style.setProperty(
-    "--bg-y",
-    pendingBackgroundPosition + "%"
-  );
+    ) +
+    "%";
 
 
   if(
@@ -5636,39 +5580,28 @@ function updateBackgroundPreview(){
     preview.style.backgroundImage =
       `url("${pendingBackgroundImage}")`;
 
-
     preview.classList.add(
       "has-image"
     );
 
-
     text.style.display =
       "none";
-
 
     guide.style.display =
       "block";
 
   }
-
   else{
 
     preview.style.backgroundImage =
-      "none";
-
+      "";
 
     preview.classList.remove(
       "has-image"
     );
 
-
     text.style.display =
       "";
-
-
-    text.textContent =
-      "ยังไม่ได้เลือกภาพพื้นหลัง";
-
 
     guide.style.display =
       "none";
@@ -5678,22 +5611,14 @@ function updateBackgroundPreview(){
 }
 
 
-/* ==================================================
-   SELECT BACKGROUND IMAGE
-================================================== */
-
-function changeProjectBackground(
-  event
-){
+function changeProjectBackground(event){
 
   const file =
     event.target.files?.[0];
 
-
   if(!file){
     return;
   }
-
 
   if(
     !file.type.startsWith(
@@ -5705,16 +5630,12 @@ function changeProjectBackground(
       "กรุณาเลือกไฟล์รูปภาพ"
     );
 
-    event.target.value = "";
-
     return;
 
   }
 
-
   const reader =
     new FileReader();
-
 
   reader.onload =
     function(loadEvent){
@@ -5722,17 +5643,8 @@ function changeProjectBackground(
       const image =
         new Image();
 
-
       image.onload =
         function(){
-
-          /*
-            ลดขนาดภาพก่อนเก็บใน localStorage
-          */
-
-          const maxDimension =
-            1600;
-
 
           let width =
             image.width;
@@ -5740,38 +5652,33 @@ function changeProjectBackground(
           let height =
             image.height;
 
+          const maxWidth =
+            1600;
 
-          if(
-            width > maxDimension ||
-            height > maxDimension
-          ){
+          const maxHeight =
+            1200;
 
-            const scale =
-              Math.min(
-                maxDimension / width,
-                maxDimension / height
-              );
+          const scale =
+            Math.min(
+              1,
+              maxWidth / width,
+              maxHeight / height
+            );
 
+          width =
+            Math.round(
+              width * scale
+            );
 
-            width =
-              Math.round(
-                width * scale
-              );
-
-
-            height =
-              Math.round(
-                height * scale
-              );
-
-          }
-
+          height =
+            Math.round(
+              height * scale
+            );
 
           const canvas =
             document.createElement(
               "canvas"
             );
-
 
           canvas.width =
             width;
@@ -5779,12 +5686,10 @@ function changeProjectBackground(
           canvas.height =
             height;
 
-
           const ctx =
             canvas.getContext(
               "2d"
             );
-
 
           ctx.drawImage(
             image,
@@ -5794,30 +5699,21 @@ function changeProjectBackground(
             height
           );
 
-
           pendingBackgroundImage =
             canvas.toDataURL(
               "image/jpeg",
-              .78
+              .80
             );
-
-
-          pendingBackgroundRemove =
-            false;
-
-
-          /*
-            ภาพใหม่เริ่มที่กึ่งกลาง
-          */
 
           pendingBackgroundPosition =
             50;
 
+          pendingBackgroundRemove =
+            false;
 
           updateBackgroundPreview();
 
         };
-
 
       image.onerror =
         function(){
@@ -5826,29 +5722,19 @@ function changeProjectBackground(
             "ไม่สามารถอ่านรูปภาพนี้ได้"
           );
 
-      };
-
+        };
 
       image.src =
         loadEvent.target.result;
 
     };
 
-
-  reader.readAsDataURL(
-    file
-  );
+  reader.readAsDataURL(file);
 
 }
 
 
-/* ==================================================
-   BACKGROUND POSITION SLIDER
-================================================== */
-
-function changeBackgroundPosition(
-  value
-){
+function changeBackgroundPosition(value){
 
   pendingBackgroundPosition =
     clamp(
@@ -5857,19 +5743,12 @@ function changeBackgroundPosition(
       100
     );
 
-
   updateBackgroundPreview();
 
 }
 
 
-/* ==================================================
-   BACKGROUND DRAG
-================================================== */
-
-function startBackgroundDrag(
-  event
-){
+function startBackgroundDrag(event){
 
   if(
     !pendingBackgroundImage ||
@@ -5878,17 +5757,13 @@ function startBackgroundDrag(
     return;
   }
 
-
   bgDragging = true;
-
 
   bgDragStartY =
     event.clientY;
 
-
   bgDragStartPosition =
     pendingBackgroundPosition;
-
 
   document
     .getElementById(
@@ -5897,7 +5772,6 @@ function startBackgroundDrag(
     .classList.add(
       "dragging"
     );
-
 
   try{
 
@@ -5912,42 +5786,31 @@ function startBackgroundDrag(
 }
 
 
-function moveBackgroundDrag(
-  event
-){
+function moveBackgroundDrag(event){
 
   if(!bgDragging){
     return;
   }
-
 
   const preview =
     document.getElementById(
       "bgPreview"
     );
 
-
   const height =
     preview.clientHeight ||
     180;
-
 
   const deltaY =
     event.clientY -
     bgDragStartY;
 
-
-  /*
-    ลากภาพขึ้น
-    = เลื่อนจุด focus ลง
-  */
-
   const deltaPercent =
     (
       -deltaY /
       height
-    ) * 100;
-
+    ) *
+    100;
 
   pendingBackgroundPosition =
     clamp(
@@ -5957,23 +5820,18 @@ function moveBackgroundDrag(
       100
     );
 
-
   updateBackgroundPreview();
 
 }
 
 
-function endBackgroundDrag(
-  event
-){
+function endBackgroundDrag(event){
 
   if(!bgDragging){
     return;
   }
 
-
   bgDragging = false;
-
 
   document
     .getElementById(
@@ -5982,7 +5840,6 @@ function endBackgroundDrag(
     .classList.remove(
       "dragging"
     );
-
 
   try{
 
@@ -5997,10 +5854,6 @@ function endBackgroundDrag(
 }
 
 
-/* ==================================================
-   REMOVE BACKGROUND
-================================================== */
-
 function removeProjectBackground(){
 
   if(
@@ -6009,37 +5862,20 @@ function removeProjectBackground(){
       selectedProjectId
     )
   ){
-
     return;
-
   }
-
 
   if(
     !confirm(
       "ต้องการลบภาพพื้นหลังโครงการนี้ใช่หรือไม่?"
     )
   ){
-
     return;
-
   }
 
-
-  /*
-    ยังไม่ลบจริง
-    รอจนกดบันทึก
-  */
-
-  pendingBackgroundImage =
-    "";
-
-  pendingBackgroundRemove =
-    true;
-
-  pendingBackgroundPosition =
-    50;
-
+  pendingBackgroundImage = "";
+  pendingBackgroundRemove = true;
+  pendingBackgroundPosition = 50;
 
   document
     .getElementById(
@@ -6047,15 +5883,10 @@ function removeProjectBackground(){
     )
     .value = "";
 
-
   updateBackgroundPreview();
 
 }
 
-
-/* ==================================================
-   SAVE BACKGROUND
-================================================== */
 
 function saveBackgroundEditor(){
 
@@ -6063,20 +5894,17 @@ function saveBackgroundEditor(){
     return;
   }
 
-
   if(pendingBackgroundRemove){
 
     deleteProjectBackground(
       selectedProjectId
     );
 
-
     deleteProjectBackgroundPosition(
       selectedProjectId
     );
 
   }
-
   else if(
     pendingBackgroundImage
   ){
@@ -6088,7 +5916,6 @@ function saveBackgroundEditor(){
         pendingBackgroundImage
       );
 
-
       setProjectBackgroundPosition(
         selectedProjectId,
         pendingBackgroundPosition
@@ -6097,22 +5924,15 @@ function saveBackgroundEditor(){
     }
     catch(error){
 
-      console.error(
-        error
-      );
-
-
       alert(
         "พื้นที่จัดเก็บของ Browser ไม่เพียงพอ กรุณาเลือกภาพขนาดเล็กลง"
       );
-
 
       return;
 
     }
 
   }
-
 
   document
     .getElementById(
@@ -6122,73 +5942,22 @@ function saveBackgroundEditor(){
       "show"
     );
 
-
   const id =
     selectedProjectId;
-
 
   pendingBackgroundImage = "";
   pendingBackgroundPosition = 50;
   pendingBackgroundRemove = false;
 
-
   render();
 
-  openDetail(
-    id
-  );
+  openDetail(id);
 
 }
 
 
 /* ==================================================
-   BACKGROUND POINTER EVENTS
-================================================== */
-
-const bgPreviewElement =
-  document.getElementById(
-    "bgPreview"
-  );
-
-
-bgPreviewElement.addEventListener(
-  "pointerdown",
-  startBackgroundDrag
-);
-
-
-bgPreviewElement.addEventListener(
-  "pointermove",
-  moveBackgroundDrag
-);
-
-
-bgPreviewElement.addEventListener(
-  "pointerup",
-  endBackgroundDrag
-);
-
-
-bgPreviewElement.addEventListener(
-  "pointercancel",
-  endBackgroundDrag
-);
-
-
-/*
-==================================================
-PART 3 ต่อจากตรงนี้
-- Export PNG 1920x1080
-- Canvas helpers
-- Thai text wrapping
-- Export contractor / note / tasks
-- Initialization
-- Modal outside click
-- จบ </script></body></html>
-==================================================
-*/
-      /* ==================================================
-   EXPORT 16:9
+   EXPORT
 ================================================== */
 
 function loadCanvasImage(src){
@@ -6203,14 +5972,11 @@ function loadCanvasImage(src){
 
       }
 
-
       const image =
         new Image();
 
-
       image.onload =
         () => resolve(image);
-
 
       image.onerror =
         () => reject(
@@ -6218,7 +5984,6 @@ function loadCanvasImage(src){
             "Image load failed"
           )
         );
-
 
       image.src = src;
 
@@ -6228,9 +5993,97 @@ function loadCanvasImage(src){
 }
 
 
-/* ==================================================
-   DRAW COVER WITH VERTICAL POSITION
-================================================== */
+function roundRectPath(
+  ctx,x,y,width,height,radius
+){
+
+  const r =
+    Math.min(
+      radius,
+      width / 2,
+      height / 2
+    );
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    x + r,
+    y
+  );
+
+  ctx.lineTo(
+    x + width - r,
+    y
+  );
+
+  ctx.quadraticCurveTo(
+    x + width,
+    y,
+    x + width,
+    y + r
+  );
+
+  ctx.lineTo(
+    x + width,
+    y + height - r
+  );
+
+  ctx.quadraticCurveTo(
+    x + width,
+    y + height,
+    x + width - r,
+    y + height
+  );
+
+  ctx.lineTo(
+    x + r,
+    y + height
+  );
+
+  ctx.quadraticCurveTo(
+    x,
+    y + height,
+    x,
+    y + height - r
+  );
+
+  ctx.lineTo(
+    x,
+    y + r
+  );
+
+  ctx.quadraticCurveTo(
+    x,
+    y,
+    x + r,
+    y
+  );
+
+  ctx.closePath();
+
+}
+
+
+function fillRoundRect(
+  ctx,x,y,width,height,radius,color
+){
+
+  ctx.save();
+
+  roundRectPath(
+    ctx,
+    x,y,width,height,radius
+  );
+
+  ctx.fillStyle =
+    color;
+
+  ctx.fill();
+
+  ctx.restore();
+
+}
+
 
 function drawCoverPositioned(
   ctx,
@@ -6246,28 +6099,23 @@ function drawCoverPositioned(
     return;
   }
 
-
   const scale =
     Math.max(
       width / image.width,
       height / image.height
     );
 
-
   const sourceWidth =
     width / scale;
 
-
   const sourceHeight =
     height / scale;
-
 
   const sourceX =
     (
       image.width -
       sourceWidth
     ) / 2;
-
 
   const maxSourceY =
     Math.max(
@@ -6276,7 +6124,6 @@ function drawCoverPositioned(
       sourceHeight
     );
 
-
   const sourceY =
     maxSourceY *
     (
@@ -6284,18 +6131,16 @@ function drawCoverPositioned(
         positionY,
         0,
         100
-      ) / 100
+      ) /
+      100
     );
-
 
   ctx.drawImage(
     image,
-
     sourceX,
     sourceY,
     sourceWidth,
     sourceHeight,
-
     x,
     y,
     width,
@@ -6304,166 +6149,6 @@ function drawCoverPositioned(
 
 }
 
-
-/* ==================================================
-   CANVAS ROUND RECT
-================================================== */
-
-function roundRectPath(
-  ctx,
-  x,
-  y,
-  width,
-  height,
-  radius
-){
-
-  const r =
-    Math.min(
-      radius,
-      width / 2,
-      height / 2
-    );
-
-
-  ctx.beginPath();
-
-  ctx.moveTo(
-    x + r,
-    y
-  );
-
-
-  ctx.lineTo(
-    x + width - r,
-    y
-  );
-
-
-  ctx.quadraticCurveTo(
-    x + width,
-    y,
-    x + width,
-    y + r
-  );
-
-
-  ctx.lineTo(
-    x + width,
-    y + height - r
-  );
-
-
-  ctx.quadraticCurveTo(
-    x + width,
-    y + height,
-    x + width - r,
-    y + height
-  );
-
-
-  ctx.lineTo(
-    x + r,
-    y + height
-  );
-
-
-  ctx.quadraticCurveTo(
-    x,
-    y + height,
-    x,
-    y + height - r
-  );
-
-
-  ctx.lineTo(
-    x,
-    y + r
-  );
-
-
-  ctx.quadraticCurveTo(
-    x,
-    y,
-    x + r,
-    y
-  );
-
-
-  ctx.closePath();
-
-}
-
-
-function fillRoundRect(
-  ctx,
-  x,
-  y,
-  width,
-  height,
-  radius,
-  color
-){
-
-  ctx.save();
-
-  roundRectPath(
-    ctx,
-    x,
-    y,
-    width,
-    height,
-    radius
-  );
-
-  ctx.fillStyle =
-    color;
-
-  ctx.fill();
-
-  ctx.restore();
-
-}
-
-
-function strokeRoundRect(
-  ctx,
-  x,
-  y,
-  width,
-  height,
-  radius,
-  color,
-  lineWidth = 1
-){
-
-  ctx.save();
-
-  roundRectPath(
-    ctx,
-    x,
-    y,
-    width,
-    height,
-    radius
-  );
-
-  ctx.strokeStyle =
-    color;
-
-  ctx.lineWidth =
-    lineWidth;
-
-  ctx.stroke();
-
-  ctx.restore();
-
-}
-
-
-/* ==================================================
-   CANVAS TEXT HELPERS
-================================================== */
 
 function canvasFont(
   size,
@@ -6509,9 +6194,7 @@ function drawText(
     "alphabetic";
 
   ctx.fillText(
-    String(
-      text ?? ""
-    ),
+    String(text ?? ""),
     x,
     y
   );
@@ -6521,10 +6204,6 @@ function drawText(
 }
 
 
-/* ==================================================
-   WRAP TEXT
-================================================== */
-
 function getWrappedLines(
   ctx,
   text,
@@ -6533,27 +6212,15 @@ function getWrappedLines(
 ){
 
   const source =
-    String(
-      text ?? ""
-    )
+    String(text ?? "")
       .replace(/\r/g,"")
       .split("\n");
 
-
   const lines = [];
 
-
   for(
-    let paragraphIndex = 0;
-    paragraphIndex < source.length;
-    paragraphIndex++
+    const paragraph of source
   ){
-
-    const paragraph =
-      source[
-        paragraphIndex
-      ];
-
 
     if(!paragraph){
 
@@ -6570,37 +6237,19 @@ function getWrappedLines(
 
     }
 
-
     let line = "";
 
-
-    /*
-      รองรับภาษาไทย:
-      ใช้ Array.from แยก Unicode character
-      แทนการ split ด้วย space อย่างเดียว
-    */
-
-    const characters =
-      Array.from(
-        paragraph
-      );
-
-
     for(
-      let i = 0;
-      i < characters.length;
-      i++
+      const character of
+      Array.from(paragraph)
     ){
 
-      const testLine =
+      const test =
         line +
-        characters[i];
-
+        character;
 
       if(
-        ctx.measureText(
-          testLine
-        ).width >
+        ctx.measureText(test).width >
         maxWidth &&
         line
       ){
@@ -6609,10 +6258,8 @@ function getWrappedLines(
           line.trim()
         );
 
-
         line =
-          characters[i];
-
+          character;
 
         if(
           lines.length >=
@@ -6622,16 +6269,14 @@ function getWrappedLines(
         }
 
       }
-
       else{
 
         line =
-          testLine;
+          test;
 
       }
 
     }
-
 
     if(
       lines.length >=
@@ -6640,15 +6285,9 @@ function getWrappedLines(
       break;
     }
 
-
     if(line){
-
-      lines.push(
-        line.trim()
-      );
-
+      lines.push(line.trim());
     }
-
 
     if(
       lines.length >=
@@ -6658,7 +6297,6 @@ function getWrappedLines(
     }
 
   }
-
 
   return lines.slice(
     0,
@@ -6698,7 +6336,6 @@ function drawWrappedText(
   ctx.textBaseline =
     "top";
 
-
   const lines =
     getWrappedLines(
       ctx,
@@ -6707,602 +6344,33 @@ function drawWrappedText(
       maxLines
     );
 
-
   lines.forEach(
     (line,index) => {
 
-      let displayLine =
-        line;
-
-
-      if(
-        index ===
-        maxLines - 1
-      ){
-
-        while(
-          ctx.measureText(
-            displayLine
-          ).width >
-          maxWidth &&
-          displayLine.length > 1
-        ){
-
-          displayLine =
-            displayLine.slice(
-              0,
-              -1
-            );
-
-        }
-
-      }
-
-
       ctx.fillText(
-        displayLine,
+        line,
         x,
         y +
-        (
-          index *
-          lineHeight
-        )
+        index *
+        lineHeight
       );
 
     }
   );
 
-
-  ctx.restore();
-
-
-  return (
-    lines.length *
-    lineHeight
-  );
-
-}
-
-
-/* ==================================================
-   STATUS COLORS FOR EXPORT
-================================================== */
-
-function exportStatusColors(
-  status
-){
-
-  const colors = {
-
-    active:{
-      bg:"#EAF2FF",
-      text:"#3976D3",
-      bar:"#3976D3"
-    },
-
-    done:{
-      bg:"#E8F7EF",
-      text:"#1D9B63",
-      bar:"#1D9B63"
-    },
-
-    delay:{
-      bg:"#FFEDED",
-      text:"#DF5353",
-      bar:"#DF5353"
-    },
-
-    wait:{
-      bg:"#F0F1F3",
-      text:"#737B87",
-      bar:"#9AA2AE"
-    },
-
-    pause:{
-      bg:"#FFF4E4",
-      text:"#E69328",
-      bar:"#E69328"
-    }
-
-  };
-
-
-  return (
-    colors[status] ||
-    colors.active
-  );
-
-}
-
-
-/* ==================================================
-   STATUS BADGE CANVAS
-================================================== */
-
-function drawStatusBadge(
-  ctx,
-  status,
-  x,
-  y
-){
-
-  const text =
-    statusText(
-      status
-    );
-
-
-  const colors =
-    exportStatusColors(
-      status
-    );
-
-
-  ctx.save();
-
-  ctx.font =
-    canvasFont(
-      22,
-      700
-    );
-
-
-  const width =
-    ctx.measureText(
-      text
-    ).width +
-    36;
-
-
-  fillRoundRect(
-    ctx,
-    x,
-    y,
-    width,
-    42,
-    21,
-    colors.bg
-  );
-
-
-  drawText(
-    ctx,
-    text,
-    x + 18,
-    y + 29,
-    22,
-    colors.text,
-    700
-  );
-
-
-  ctx.restore();
-
-
-  return width;
-
-}
-
-
-/* ==================================================
-   DONUT
-================================================== */
-
-function drawDonut(
-  ctx,
-  centerX,
-  centerY,
-  radius,
-  lineWidth,
-  percent,
-  foreground,
-  background,
-  centerColor = null
-){
-
-  const progress =
-    clamp(
-      percent,
-      0,
-      100
-    );
-
-
-  ctx.save();
-
-
-  ctx.beginPath();
-
-  ctx.arc(
-    centerX,
-    centerY,
-    radius,
-    0,
-    Math.PI * 2
-  );
-
-  ctx.strokeStyle =
-    background;
-
-  ctx.lineWidth =
-    lineWidth;
-
-  ctx.lineCap =
-    "round";
-
-  ctx.stroke();
-
-
-  if(progress > 0){
-
-    ctx.beginPath();
-
-    ctx.arc(
-      centerX,
-      centerY,
-      radius,
-      -Math.PI / 2,
-      -Math.PI / 2 +
-      (
-        Math.PI *
-        2 *
-        progress /
-        100
-      )
-    );
-
-    ctx.strokeStyle =
-      foreground;
-
-    ctx.lineWidth =
-      lineWidth;
-
-    ctx.lineCap =
-      "round";
-
-    ctx.stroke();
-
-  }
-
-
-  if(centerColor){
-
-    ctx.beginPath();
-
-    ctx.arc(
-      centerX,
-      centerY,
-      radius -
-      lineWidth / 2 -
-      3,
-      0,
-      Math.PI * 2
-    );
-
-    ctx.fillStyle =
-      centerColor;
-
-    ctx.fill();
-
-  }
-
-
   ctx.restore();
 
 }
 
-
-/* ==================================================
-   KPI CARD
-================================================== */
-
-function drawExportKPI(
-  ctx,
-  x,
-  y,
-  width,
-  height,
-  icon,
-  label,
-  value,
-  options = {}
-){
-
-  const background =
-    options.background ||
-    "#FFFFFF";
-
-
-  const border =
-    options.border ||
-    "#E8EDF3";
-
-
-  const valueColor =
-    options.valueColor ||
-    "#18202E";
-
-
-  fillRoundRect(
-    ctx,
-    x,
-    y,
-    width,
-    height,
-    22,
-    background
-  );
-
-
-  strokeRoundRect(
-    ctx,
-    x,
-    y,
-    width,
-    height,
-    22,
-    border,
-    1
-  );
-
-
-  fillRoundRect(
-    ctx,
-    x + 22,
-    y + 21,
-    48,
-    48,
-    15,
-    "#F1F5FB"
-  );
-
-
-  drawText(
-    ctx,
-    icon,
-    x + 46,
-    y + 54,
-    23,
-    "#31415C",
-    700,
-    "center"
-  );
-
-
-  drawText(
-    ctx,
-    label,
-    x + 22,
-    y + 95,
-    17,
-    "#8D96A6",
-    600
-  );
-
-
-  drawWrappedText(
-    ctx,
-    value,
-    x + 22,
-    y + 108,
-    width - 44,
-    30,
-    27,
-    valueColor,
-    800,
-    2
-  );
-
-}
-
-
-/* ==================================================
-   TASK ROW EXPORT
-================================================== */
-
-function drawExportTask(
-  ctx,
-  task,
-  x,
-  y,
-  width
-){
-
-  const progress =
-    clamp(
-      task.progress || 0,
-      0,
-      100
-    );
-
-
-  const status =
-    task.status ||
-    (
-      progress >= 100
-        ? "done"
-        : "active"
-    );
-
-
-  const colors =
-    exportStatusColors(
-      status
-    );
-
-
-  const height =
-    112;
-
-
-  fillRoundRect(
-    ctx,
-    x,
-    y,
-    width,
-    height,
-    18,
-    "#FFFFFF"
-  );
-
-
-  strokeRoundRect(
-    ctx,
-    x,
-    y,
-    width,
-    height,
-    18,
-    "#E9EDF2",
-    1
-  );
-
-
-  ctx.save();
-
-  ctx.font =
-    canvasFont(
-      22,
-      700
-    );
-
-
-  const taskName =
-    String(
-      task.name || "-"
-    );
-
-
-  let displayName =
-    taskName;
-
-
-  while(
-    ctx.measureText(
-      displayName
-    ).width >
-    width - 205 &&
-    displayName.length > 3
-  ){
-
-    displayName =
-      displayName.slice(
-        0,
-        -1
-      );
-
-  }
-
-
-  if(
-    displayName !==
-    taskName
-  ){
-
-    displayName += "…";
-
-  }
-
-
-  ctx.restore();
-
-
-  drawText(
-    ctx,
-    displayName,
-    x + 22,
-    y + 34,
-    22,
-    "#18202E",
-    700
-  );
-
-
-  drawText(
-    ctx,
-    progress + "%",
-    x + width - 22,
-    y + 34,
-    23,
-    "#18202E",
-    800,
-    "right"
-  );
-
-
-  fillRoundRect(
-    ctx,
-    x + 22,
-    y + 54,
-    116,
-    27,
-    14,
-    colors.bg
-  );
-
-
-  drawText(
-    ctx,
-    taskStatusText(
-      status
-    ),
-    x + 80,
-    y + 73,
-    13,
-    colors.text,
-    700,
-    "center"
-  );
-
-
-  fillRoundRect(
-    ctx,
-    x + 22,
-    y + 91,
-    width - 44,
-    8,
-    4,
-    "#EDF0F3"
-  );
-
-
-  if(progress > 0){
-
-    fillRoundRect(
-      ctx,
-      x + 22,
-      y + 91,
-      (
-        width - 44
-      ) *
-      progress /
-      100,
-      8,
-      4,
-      colors.bar
-    );
-
-  }
-
-
-  return height;
-
-}
-
-
-/* ==================================================
-   EXPORT PROJECT IMAGE
-================================================== */
 
 async function exportProjectImage(){
 
   const project =
     projects.find(
-      project =>
-        project.id ===
+      item =>
+        item.id ===
         selectedProjectId
     );
-
 
   if(!project){
 
@@ -7314,45 +6382,22 @@ async function exportProjectImage(){
 
   }
 
-
-  if(
-    Array.isArray(
-      project.tasks
-    ) &&
-    project.tasks.length > 0
-  ){
-
-    recalculateProject(
-      project
-    );
-
+  if(project.tasks.length){
+    recalculateProject(project);
   }
-
 
   const canvas =
     document.createElement(
       "canvas"
     );
 
-
-  /*
-    Full HD 16:9
-  */
-
-  canvas.width =
-    1920;
-
-  canvas.height =
-    1080;
-
+  canvas.width = 1920;
+  canvas.height = 1080;
 
   const ctx =
     canvas.getContext(
       "2d"
     );
-
-
-  /* Anti alias / quality */
 
   ctx.imageSmoothingEnabled =
     true;
@@ -7360,120 +6405,64 @@ async function exportProjectImage(){
   ctx.imageSmoothingQuality =
     "high";
 
-
-  const W =
-    canvas.width;
-
-  const H =
-    canvas.height;
-
-
   const progress =
     clamp(
-      project.progress || 0,
+      project.progress,
       0,
       100
     );
 
-
   const days =
-    daysInfo(
-      project
-    );
-
+    daysInfo(project);
 
   const tasks =
-    Array.isArray(
-      project.tasks
-    )
-      ? project.tasks
-      : [];
-
+    project.tasks;
 
   const summary =
-    getTaskSummary(
-      project
-    );
-
-
-  const completedTasks =
-    summary.done;
-
-
-  const taskDonePercent =
-    summary.total
-      ? Math.round(
-          summary.done /
-          summary.total *
-          100
-        )
-      : 0;
-
+    getTaskSummary(project);
 
   const background =
     getProjectBackground(
       project.id
     );
 
-
-  const backgroundPosition =
+  const bgPosition =
     getProjectBackgroundPosition(
       project.id
     );
 
-
-  let heroImage = null;
-
+  let image = null;
 
   if(background){
 
     try{
 
-      heroImage =
+      image =
         await loadCanvasImage(
           background
         );
 
     }
-    catch(error){
-
-      console.error(
-        "Export background:",
-        error
-      );
-
-    }
+    catch(error){}
 
   }
 
-
-  /* ==================================================
-     PAGE BACKGROUND
-  ================================================== */
 
   ctx.fillStyle =
     "#F3F5F8";
 
   ctx.fillRect(
-    0,
-    0,
-    W,
-    H
+    0,0,1920,1080
   );
 
 
-  /* ==================================================
-     HERO
-  ================================================== */
-
   const heroX = 48;
   const heroY = 42;
-  const heroW = W - 96;
+  const heroW = 1824;
   const heroH = 315;
 
 
   ctx.save();
-
 
   roundRectPath(
     ctx,
@@ -7484,24 +6473,22 @@ async function exportProjectImage(){
     30
   );
 
-
   ctx.clip();
 
 
-  if(heroImage){
+  if(image){
 
     drawCoverPositioned(
       ctx,
-      heroImage,
+      image,
       heroX,
       heroY,
       heroW,
       heroH,
-      backgroundPosition
+      bgPosition
     );
 
   }
-
   else{
 
     const gradient =
@@ -7512,22 +6499,18 @@ async function exportProjectImage(){
         heroY + heroH
       );
 
-
     gradient.addColorStop(
       0,
       "#172033"
     );
-
 
     gradient.addColorStop(
       1,
       "#344B70"
     );
 
-
     ctx.fillStyle =
       gradient;
-
 
     ctx.fillRect(
       heroX,
@@ -7539,40 +6522,26 @@ async function exportProjectImage(){
   }
 
 
-  /*
-    Hero dark gradient
-  */
-
   const overlay =
     ctx.createLinearGradient(
-      heroX,
+      0,
       heroY,
-      heroX,
+      0,
       heroY + heroH
     );
 
-
   overlay.addColorStop(
     0,
-    "rgba(8,14,25,.22)"
+    "rgba(8,14,25,.20)"
   );
-
-
-  overlay.addColorStop(
-    .35,
-    "rgba(8,14,25,.40)"
-  );
-
 
   overlay.addColorStop(
     1,
-    "rgba(8,14,25,.93)"
+    "rgba(8,14,25,.94)"
   );
-
 
   ctx.fillStyle =
     overlay;
-
 
   ctx.fillRect(
     heroX,
@@ -7581,40 +6550,6 @@ async function exportProjectImage(){
     heroH
   );
 
-
-  ctx.restore();
-
-
-  /* Status */
-
-  drawStatusBadge(
-    ctx,
-    project.status,
-    88,
-    82
-  );
-
-
-  /* Project title */
-
-  ctx.save();
-
-  ctx.font =
-    canvasFont(
-      44,
-      800
-    );
-
-
-  const titleLines =
-    getWrappedLines(
-      ctx,
-      project.name,
-      1240,
-      2
-    );
-
-
   ctx.restore();
 
 
@@ -7622,27 +6557,14 @@ async function exportProjectImage(){
     ctx,
     project.name,
     88,
-    153,
-    1240,
-    55,
-    44,
+    125,
+    1250,
+    56,
+    46,
     "#FFFFFF",
     800,
     2
   );
-
-
-  const titleHeight =
-    titleLines.length *
-    55;
-
-
-  const infoY =
-    Math.min(
-      286,
-      164 +
-      titleHeight
-    );
 
 
   drawText(
@@ -7653,59 +6575,19 @@ async function exportProjectImage(){
       "ไม่ระบุสถานที่"
     ),
     90,
-    infoY,
-    21,
-    "rgba(255,255,255,.78)",
+    270,
+    22,
+    "rgba(255,255,255,.80)",
     500
-  );
-
-
-  if(
-    project.contractorCompany
-  ){
-
-    drawText(
-      ctx,
-      "บริษัทรับเหมา: " +
-      project.contractorCompany,
-      90,
-      infoY + 34,
-      19,
-      "rgba(255,255,255,.78)",
-      500
-    );
-
-  }
-
-
-  /* HERO DONUT */
-
-  const donutX =
-    1680;
-
-  const donutY =
-    198;
-
-
-  drawDonut(
-    ctx,
-    donutX,
-    donutY,
-    92,
-    19,
-    progress,
-    "#FFFFFF",
-    "rgba(255,255,255,.22)",
-    "rgba(22,32,51,.90)"
   );
 
 
   drawText(
     ctx,
     progress + "%",
-    donutX,
-    donutY + 10,
-    40,
+    1690,
+    200,
+    58,
     "#FFFFFF",
     800,
     "center"
@@ -7715,193 +6597,121 @@ async function exportProjectImage(){
   drawText(
     ctx,
     "PROGRESS",
-    donutX,
-    donutY + 43,
-    14,
-    "rgba(255,255,255,.64)",
+    1690,
+    238,
+    16,
+    "rgba(255,255,255,.65)",
     700,
     "center"
   );
 
 
-  /* ==================================================
-     LEFT COLUMN
-  ================================================== */
+  const cardY = 390;
 
-  const leftX = 48;
-  const leftY = 385;
-  const leftW = 1195;
+  const cardGap = 16;
 
-
-  /* KPI */
-
-  const gap =
-    14;
-
-
-  const kpiWidth =
+  const cardW =
     (
-      leftW -
-      gap * 3
-    ) / 4;
+      1824 -
+      cardGap * 3
+    ) /
+    4;
 
 
-  const kpiHeight =
-    154;
+  const kpis = [
+
+    [
+      "มูลค่าโครงการ",
+      money(project.value)
+    ],
+
+    [
+      "งานเสร็จ",
+      summary.done +
+      "/" +
+      tasks.length +
+      " งาน"
+    ],
+
+    [
+      "กำหนดเสร็จ",
+      formatDate(
+        project.endDate
+      )
+    ],
+
+    [
+      "ระยะเวลาคงเหลือ",
+      days.short
+    ]
+
+  ];
 
 
-  drawExportKPI(
-    ctx,
-    leftX,
-    leftY,
-    kpiWidth,
-    kpiHeight,
-    "฿",
-    "มูลค่าโครงการ",
-    money(
-      project.value
-    )
-  );
+  kpis.forEach(
+    (item,index) => {
 
+      const x =
+        48 +
+        index *
+        (
+          cardW +
+          cardGap
+        );
 
-  drawExportKPI(
-    ctx,
-    leftX +
-    (
-      kpiWidth +
-      gap
-    ),
-    leftY,
-    kpiWidth,
-    kpiHeight,
-    "✓",
-    "งานเสร็จ",
-    completedTasks +
-    "/" +
-    tasks.length +
-    " งาน"
-  );
+      fillRoundRect(
+        ctx,
+        x,
+        cardY,
+        cardW,
+        145,
+        22,
+        "#FFFFFF"
+      );
 
+      drawText(
+        ctx,
+        item[0],
+        x + 24,
+        cardY + 42,
+        18,
+        "#8D96A6",
+        600
+      );
 
-  drawExportKPI(
-    ctx,
-    leftX +
-    (
-      kpiWidth +
-      gap
-    ) * 2,
-    leftY,
-    kpiWidth,
-    kpiHeight,
-    "📅",
-    "กำหนดเสร็จ",
-    formatDate(
-      project.endDate
-    )
-  );
+      drawWrappedText(
+        ctx,
+        item[1],
+        x + 24,
+        cardY + 65,
+        cardW - 48,
+        35,
+        28,
+        "#18202E",
+        800,
+        2
+      );
 
-
-  let remainingBackground =
-    "#FFFFFF";
-
-  let remainingBorder =
-    "#E8EDF3";
-
-  let remainingColor =
-    "#18202E";
-
-
-  if(days.cls === "overdue"){
-
-    remainingBackground =
-      "#FFEDED";
-
-    remainingBorder =
-      "#FFD8D8";
-
-    remainingColor =
-      "#DF5353";
-
-  }
-
-  else if(
-    days.cls === "done"
-  ){
-
-    remainingBackground =
-      "#E8F7EF";
-
-    remainingBorder =
-      "#D4EFDF";
-
-    remainingColor =
-      "#1D9B63";
-
-  }
-
-
-  drawExportKPI(
-    ctx,
-    leftX +
-    (
-      kpiWidth +
-      gap
-    ) * 3,
-    leftY,
-    kpiWidth,
-    kpiHeight,
-    "◷",
-    "ระยะเวลาคงเหลือ",
-    days.short,
-    {
-      background:
-        remainingBackground,
-
-      border:
-        remainingBorder,
-
-      valueColor:
-        remainingColor
     }
   );
 
 
-  /* ==================================================
-     PROJECT PROGRESS CARD
-  ================================================== */
-
-  const progressCardY =
-    558;
-
-
   fillRoundRect(
     ctx,
-    leftX,
-    progressCardY,
-    leftW,
+    48,
+    555,
+    1824,
     120,
-    21,
+    22,
     "#FFFFFF"
-  );
-
-
-  strokeRoundRect(
-    ctx,
-    leftX,
-    progressCardY,
-    leftW,
-    120,
-    21,
-    "#E8EDF3",
-    1
   );
 
 
   drawText(
     ctx,
     "ความคืบหน้าโครงการ",
-    leftX + 24,
-    progressCardY + 39,
+    74,
+    598,
     20,
     "#687385",
     700
@@ -7911,9 +6721,9 @@ async function exportProjectImage(){
   drawText(
     ctx,
     progress + "%",
-    leftX + leftW - 24,
-    progressCardY + 41,
-    27,
+    1845,
+    600,
+    28,
     "#18202E",
     800,
     "right"
@@ -7922,644 +6732,39 @@ async function exportProjectImage(){
 
   fillRoundRect(
     ctx,
-    leftX + 24,
-    progressCardY + 68,
-    leftW - 48,
+    74,
+    625,
+    1770,
     14,
     7,
     "#EDF0F3"
   );
 
 
-  if(progress > 0){
-
-    const gradient =
-      ctx.createLinearGradient(
-        leftX + 24,
-        0,
-        leftX +
-        leftW -
-        24,
-        0
-      );
-
-
-    gradient.addColorStop(
-      0,
-      "#172033"
-    );
-
-
-    gradient.addColorStop(
-      1,
-      "#3976D3"
-    );
-
+  if(progress){
 
     fillRoundRect(
       ctx,
-      leftX + 24,
-      progressCardY + 68,
-      (
-        leftW - 48
-      ) *
+      74,
+      625,
+      1770 *
       progress /
       100,
       14,
       7,
-      gradient
+      "#3976D3"
     );
 
   }
 
 
-  if(tasks.length){
-
-    drawText(
-      ctx,
-      "คำนวณจาก " +
-      tasks.length +
-      " รายการงานอัตโนมัติ",
-      leftX + 24,
-      progressCardY + 106,
-      15,
-      "#8D96A6",
-      500
-    );
-
-  }
-
-
-  /* ==================================================
-     CONTRACTOR / DESCRIPTION
-  ================================================== */
-
-  const infoY2 =
-    698;
-
-
-  const contractorExists =
-    !!(
-      project.contractorCompany ||
-      project.contractorContact ||
-      project.contractorPhone
-    );
-
-
-  fillRoundRect(
-    ctx,
-    leftX,
-    infoY2,
-    leftW,
-    186,
-    21,
-    "#FFFFFF"
-  );
-
-
-  strokeRoundRect(
-    ctx,
-    leftX,
-    infoY2,
-    leftW,
-    186,
-    21,
-    "#E8EDF3",
-    1
-  );
-
-
-  if(contractorExists){
-
-    drawText(
-      ctx,
-      "บริษัทรับเหมา",
-      leftX + 24,
-      infoY2 + 35,
-      17,
-      "#8D96A6",
-      600
-    );
-
-
-    drawText(
-      ctx,
-      project.contractorCompany ||
-      "-",
-      leftX + 24,
-      infoY2 + 70,
-      26,
-      "#18202E",
-      800
-    );
-
-
-    drawText(
-      ctx,
-      "ผู้ประสานงาน",
-      leftX + 24,
-      infoY2 + 108,
-      15,
-      "#8D96A6",
-      600
-    );
-
-
-    drawText(
-      ctx,
-      project.contractorContact ||
-      "-",
-      leftX + 24,
-      infoY2 + 139,
-      20,
-      "#394354",
-      700
-    );
-
-
-    drawText(
-      ctx,
-      "เบอร์โทรศัพท์",
-      leftX + 430,
-      infoY2 + 108,
-      15,
-      "#8D96A6",
-      600
-    );
-
-
-    drawText(
-      ctx,
-      project.contractorPhone ||
-      "-",
-      leftX + 430,
-      infoY2 + 139,
-      20,
-      "#394354",
-      700
-    );
-
-
-    /*
-      Description ฝั่งขวา
-    */
-
-    if(
-      project.description ||
-      project.note
-    ){
-
-      ctx.strokeStyle =
-        "#E8EDF3";
-
-      ctx.lineWidth =
-        1;
-
-
-      ctx.beginPath();
-
-      ctx.moveTo(
-        leftX + 720,
-        infoY2 + 24
-      );
-
-      ctx.lineTo(
-        leftX + 720,
-        infoY2 + 162
-      );
-
-      ctx.stroke();
-
-
-      drawText(
-        ctx,
-        project.note
-          ? "หมายเหตุ"
-          : "รายละเอียดโครงการ",
-        leftX + 750,
-        infoY2 + 35,
-        17,
-        project.note
-          ? "#A26A1C"
-          : "#8D96A6",
-        700
-      );
-
-
-      drawWrappedText(
-        ctx,
-        project.note ||
-        project.description,
-        leftX + 750,
-        infoY2 + 56,
-        leftW - 780,
-        26,
-        17,
-        "#596273",
-        500,
-        4
-      );
-
-    }
-
-  }
-
-  else{
-
-    drawText(
-      ctx,
-      project.note
-        ? "หมายเหตุ"
-        : "รายละเอียดโครงการ",
-      leftX + 24,
-      infoY2 + 36,
-      17,
-      project.note
-        ? "#A26A1C"
-        : "#8D96A6",
-      700
-    );
-
-
-    drawWrappedText(
-      ctx,
-      project.note ||
-      project.description ||
-      "ยังไม่มีรายละเอียดเพิ่มเติม",
-      leftX + 24,
-      infoY2 + 58,
-      leftW - 48,
-      28,
-      19,
-      "#596273",
-      500,
-      4
-    );
-
-  }
-
-
-  /* ==================================================
-     RIGHT COLUMN
-  ================================================== */
-
-  const rightX =
-    1265;
-
-  const rightY =
-    385;
-
-  const rightW =
-    607;
-
-
-  /* TASK SUMMARY */
-
-  fillRoundRect(
-    ctx,
-    rightX,
-    rightY,
-    rightW,
-    260,
-    24,
-    "#FFFFFF"
-  );
-
-
-  strokeRoundRect(
-    ctx,
-    rightX,
-    rightY,
-    rightW,
-    260,
-    24,
-    "#E8EDF3",
-    1
-  );
-
-
-  drawText(
-    ctx,
-    "สรุปรายการงาน",
-    rightX + 25,
-    rightY + 39,
-    22,
-    "#18202E",
-    800
-  );
-
-
-  drawDonut(
-    ctx,
-    rightX + 135,
-    rightY + 146,
-    72,
-    16,
-    taskDonePercent,
-    "#1D9B63",
-    "#EDF0F3",
-    "#FFFFFF"
-  );
-
-
-  drawText(
-    ctx,
-    completedTasks +
-    "/" +
-    summary.total,
-    rightX + 135,
-    rightY + 153,
-    28,
-    "#18202E",
-    800,
-    "center"
-  );
-
-
-  drawText(
-    ctx,
-    "งานเสร็จ",
-    rightX + 135,
-    rightY + 181,
-    14,
-    "#8D96A6",
-    600,
-    "center"
-  );
-
-
-  /* Legend */
-
-  const legendX =
-    rightX + 260;
-
-
-  const legendRows = [
-
-    {
-      label:"เสร็จแล้ว",
-      value:summary.done,
-      color:"#1D9B63"
-    },
-
-    {
-      label:"กำลังดำเนินการ",
-      value:summary.active,
-      color:"#3976D3"
-    },
-
-    {
-      label:"ยังไม่เริ่ม",
-      value:summary.wait,
-      color:"#9AA2AE"
-    },
-
-    {
-      label:"ล่าช้า",
-      value:summary.delay,
-      color:"#DF5353"
-    }
-
-  ];
-
-
-  if(summary.pause){
-
-    legendRows.push({
-
-      label:"พักงาน",
-      value:summary.pause,
-      color:"#E69328"
-
-    });
-
-  }
-
-
-  legendRows.forEach(
-    (item,index) => {
-
-      const y =
-        rightY +
-        82 +
-        index * 37;
-
-
-      ctx.beginPath();
-
-      ctx.arc(
-        legendX,
-        y - 5,
-        6,
-        0,
-        Math.PI * 2
-      );
-
-      ctx.fillStyle =
-        item.color;
-
-      ctx.fill();
-
-
-      drawText(
-        ctx,
-        item.label,
-        legendX + 18,
-        y,
-        16,
-        "#687385",
-        600
-      );
-
-
-      drawText(
-        ctx,
-        item.value,
-        rightX +
-        rightW -
-        28,
-        y,
-        17,
-        "#18202E",
-        800,
-        "right"
-      );
-
-    }
-  );
-
-
-  /* ==================================================
-     TASK LIST
-  ================================================== */
-
-  const taskListY =
-    664;
-
-
-  drawText(
-    ctx,
-    "รายการงาน",
-    rightX,
-    taskListY,
-    22,
-    "#18202E",
-    800
-  );
-
-
-  drawText(
-    ctx,
-    tasks.length +
-    " รายการ",
-    rightX +
-    rightW,
-    taskListY,
-    16,
-    "#8D96A6",
-    600,
-    "right"
-  );
-
-
-  let taskY =
-    taskListY + 22;
-
-
-  const maxTaskRows =
-    3;
-
-
-  if(tasks.length === 0){
-
-    fillRoundRect(
-      ctx,
-      rightX,
-      taskY,
-      rightW,
-      120,
-      18,
-      "#FFFFFF"
-    );
-
-
-    strokeRoundRect(
-      ctx,
-      rightX,
-      taskY,
-      rightW,
-      120,
-      18,
-      "#DDE2E8",
-      1
-    );
-
-
-    drawText(
-      ctx,
-      "ยังไม่มีรายการงาน",
-      rightX +
-      rightW / 2,
-      taskY + 68,
-      18,
-      "#8D96A6",
-      600,
-      "center"
-    );
-
-  }
-
-  else{
-
-    tasks
-      .slice(
-        0,
-        maxTaskRows
-      )
-      .forEach(task => {
-
-        const usedHeight =
-          drawExportTask(
-            ctx,
-            task,
-            rightX,
-            taskY,
-            rightW
-          );
-
-
-        taskY +=
-          usedHeight +
-          10;
-
-      });
-
-
-    if(
-      tasks.length >
-      maxTaskRows
-    ){
-
-      drawText(
-        ctx,
-        "+ อีก " +
-        (
-          tasks.length -
-          maxTaskRows
-        ) +
-        " รายการ",
-        rightX +
-        rightW,
-        Math.min(
-          taskY + 5,
-          1015
-        ),
-        15,
-        "#8D96A6",
-        600,
-        "right"
-      );
-
-    }
-
-  }
-
-
-  /* ==================================================
-     FOOTER
-  ================================================== */
-
-  const footerY =
-    1032;
-
-
-  ctx.strokeStyle =
-    "#DFE3E9";
-
-  ctx.lineWidth =
-    1;
-
-
-  ctx.beginPath();
-
-  ctx.moveTo(
-    48,
-    footerY - 20
-  );
-
-  ctx.lineTo(
-    W - 48,
-    footerY - 20
-  );
-
-  ctx.stroke();
-
+  drawProjectInformationForExport(ctx, project, 48, 695, 1824, 275);
 
   drawText(
     ctx,
     "PROJECT DASHBOARD",
     48,
-    footerY + 5,
+    1037,
     15,
     "#A0A7B3",
     700
@@ -8579,27 +6784,18 @@ async function exportProjectImage(){
     );
 
 
-  /*
-    วางชิดขวาโดย textAlign:right
-    แก้ปัญหาวันที่ถูกตัดขอบ
-  */
-
   drawText(
     ctx,
     "อัปเดต " +
     generatedDate,
-    W - 48,
-    footerY + 5,
+    1872,
+    1037,
     15,
     "#A0A7B3",
     500,
     "right"
   );
 
-
-  /* ==================================================
-     DOWNLOAD
-  ================================================== */
 
   const safeName =
     String(
@@ -8635,9 +6831,7 @@ async function exportProjectImage(){
     link
   );
 
-
   link.click();
-
 
   link.remove();
 
@@ -8645,7 +6839,7 @@ async function exportProjectImage(){
 
 
 /* ==================================================
-   TODAY TEXT
+   UI SUPPORT
 ================================================== */
 
 function updateTodayText(){
@@ -8655,11 +6849,9 @@ function updateTodayText(){
       "todayText"
     );
 
-
   if(!element){
     return;
   }
-
 
   try{
 
@@ -8678,17 +6870,110 @@ function updateTodayText(){
   }
   catch(error){
 
-    element.textContent =
-      "";
+    element.textContent = "";
 
   }
 
 }
 
 
+function resetModalScroll(
+  modalId
+){
+
+  const modal =
+    document.getElementById(
+      modalId
+    );
+
+  if(!modal){
+    return;
+  }
+
+  const box =
+    modal.querySelector(
+      ".modal-box,.detail-box"
+    );
+
+  if(box){
+    box.scrollTop = 0;
+  }
+
+}
+
+
 /* ==================================================
-   CLOSE MODAL WHEN CLICKING BACKDROP
+   EVENTS
 ================================================== */
+
+const bgPreviewElement =
+  document.getElementById(
+    "bgPreview"
+  );
+
+
+bgPreviewElement.addEventListener(
+  "pointerdown",
+  startBackgroundDrag
+);
+
+
+bgPreviewElement.addEventListener(
+  "pointermove",
+  moveBackgroundDrag
+);
+
+
+bgPreviewElement.addEventListener(
+  "pointerup",
+  endBackgroundDrag
+);
+
+
+bgPreviewElement.addEventListener(
+  "pointercancel",
+  endBackgroundDrag
+);
+
+
+document
+  .getElementById(
+    "taskProgress"
+  )
+  .addEventListener(
+    "input",
+    function(){
+
+      const progress =
+        Number(this.value);
+
+      const status =
+        document.getElementById(
+          "taskStatus"
+        );
+
+      if(progress >= 100){
+
+        status.value =
+          "done";
+
+      }
+      else if(
+        status.value === "done"
+      ){
+
+        status.value =
+          progress === 0
+            ? "wait"
+            : "active";
+
+      }
+
+      updateTaskLabel();
+
+    }
+  );
+
 
 document.addEventListener(
   "click",
@@ -8700,11 +6985,8 @@ document.addEventListener(
         "projectModal"
       )
     ){
-
       closeProjectModal();
-
     }
-
 
     if(
       event.target ===
@@ -8712,11 +6994,8 @@ document.addEventListener(
         "detailModal"
       )
     ){
-
       closeDetail();
-
     }
-
 
     if(
       event.target ===
@@ -8724,11 +7003,8 @@ document.addEventListener(
         "taskModal"
       )
     ){
-
       closeTaskModal();
-
     }
-
 
     if(
       event.target ===
@@ -8736,56 +7012,26 @@ document.addEventListener(
         "backgroundModal"
       )
     ){
-
       cancelBackgroundEditor();
-
     }
 
   }
 );
 
-
-/* ==================================================
-   ESC KEY
-================================================== */
 
 document.addEventListener(
   "keydown",
   function(event){
 
-    if(
-      event.key !== "Escape"
-    ){
+    if(event.key !== "Escape"){
       return;
     }
 
-
-    const backgroundModal =
-      document.getElementById(
-        "backgroundModal"
-      );
-
-
-    const taskModal =
-      document.getElementById(
-        "taskModal"
-      );
-
-
-    const projectModal =
-      document.getElementById(
-        "projectModal"
-      );
-
-
-    const detailModal =
-      document.getElementById(
-        "detailModal"
-      );
-
-
     if(
-      backgroundModal
+      document
+        .getElementById(
+          "backgroundModal"
+        )
         .classList
         .contains(
           "show"
@@ -8797,9 +7043,11 @@ document.addEventListener(
 
     }
 
-
     if(
-      taskModal
+      document
+        .getElementById(
+          "taskModal"
+        )
         .classList
         .contains(
           "show"
@@ -8811,9 +7059,11 @@ document.addEventListener(
 
     }
 
-
     if(
-      projectModal
+      document
+        .getElementById(
+          "projectModal"
+        )
         .classList
         .contains(
           "show"
@@ -8825,9 +7075,11 @@ document.addEventListener(
 
     }
 
-
     if(
-      detailModal
+      document
+        .getElementById(
+          "detailModal"
+        )
         .classList
         .contains(
           "show"
@@ -8842,116 +7094,14 @@ document.addEventListener(
 );
 
 
-/* ==================================================
-   RANGE / TASK AUTO STATUS
-================================================== */
-
-document
-  .getElementById(
-    "taskProgress"
-  )
-  .addEventListener(
-    "input",
-    function(){
-
-      const progress =
-        Number(
-          this.value
-        );
-
-
-      const status =
-        document.getElementById(
-          "taskStatus"
-        );
-
-
-      /*
-        เลื่อนถึง 100%
-        เปลี่ยนเป็นเสร็จอัตโนมัติ
-      */
-
-      if(progress >= 100){
-
-        status.value =
-          "done";
-
-      }
-
-
-      /*
-        ถ้าลดจาก 100%
-        และเดิมเป็น done
-        กลับเป็น active
-      */
-
-      else if(
-        status.value ===
-        "done"
-      ){
-
-        status.value =
-          progress === 0
-            ? "wait"
-            : "active";
-
-      }
-
-
-      updateTaskLabel();
-
-    }
-  );
-
-
-/* ==================================================
-   MODAL SCROLL RESET
-================================================== */
-
-function resetModalScroll(
-  modalId
-){
-
-  const modal =
-    document.getElementById(
-      modalId
-    );
-
-
-  if(!modal){
-    return;
-  }
-
-
-  const box =
-    modal.querySelector(
-      ".modal-box, .detail-box"
-    );
-
-
-  if(box){
-
-    box.scrollTop = 0;
-
-  }
-
-}
-
-
-/* ==================================================
-   TOUCH / IOS SUPPORT
-================================================== */
-
 document.addEventListener(
   "touchmove",
   function(event){
 
-    if(bgDragging){
-
-      /*
-        ป้องกันหน้าเว็บเลื่อน
-        ตอนกำลังจัดตำแหน่งภาพ
-      */
+    if(
+      bgDragging ||
+      sortState.sorting
+    ){
 
       event.preventDefault();
 
@@ -8964,17 +7114,15 @@ document.addEventListener(
 );
 
 
-/* ==================================================
-   SAFETY - STORAGE EVENT
-================================================== */
-
 window.addEventListener(
   "storage",
   function(event){
 
     if(
       event.key ===
-      STORAGE_KEY
+      STORAGE_KEY ||
+      event.key ===
+      PROJECT_ORDER_KEY
     ){
 
       loadData();
@@ -9001,10 +7149,6 @@ function initializeApp(){
 }
 
 
-/*
-  เริ่มระบบเมื่อ DOM พร้อม
-*/
-
 if(
   document.readyState ===
   "loading"
@@ -9016,14 +7160,1137 @@ if(
   );
 
 }
-
 else{
 
   initializeApp();
 
 }
 
-</script>
+/* ==================================================
+   EXPORT TEXT SECTION
+================================================== */
 
+function getProjectDescription(project){
+
+  return String(
+    project?.description || ""
+  ).trim();
+
+}
+
+
+function getProjectRemark(project){
+
+  return String(
+    project?.note || ""
+  ).trim();
+
+}
+
+
+function drawProjectInformationForExport(
+  ctx,
+  project,
+  x,
+  y,
+  width,
+  height
+){
+
+  const contractorExists =
+    !!(
+      project.contractorCompany ||
+      project.contractorContact ||
+      project.contractorPhone
+    );
+
+  const description =
+    getProjectDescription(project);
+
+  const remark =
+    getProjectRemark(project);
+
+
+  fillRoundRect(
+    ctx,
+    x,
+    y,
+    width,
+    height,
+    22,
+    "#FFFFFF"
+  );
+
+
+  if(contractorExists){
+
+    const contractorWidth =
+      Math.min(
+        720,
+        width * .40
+      );
+
+    const dividerX =
+      x +
+      contractorWidth;
+
+
+    drawText(
+      ctx,
+      "บริษัทรับเหมา",
+      x + 26,
+      y + 43,
+      17,
+      "#8D96A6",
+      600
+    );
+
+
+    drawWrappedText(
+      ctx,
+      project.contractorCompany ||
+      "-",
+      x + 26,
+      y + 62,
+      contractorWidth - 52,
+      34,
+      25,
+      "#18202E",
+      800,
+      2
+    );
+
+
+    drawText(
+      ctx,
+      "ผู้ประสานงาน",
+      x + 26,
+      y + 140,
+      15,
+      "#8D96A6",
+      600
+    );
+
+
+    drawText(
+      ctx,
+      project.contractorContact ||
+      "-",
+      x + 26,
+      y + 171,
+      19,
+      "#394354",
+      700
+    );
+
+
+    drawText(
+      ctx,
+      "เบอร์โทรศัพท์",
+      x + 355,
+      y + 140,
+      15,
+      "#8D96A6",
+      600
+    );
+
+
+    drawText(
+      ctx,
+      project.contractorPhone ||
+      "-",
+      x + 355,
+      y + 171,
+      19,
+      "#394354",
+      700
+    );
+
+
+    ctx.save();
+
+    ctx.strokeStyle =
+      "#E8EDF3";
+
+    ctx.lineWidth =
+      1;
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      dividerX,
+      y + 25
+    );
+
+    ctx.lineTo(
+      dividerX,
+      y + height - 25
+    );
+
+    ctx.stroke();
+
+    ctx.restore();
+
+
+    const textX =
+      dividerX + 30;
+
+    const textWidth =
+      width -
+      contractorWidth -
+      60;
+
+
+    if(description){
+
+      drawText(
+        ctx,
+        "รายละเอียดโครงการ",
+        textX,
+        y + 43,
+        17,
+        "#687385",
+        700
+      );
+
+
+      drawWrappedText(
+        ctx,
+        description,
+        textX,
+        y + 64,
+        textWidth,
+        27,
+        17,
+        "#596273",
+        500,
+        remark
+          ? 3
+          : 6
+      );
+
+    }
+
+
+    if(remark){
+
+      const remarkY =
+        description
+          ? y + 157
+          : y + 43;
+
+
+      drawText(
+        ctx,
+        "หมายเหตุ",
+        textX,
+        remarkY,
+        17,
+        "#A26A1C",
+        700
+      );
+
+
+      drawWrappedText(
+        ctx,
+        remark,
+        textX,
+        remarkY + 21,
+        textWidth,
+        27,
+        17,
+        "#755124",
+        500,
+        description
+          ? 3
+          : 6
+      );
+
+    }
+
+
+    if(
+      !description &&
+      !remark
+    ){
+
+      drawText(
+        ctx,
+        "รายละเอียดโครงการ",
+        textX,
+        y + 43,
+        17,
+        "#687385",
+        700
+      );
+
+
+      drawWrappedText(
+        ctx,
+        "ยังไม่มีรายละเอียดเพิ่มเติม",
+        textX,
+        y + 64,
+        textWidth,
+        27,
+        17,
+        "#8D96A6",
+        500,
+        5
+      );
+
+    }
+
+  }
+
+  else{
+
+    const innerX =
+      x + 26;
+
+    const innerWidth =
+      width - 52;
+
+
+    if(description){
+
+      drawText(
+        ctx,
+        "รายละเอียดโครงการ",
+        innerX,
+        y + 43,
+        17,
+        "#687385",
+        700
+      );
+
+
+      drawWrappedText(
+        ctx,
+        description,
+        innerX,
+        y + 65,
+        innerWidth,
+        28,
+        18,
+        "#596273",
+        500,
+        remark
+          ? 3
+          : 6
+      );
+
+    }
+
+
+    if(remark){
+
+      const remarkY =
+        description
+          ? y + 158
+          : y + 43;
+
+
+      drawText(
+        ctx,
+        "หมายเหตุ",
+        innerX,
+        remarkY,
+        17,
+        "#A26A1C",
+        700
+      );
+
+
+      drawWrappedText(
+        ctx,
+        remark,
+        innerX,
+        remarkY + 22,
+        innerWidth,
+        28,
+        18,
+        "#755124",
+        500,
+        description
+          ? 3
+          : 6
+      );
+
+    }
+
+
+    if(
+      !description &&
+      !remark
+    ){
+
+      drawText(
+        ctx,
+        "รายละเอียดโครงการ",
+        innerX,
+        y + 43,
+        17,
+        "#687385",
+        700
+      );
+
+
+      drawWrappedText(
+        ctx,
+        "ยังไม่มีรายละเอียดเพิ่มเติม",
+        innerX,
+        y + 65,
+        innerWidth,
+        28,
+        18,
+        "#8D96A6",
+        500,
+        6
+      );
+
+    }
+
+  }
+
+}
+
+
+/* ==================================================
+   PROJECT ORDER SAFETY
+================================================== */
+
+function cleanProjectOrder(){
+
+  if(storageWriteBlocked) return;
+
+  const validIds =
+    new Set(
+      projects.map(
+        project =>
+          String(project.id)
+      )
+    );
+
+  const saved =
+    getProjectOrder();
+
+  const cleaned =
+    saved.filter(
+      id =>
+        validIds.has(
+          String(id)
+        )
+    );
+
+
+  projects.forEach(project => {
+
+    const id =
+      String(project.id);
+
+    if(
+      !cleaned.some(
+        savedId =>
+          String(savedId) === id
+      )
+    ){
+
+      cleaned.push(id);
+
+    }
+
+  });
+
+
+  try{
+
+    localStorage.setItem(
+      PROJECT_ORDER_KEY,
+      JSON.stringify(cleaned)
+    );
+
+  }
+  catch(error){
+
+    console.error(
+      "Clean project order:",
+      error
+    );
+
+  }
+
+}
+
+
+/* ==================================================
+   SORT SAFETY
+================================================== */
+
+function resetProjectSorting(){
+
+  if(sortState.timer){
+
+    clearTimeout(
+      sortState.timer
+    );
+
+  }
+
+
+  document
+    .querySelectorAll(
+      "#projectList .project-card"
+    )
+    .forEach(card => {
+
+      card.classList.remove(
+        "dragging",
+        "drop-before",
+        "drop-after"
+      );
+
+    });
+
+
+  sortState.card = null;
+  sortState.id = null;
+  sortState.pointerId = null;
+
+  sortState.startX = 0;
+  sortState.startY = 0;
+
+  sortState.timer = null;
+
+  sortState.sorting = false;
+
+  sortState.target = null;
+  sortState.before = true;
+
+}
+
+
+/* ==================================================
+   PAGE VISIBILITY SAFETY
+================================================== */
+
+document.addEventListener(
+  "visibilitychange",
+  function(){
+
+    if(document.hidden){
+
+      resetProjectSorting();
+      bgDragging = false;
+
+    }
+
+  }
+);
+
+
+window.addEventListener(
+  "blur",
+  function(){
+
+    if(sortState.sorting){
+
+      resetProjectSorting();
+
+      setTimeout(
+        function(){
+
+          sortState.blockClick =
+            false;
+
+        },
+        100
+      );
+
+    }
+
+    bgDragging = false;
+
+  }
+);
+
+
+/* ==================================================
+   BEFORE UNLOAD
+================================================== */
+
+window.addEventListener(
+  "beforeunload",
+  function(){
+
+    saveData();
+    saveProjectOrder();
+
+  }
+);
+
+
+/* ==================================================
+   PROJECT DATA BACKUP
+================================================== */
+
+function createProjectBackup(){
+
+  const backup = {
+
+    version:1,
+
+    createdAt:
+      new Date()
+        .toISOString(),
+
+    projects,
+
+    projectOrder:
+      projects.map(
+        project =>
+          String(project.id)
+      ),
+
+    backgrounds:
+      getBackgrounds(),
+
+    backgroundPositions:
+      getBackgroundPositions()
+
+  };
+
+
+  const blob =
+    new Blob(
+      [
+        JSON.stringify(
+          backup,
+          null,
+          2
+        )
+      ],
+      {
+        type:
+          "application/json;charset=utf-8"
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+
+  const link =
+    document.createElement(
+      "a"
+    );
+
+
+  const now =
+    new Date();
+
+
+  const fileDate =
+    [
+      now.getFullYear(),
+      String(
+        now.getMonth() + 1
+      ).padStart(2,"0"),
+      String(
+        now.getDate()
+      ).padStart(2,"0")
+    ].join("-");
+
+
+  link.href =
+    url;
+
+
+  link.download =
+    "project-dashboard-backup-" +
+    fileDate +
+    ".json";
+
+
+  document.body.appendChild(
+    link
+  );
+
+
+  link.click();
+
+
+  link.remove();
+
+
+  setTimeout(
+    function(){
+
+      URL.revokeObjectURL(
+        url
+      );
+
+    },
+    1000
+  );
+
+}
+
+
+/* ==================================================
+   RESTORE BACKUP
+================================================== */
+
+function restoreProjectBackup(file){
+
+  if(!file){
+    return;
+  }
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload =
+    function(event){
+
+      try{
+
+        const backup =
+          JSON.parse(
+            event.target.result
+          );
+
+
+        if(
+          !backup ||
+          !Array.isArray(
+            backup.projects
+          )
+        ){
+
+          throw new Error(
+            "Invalid backup"
+          );
+
+        }
+
+
+        if(
+          !confirm(
+            "ข้อมูลปัจจุบันจะถูกแทนที่ด้วยข้อมูลจากไฟล์สำรอง ต้องการดำเนินการต่อหรือไม่?"
+          )
+        ){
+
+          return;
+
+        }
+
+
+        projects =
+          backup.projects
+            .map(
+              normalizeProject
+            )
+            .filter(Boolean);
+
+
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify(projects)
+        );
+
+
+        if(
+          backup.backgrounds &&
+          typeof backup.backgrounds ===
+          "object"
+        ){
+
+          localStorage.setItem(
+            PROJECT_BG_KEY,
+            JSON.stringify(
+              backup.backgrounds
+            )
+          );
+
+        }
+
+
+        if(
+          backup.backgroundPositions &&
+          typeof backup.backgroundPositions ===
+          "object"
+        ){
+
+          localStorage.setItem(
+            PROJECT_BG_POSITION_KEY,
+            JSON.stringify(
+              backup.backgroundPositions
+            )
+          );
+
+        }
+
+
+        const order =
+          Array.isArray(
+            backup.projectOrder
+          )
+            ? backup.projectOrder
+            : projects.map(
+                project =>
+                  String(project.id)
+              );
+
+
+        localStorage.setItem(
+          PROJECT_ORDER_KEY,
+          JSON.stringify(order)
+        );
+
+
+        loadData();
+
+        cleanProjectOrder();
+
+        saveData();
+
+        render();
+
+
+        alert(
+          "นำเข้าข้อมูลสำรองเรียบร้อยแล้ว"
+        );
+
+      }
+      catch(error){
+
+        console.error(
+          error
+        );
+
+
+        alert(
+          "ไม่สามารถอ่านไฟล์สำรองนี้ได้"
+        );
+
+      }
+
+    };
+
+
+  reader.readAsText(
+    file
+  );
+
+}
+
+
+/* ==================================================
+   DATA TOOLS MODAL
+================================================== */
+
+function openDataTools(){
+
+  let modal =
+    document.getElementById(
+      "dataToolsModal"
+    );
+
+
+  if(!modal){
+
+    modal =
+      document.createElement(
+        "div"
+      );
+
+
+    modal.id =
+      "dataToolsModal";
+
+
+    modal.className =
+      "modal";
+
+
+    modal.innerHTML = `
+
+      <div class="modal-box">
+
+        <div class="modal-head">
+
+          <h2>
+            จัดการข้อมูล
+          </h2>
+
+          <button
+            class="close"
+            onclick="closeDataTools()"
+          >
+            ×
+          </button>
+
+        </div>
+
+
+        <div class="form-section-title">
+          สำรองข้อมูล
+        </div>
+
+
+        <div
+          style="
+            padding:15px;
+            border-radius:16px;
+            background:#fff;
+            border:1px solid #e7ebf1;
+            line-height:1.6;
+            font-size:11px;
+            color:#687385;
+          "
+        >
+
+          สำรองข้อมูลโครงการ รายการงาน
+          ลำดับโครงการ และภาพพื้นหลัง
+          เป็นไฟล์ JSON
+
+        </div>
+
+
+        <button
+          class="btn save"
+          style="
+            width:100%;
+            margin-top:12px;
+          "
+          onclick="createProjectBackup()"
+        >
+          สำรองข้อมูล
+        </button>
+
+
+        <div class="form-section-title">
+          นำข้อมูลกลับ
+        </div>
+
+
+        <input
+          id="restoreBackupFile"
+          type="file"
+          accept=".json,application/json"
+          onchange="
+            restoreProjectBackup(
+              this.files[0]
+            );
+            this.value='';
+          "
+        >
+
+
+        <div
+          style="
+            margin-top:10px;
+            color:#8d96a6;
+            font-size:10px;
+            line-height:1.55;
+          "
+        >
+
+          การนำเข้าจะใช้ข้อมูลจากไฟล์สำรอง
+          แทนข้อมูลปัจจุบัน
+
+        </div>
+
+      </div>
+
+    `;
+
+
+    document.body.appendChild(
+      modal
+    );
+
+
+    modal.addEventListener(
+      "click",
+      function(event){
+
+        if(event.target === modal){
+
+          closeDataTools();
+
+        }
+
+      }
+    );
+
+  }
+
+
+  modal.classList.add(
+    "show"
+  );
+
+
+  resetModalScroll(
+    "dataToolsModal"
+  );
+
+}
+
+
+function closeDataTools(){
+
+  const modal =
+    document.getElementById(
+      "dataToolsModal"
+    );
+
+
+  if(modal){
+
+    modal.classList.remove(
+      "show"
+    );
+
+  }
+
+}
+
+
+/* ==================================================
+   HEADER DATA TOOLS BUTTON
+================================================== */
+
+function createDataToolsButton(){
+
+  const topbar =
+    document.querySelector(
+      ".topbar"
+    );
+
+
+  if(
+    !topbar ||
+    document.getElementById(
+      "dataToolsButton"
+    )
+  ){
+    return;
+  }
+
+
+  const addButton =
+    topbar.querySelector(
+      ".add-top"
+    );
+
+
+  if(!addButton){
+    return;
+  }
+
+
+  const actions =
+    document.createElement(
+      "div"
+    );
+
+
+  actions.style.display =
+    "flex";
+
+
+  actions.style.gap =
+    "8px";
+
+
+  const dataButton =
+    document.createElement(
+      "button"
+    );
+
+
+  dataButton.id =
+    "dataToolsButton";
+
+
+  dataButton.className =
+    "add-top";
+
+
+  dataButton.type =
+    "button";
+
+
+  dataButton.innerHTML =
+    "⋯";
+
+
+  dataButton.setAttribute(
+    "aria-label",
+    "จัดการข้อมูล"
+  );
+
+
+  dataButton.onclick =
+    openDataTools;
+
+
+  topbar.insertBefore(
+    actions,
+    addButton
+  );
+
+
+  actions.appendChild(
+    dataButton
+  );
+
+
+  actions.appendChild(
+    addButton
+  );
+
+}
+
+
+/* ==================================================
+   FINAL INITIALIZATION
+================================================== */
+
+function initializeDashboardExtras(){
+
+  cleanProjectOrder();
+
+  createDataToolsButton();
+
+}
+
+
+if(
+  document.readyState ===
+  "loading"
+){
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    initializeDashboardExtras
+  );
+
+}
+else{
+
+  initializeDashboardExtras();
+
+}
+
+</script>
 </body>
 </html>
