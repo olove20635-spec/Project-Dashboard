@@ -16,6 +16,8 @@
 <link rel="manifest" href="./manifest.json?build=20261110-v12-polished">
 
 
+<div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
+
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
@@ -2052,7 +2054,7 @@ body{background:var(--v8-bg);}
 .detail-buttons,.secondary-actions{isolation:isolate;}
 .detail-buttons button,.secondary-actions button{position:relative!important;z-index:999!important;pointer-events:auto!important;touch-action:manipulation!important;}
 
-/* ===== V12 POPUP / DETAIL FIX ===== */
+/* ===== V13 POPUP / DETAIL FIX ===== */
 /* Keep secondary dialogs above the project detail and center them on phones. */
 #projectModal,#taskModal,#backgroundModal,#confirmModal{z-index:320;}
 @media(max-width:600px){
@@ -2063,7 +2065,7 @@ body{background:var(--v8-bg);}
   #detailModal .detail-hero{padding-top:calc(22px + env(safe-area-inset-top))!important;}
 }
 
-/* ===== V12 MOBILE SAFE AREA + ACTION + TIME BAR ===== */
+/* ===== V13 MOBILE SAFE AREA + ACTION + TIME BAR ===== */
 .time-remaining-wrap{margin-top:10px}.time-remaining-bar{height:7px;border-radius:999px;background:#edf0f5;overflow:hidden}.time-remaining-bar>div{height:100%;border-radius:inherit;background:linear-gradient(90deg,#6737b7,#8a63d2);transition:width .3s ease}.time-remaining-caption{margin-top:6px;font-size:10px;color:#7b8798;font-weight:700}.time-remaining-wrap.overdue .time-remaining-bar>div{background:#dc252b}.time-remaining-wrap.done .time-remaining-bar>div{background:#0b8a50}
 #detailBackgroundBtn,#detailExportBtn{pointer-events:auto!important;touch-action:manipulation!important;position:relative!important;z-index:1001!important}
 @media(max-width:600px){
@@ -2075,13 +2077,19 @@ body{background:var(--v8-bg);}
 }
 
 
-/* ===== V12 POLISHED MOBILE UI ===== */
+/* ===== V13 POLISHED MOBILE UI ===== */
 .modern-kpi.timeline-kpi{grid-column:1/-1;min-height:138px!important;border-top:4px solid #6737b7!important}
 .timeline-dates{display:flex;align-items:center;gap:10px;margin-top:8px;font-weight:850;font-size:16px;color:#152238}.timeline-arrow{color:#8b97a8;font-size:18px}.timeline-meta{display:flex;justify-content:space-between;gap:10px;margin-top:8px;font-size:10px;font-weight:750;color:#7b8798}.timeline-bar{height:9px;border-radius:999px;background:#edf0f5;overflow:hidden;margin-top:10px}.timeline-bar>div{height:100%;border-radius:inherit;background:linear-gradient(90deg,#173d7a,#6d49c7);transition:width .3s ease}.timeline-kpi.overdue .timeline-bar>div{background:linear-gradient(90deg,#ef7a45,#dc252b)}
 .modern-kpi-icon{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:12px;background:#f1f5fb;font-size:19px;margin-bottom:8px}.contractor-icon{display:flex;align-items:center;justify-content:center}
 #exportReadyModal{z-index:700}.export-ready-card{width:min(92vw,430px);background:#fff;border-radius:28px;box-shadow:0 30px 80px rgba(3,18,40,.28);overflow:hidden;border:1px solid rgba(255,255,255,.6)}.export-ready-head{padding:24px 24px 18px;background:linear-gradient(135deg,#061d3d,#164d8c);color:#fff}.export-ready-icon{width:52px;height:52px;border-radius:17px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:14px}.export-ready-head h3{margin:0;font-size:21px}.export-ready-head p{margin:6px 0 0;font-size:12px;color:rgba(255,255,255,.72)}.export-ready-actions{padding:18px;display:grid;grid-template-columns:1fr 1.35fr;gap:10px}.export-ready-actions .btn{min-height:52px;border-radius:15px}.export-share{background:linear-gradient(135deg,#2f66d7,#123d7d);color:#fff}.export-download{background:#eef2f7;color:#23334a}
 #backgroundModal .modal-box{border:1px solid rgba(255,255,255,.7);box-shadow:0 28px 80px rgba(3,18,40,.28)}#backgroundModal .modal-head{background:linear-gradient(135deg,#061d3d,#164d8c);border-radius:22px 22px 16px 16px}#backgroundModal .bg-preview{border-radius:18px;overflow:hidden;background:#e9eef5}
 @media(max-width:600px){#detailModal{padding-top:calc(env(safe-area-inset-top) + 16px)!important}#detailModal .detail-box{height:calc(100dvh - env(safe-area-inset-top) - 16px)!important;max-height:calc(100dvh - env(safe-area-inset-top) - 16px)!important}.modern-kpi-grid{grid-template-columns:1fr 1fr!important}.export-ready-card{margin:auto}.timeline-dates{font-size:15px}}
+
+/* V13: lightweight success/error toast */
+.app-toast{position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom));transform:translate(-50%,24px);z-index:9999;min-width:180px;max-width:calc(100vw - 32px);padding:13px 18px;border-radius:16px;background:rgba(7,29,61,.94);color:#fff;font-weight:750;text-align:center;box-shadow:0 16px 45px rgba(2,16,34,.28);opacity:0;pointer-events:none;transition:.25s ease;backdrop-filter:blur(14px)}
+.app-toast.show{opacity:1;transform:translate(-50%,0)}
+.app-toast.error{background:rgba(190,35,40,.95)}
+@media(max-width:600px){.project-text-card,.project-note-card{border-radius:20px!important}.project-note-card{border-left:4px solid #f59e0b!important}.project-text-title:before{content:'✦';margin-right:7px;color:#2563eb}.project-note-card .project-text-title:before{content:'✎';color:#f59e0b}}
 </style>
 </head>
 
@@ -4699,6 +4707,9 @@ function saveProject(){
 
   if(projectIdBeingEdited){
     openDetail(projectIdBeingEdited);
+    showToast("บันทึกการแก้ไขสำเร็จ");
+  }else{
+    showToast("สร้างโครงการสำเร็จ");
   }
 
 }
@@ -4708,7 +4719,7 @@ function saveProject(){
 
 
 /* ==================================================
-   RESTORED PROJECT / TASK / BACKGROUND ACTIONS (V12)
+   RESTORED PROJECT / TASK / BACKGROUND ACTIONS (V13)
 ================================================== */
 
 function editProject(){
@@ -5246,6 +5257,7 @@ function endBackgroundDrag(event){
 
 function saveBackgroundEditor(){
 
+  const wasRemovingBackground = pendingBackgroundRemove;
   if(!selectedProjectId){
     return;
   }
@@ -5290,13 +5302,11 @@ function saveBackgroundEditor(){
 
   }
 
-  document
-    .getElementById(
-      "backgroundModal"
-    )
-    .classList.remove(
-      "show"
-    );
+  const savedBackgroundModal = document.getElementById("backgroundModal");
+  if(savedBackgroundModal){
+    savedBackgroundModal.classList.remove("show");
+    savedBackgroundModal.style.display = "";
+  }
 
   const id =
     selectedProjectId;
@@ -5306,8 +5316,8 @@ function saveBackgroundEditor(){
   pendingBackgroundRemove = false;
 
   render();
-
   openDetail(id);
+  showToast(wasRemovingBackground ? "ลบภาพพื้นหลังแล้ว" : "บันทึกภาพพื้นหลังสำเร็จ");
 
 }
 
@@ -6122,6 +6132,52 @@ async function sharePreparedExport(){
   const u=URL.createObjectURL(preparedExportBlob),a=document.createElement("a");a.href=u;a.download=preparedExportName||"project-dashboard.png";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),30000);
 }
 
+
+function showToast(message,type="success"){
+  const el=document.getElementById("appToast");
+  if(!el) return;
+  el.textContent=message;
+  el.className="app-toast"+(type==="error"?" error":"");
+  requestAnimationFrame(()=>el.classList.add("show"));
+  clearTimeout(showToast._timer);
+  showToast._timer=setTimeout(()=>el.classList.remove("show"),2200);
+}
+
+/* Canvas helpers restored in V13. These were missing in V13 and caused Export to stop at drawText(). */
+function roundRectPath(ctx,x,y,w,h,r){
+  r=Math.max(0,Math.min(Number(r)||0,Math.abs(w)/2,Math.abs(h)/2));
+  ctx.beginPath();
+  ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath();
+}
+function fillRoundRect(ctx,x,y,w,h,r,color){
+  ctx.save(); roundRectPath(ctx,x,y,w,h,r); ctx.fillStyle=color; ctx.fill(); ctx.restore();
+}
+function drawText(ctx,text,x,y,size,color="#111827",weight=600,align="left"){
+  ctx.save(); ctx.fillStyle=color; ctx.font=`${weight} ${size}px -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans Thai",Arial,sans-serif`;
+  ctx.textAlign=align; ctx.textBaseline="top"; ctx.fillText(String(text??""),x,y); ctx.restore();
+}
+function drawWrappedText(ctx,text,x,y,maxWidth,lineHeight,size,color="#111827",weight=500,maxLines=99){
+  ctx.save(); ctx.fillStyle=color; ctx.font=`${weight} ${size}px -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans Thai",Arial,sans-serif`;
+  ctx.textAlign="left"; ctx.textBaseline="top";
+  const raw=String(text??"").replace(/\r/g,""); let lines=[];
+  for(const para of raw.split("\n")){
+    const words=para.split(/\s+/).filter(Boolean); let line="";
+    if(!words.length){ lines.push(""); continue; }
+    for(const word of words){ const test=line?line+" "+word:word; if(ctx.measureText(test).width<=maxWidth||!line) line=test; else{lines.push(line);line=word;} }
+    if(line) lines.push(line);
+  }
+  lines=lines.slice(0,maxLines);
+  lines.forEach((line,i)=>{ let out=line; if(i===maxLines-1 && lines.length===maxLines){ while(out && ctx.measureText(out+"…").width>maxWidth) out=out.slice(0,-1); } ctx.fillText(out,x,y+i*lineHeight); });
+  ctx.restore(); return y+lines.length*lineHeight;
+}
+function drawCoverPositioned(ctx,img,x,y,w,h,positionY=50){
+  if(!img||!img.width||!img.height) return;
+  const scale=Math.max(w/img.width,h/img.height), sw=w/scale, sh=h/scale;
+  const sx=(img.width-sw)/2, sy=Math.max(0,(img.height-sh)*(Math.max(0,Math.min(100,Number(positionY)||50))/100));
+  ctx.drawImage(img,sx,sy,sw,sh,x,y,w,h);
+}
+
 async function exportProjectImage(){
 
   if(exportProjectBusy){ return; }
@@ -6282,7 +6338,7 @@ async function exportProjectImage(){
 
   }catch(error){
     console.error("Export error:", error);
-    alert("Export ไม่สำเร็จ: " + (error?.message || "กรุณาลองใหม่อีกครั้ง"));
+    showToast("Export ไม่สำเร็จ: " + (error?.message || "กรุณาลองใหม่อีกครั้ง"),"error");
   }finally{
     exportProjectBusy = false;
     if(exportButton){ exportButton.disabled = false; exportButton.textContent = exportButtonText || "Export 16:9"; }
