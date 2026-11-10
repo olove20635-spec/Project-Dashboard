@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#172033">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<title>Project Dashboard</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+:root{
+  --navy:#172033;
+  --navy2:#293750;
+  --bg:#f4f6f9;
+  --card:#ffffff;
+  --text:#18202e;
+  --muted:#8b93a3;
+  --line:#e8ebf0;
+  --green:#20a66a;
+  --greenBg:#e9f8f0;
+  --orange:#e99528;
+  --orangeBg:#fff4e3;
+  --red:#e45656;
+  --redBg:#ffeded;
+  --blue:#3976d3;
+  --blueBg:#edf4ff;
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  background:var(--bg);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text);
+}
+
+body{
+  padding-bottom:calc(90px + env(safe-area-inset-bottom));
+}
+
+.header{
+  background:linear-gradient(145deg,var(--navy),var(--navy2));
+  color:white;
+  padding:
+    calc(16px + env(safe-area-inset-top))
+    18px
+    25px;
+  border-radius:0 0 28px 28px;
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.title-small{
+  font-size:11px;
+  letter-spacing:1.5px;
+  opacity:.6;
+}
+
+.header h1{
+  margin:3px 0 0;
+  font-size:25px;
+}
+
+.add-top{
+  width:43px;
+  height:43px;
+  border:0;
+  border-radius:14px;
+  background:rgba(255,255,255,.13);
+  color:white;
+  font-size:27px;
+}
+
+.overall{
+  margin-top:25px;
+}
+
+.overall-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+}
+
+.overall-label{
+  font-size:12px;
+  opacity:.65;
+}
+
+.overall-value{
+  font-size:37px;
+  font-weight:800;
+}
+
+.progress-bg{
+  height:9px;
+  background:rgba(255,255,255,.14);
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:10px;
+}
+
+.progress-fill{
+  height:100%;
+  background:white;
+  border-radius:20px;
+  transition:.3s;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:18px;
+}
+
+.stat{
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:15px;
+  padding:10px;
+  text-align:center;
+}
+
+.stat strong{
+  display:block;
+  font-size:19px;
+}
+
+.stat span{
+  font-size:10px;
+  opacity:.65;
+}
+
+.content{
+  max-width:720px;
+  margin:auto;
+  padding:18px 13px;
+}
+
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px;
+}
+
+.section-head h2{
+  font-size:17px;
+  margin:0;
+}
+
+.section-head span{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.project-list{
+  display:grid;
+  gap:12px;
+}
+
+.project-card{
+  background:white;
+  border-radius:20px;
+  padding:16px;
+  box-shadow:0 4px 18px rgba(25,35,55,.055);
+  cursor:pointer;
+}
+
+.card-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.project-name{
+  font-size:17px;
+  font-weight:750;
+  margin-bottom:3px;
+}
+
+.project-location{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.status{
+  height:fit-content;
+  white-space:nowrap;
+  border-radius:20px;
+  padding:5px 8px;
+  font-size:9px;
+  font-weight:700;
+}
+
+.status.active{
+  color:var(--blue);
+  background:var(--blueBg);
+}
+
+.status.done{
+  color:var(--green);
+  background:var(--greenBg);
+}
+
+.status.delay{
+  color:var(--red);
+  background:var(--redBg);
+}
+
+.status.wait{
+  color:#7a818d;
+  background:#f0f1f3;
+}
+
+.status.pause{
+  color:var(--orange);
+  background:var(--orangeBg);
+}
+
+.card-progress{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:17px;
+}
+
+.card-progress span{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.percent{
+  font-size:21px !important;
+  color:var(--text) !important;
+  font-weight:800;
+}
+
+.card-bar{
+  height:7px;
+  background:#eef0f3;
+  border-radius:10px;
+  overflow:hidden;
+  margin-top:7px;
+}
+
+.card-bar div{
+  height:100%;
+  background:var(--navy);
+  border-radius:10px;
+}
+
+.card-bottom{
+  display:flex;
+  justify-content:space-between;
+  margin-top:14px;
+  padding-top:12px;
+  border-top:1px solid var(--line);
+  font-size:10px;
+  color:var(--muted);
+}
+
+.empty{
+  text-align:center;
+  padding:55px 20px;
+  color:var(--muted);
+}
+
+.empty-icon{
+  font-size:43px;
+  margin-bottom:10px;
+}
+
+.fab{
+  position:fixed;
+  right:20px;
+  bottom:calc(22px + env(safe-area-inset-bottom));
+  width:58px;
+  height:58px;
+  border-radius:19px;
+  border:0;
+  background:var(--navy);
+  color:white;
+  font-size:29px;
+  box-shadow:0 10px 28px rgba(23,32,51,.28);
+  z-index:20;
+}
+
+/* MODAL */
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(8,15,28,.55);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+  z-index:100;
+  align-items:center;
+  justify-content:center;
+  padding:
+    calc(18px + env(safe-area-inset-top))
+    16px
+    calc(18px + env(safe-area-inset-bottom));
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  background:white;
+  width:100%;
+  max-width:540px;
+  max-height:90vh;
+  overflow-y:auto;
+  border-radius:24px;
+  padding:19px;
+}
+
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.modal-head h2{
+  margin:0;
+  font-size:20px;
+}
+
+.close{
+  border:0;
+  background:#f0f1f3;
+  width:35px;
+  height:35px;
+  border-radius:11px;
+  font-size:18px;
+}
+
+label{
+  display:block;
+  font-size:11px;
+  font-weight:700;
+  margin:14px 0 6px;
+}
+
+input,select,textarea{
+  width:100%;
+  border:1.5px solid #e1e5ea;
+  border-radius:13px;
+  background:#fafbfc;
+  padding:12px;
+  font-size:15px;
+  font-family:inherit;
+  outline:none;
+}
+
+textarea{
+  min-height:75px;
+  resize:none;
+}
+
+input:focus,select:focus,textarea:focus{
+  border-color:#8ea0bd;
+  background:white;
+}
+
+.two{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.progress-input{
+  display:grid;
+  grid-template-columns:1fr 55px;
+  align-items:center;
+  gap:12px;
+}
+
+input[type="range"]{
+  padding:0;
+}
+
+.progress-number{
+  text-align:center;
+  font-weight:800;
+  font-size:16px;
+}
+
+.modal-buttons{
+  display:grid;
+  grid-template-columns:1fr 1.7fr;
+  gap:9px;
+  margin-top:22px;
+}
+
+.btn{
+  border:0;
+  border-radius:13px;
+  padding:14px;
+  font-size:14px;
+  font-weight:700;
+}
+
+.cancel{
+  background:#eef0f3;
+  color:#555d69;
+}
+
+.save{
+  background:var(--navy);
+  color:white;
+}
+
+/* DETAIL */
+
+.detail-box{
+  background:white;
+  width:100%;
+  max-width:540px;
+  max-height:90vh;
+  overflow-y:auto;
+  border-radius:24px;
+  padding:19px;
+}
+
+.detail-title{
+  font-size:22px;
+  font-weight:800;
+  margin-top:8px;
+}
+
+.detail-location{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:3px;
+}
+
+.big-progress{
+  text-align:center;
+  margin:22px 0;
+}
+
+.progress-circle{
+  width:130px;
+  height:130px;
+  margin:auto;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+}
+
+.progress-circle:after{
+  content:"";
+  position:absolute;
+  width:102px;
+  height:102px;
+  background:white;
+  border-radius:50%;
+}
+
+.progress-circle span{
+  position:relative;
+  z-index:2;
+  font-size:26px;
+  font-weight:800;
+}
+
+.info-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+
+.info{
+  background:#f6f7f9;
+  border-radius:14px;
+  padding:12px;
+}
+
+.info small{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  margin-bottom:4px;
+}
+
+.info strong{
+  font-size:12px;
+}
+
+.note{
+  margin-top:12px;
+  background:#f6f7f9;
+  padding:13px;
+  border-radius:14px;
+  font-size:12px;
+  line-height:1.5;
+  white-space:pre-wrap;
+}
+
+.detail-buttons{
+  display:grid;
+  grid-template-columns:.8fr 1fr 1.5fr;
+  gap:8px;
+  margin-top:18px;
+}
+
+.delete-btn{
+  background:var(--redBg);
+  color:var(--red);
+}
+
+.edit-btn{
+  background:#eef0f3;
+  color:var(--text);
+}
+
+.task-btn{
+  background:var(--navy);
+  color:white;
+}
+
+/* TASKS */
+
+.task-section{
+  margin-top:20px;
+}
+
+.task-title{
+  font-size:14px;
+  font-weight:750;
+  margin-bottom:8px;
+}
+
+.task{
+  padding:11px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.task:last-child{
+  border-bottom:0;
+}
+
+.task-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.task-name{
+  font-size:12px;
+  font-weight:650;
+}
+
+.task-pct{
+  font-size:11px;
+  font-weight:750;
+}
+
+.task-bar{
+  height:5px;
+  background:#edf0f3;
+  border-radius:10px;
+  margin-top:6px;
+  overflow:hidden;
+}
+
+.task-bar div{
+  height:100%;
+  background:var(--green);
+}
+
+.task-delete{
+  font-size:9px;
+  color:var(--red);
+  margin-top:6px;
+  display:inline-block;
+  cursor:pointer;
+}
+
+@media(max-width:380px){
+  .header{
+    padding-left:14px;
+    padding-right:14px;
+  }
+
+  .content{
+    padding-left:10px;
+    padding-right:10px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+  <div class="topbar">
+    <div>
+      <div class="title-small">PERSONAL WORKSPACE</div>
+      <h1>Project Dashboard</h1>
+    </div>
+
+    <button class="add-top" onclick="openProjectModal()">+</button>
+  </div>
+
+  <div class="overall">
+
+    <div class="overall-row">
+      <div>
+        <div class="overall-label">Overall Progress</div>
+        <div class="overall-value" id="overallPercent">0%</div>
+      </div>
+
+      <div class="overall-label" id="projectCount">0 Projects</div>
+    </div>
+
+    <div class="progress-bg">
+      <div id="overallBar" class="progress-fill" style="width:0%"></div>
+    </div>
+
+  </div>
+
+  <div class="stats">
+
+    <div class="stat">
+      <strong id="activeCount">0</strong>
+      <span>กำลังทำ</span>
+    </div>
+
+    <div class="stat">
+      <strong id="doneCount">0</strong>
+      <span>เสร็จแล้ว</span>
+    </div>
+
+    <div class="stat">
+      <strong id="delayCount">0</strong>
+      <span>ล่าช้า</span>
+    </div>
+
+  </div>
+
+</header>
+
+
+<main class="content">
+
+  <div class="section-head">
+    <h2>โครงการของฉัน</h2>
+    <span id="todayText"></span>
+  </div>
+
+  <div id="projectList" class="project-list"></div>
+
+</main>
+
+
+<button class="fab" onclick="openProjectModal()">+</button>
+
+
+<!-- ADD / EDIT PROJECT -->
+
+<div id="projectModal" class="modal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+      <h2 id="projectModalTitle">เพิ่มโครงการ</h2>
+      <button class="close" onclick="closeProjectModal()">×</button>
+    </div>
+
+    <label>ชื่อโครงการ</label>
+    <input id="projectName" type="text" placeholder="เช่น Fire Alarm โรงฟักไข่">
+
+    <label>สถานที่ / ลูกค้า</label>
+    <input id="projectLocation" type="text" placeholder="เช่น โรงฟักไข่">
+
+    <div class="two">
+
+      <div>
+        <label>วันที่เริ่ม</label>
+        <input id="startDate" type="date">
+      </div>
+
+      <div>
+        <label>กำหนดเสร็จ</label>
+        <input id="endDate" type="date">
+      </div>
+
+    </div>
+
+    <label>สถานะ</label>
+
+    <select id="projectStatus">
+      <option value="active">กำลังดำเนินการ</option>
+      <option value="wait">ยังไม่เริ่ม</option>
+      <option value="done">เสร็จแล้ว</option>
+      <option value="delay">ล่าช้า</option>
+      <option value="pause">พักงาน</option>
+    </select>
+
+    <label>ความคืบหน้า</label>
+
+    <div class="progress-input">
+
+      <input
+        id="projectProgress"
+        type="range"
+        min="0"
+        max="100"
+        value="0"
+        oninput="updateProgressLabel()"
+      >
+
+      <div id="progressLabel" class="progress-number">0%</div>
+
+    </div>
+
+    <label>รายละเอียด / หมายเหตุ</label>
+
+    <textarea
+      id="projectNote"
+      placeholder="รายละเอียดงาน ปัญหา สิ่งที่ต้องติดตาม..."
+    ></textarea>
+
+    <div class="modal-buttons">
+
+      <button class="btn cancel" onclick="closeProjectModal()">
+        ยกเลิก
+      </button>
+
+      <button class="btn save" onclick="saveProject()">
+        บันทึก
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- PROJECT DETAIL -->
+
+<div id="detailModal" class="modal">
+
+  <div class="detail-box">
+
+    <div class="modal-head">
+      <div></div>
+      <button class="close" onclick="closeDetail()">×</button>
+    </div>
+
+    <div id="detailContent"></div>
+
+  </div>
+
+</div>
+
+
+<!-- ADD TASK -->
+
+<div id="taskModal" class="modal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+      <h2>เพิ่มรายการงาน</h2>
+      <button class="close" onclick="closeTaskModal()">×</button>
+    </div>
+
+    <label>รายการงาน</label>
+
+    <input
+      id="taskName"
+      type="text"
+      placeholder="เช่น ติดตั้งอุปกรณ์ Loop 2"
+    >
+
+    <label>ความคืบหน้า</label>
+
+    <div class="progress-input">
+
+      <input
+        id="taskProgress"
+        type="range"
+        min="0"
+        max="100"
+        value="0"
+        oninput="updateTaskLabel()"
+      >
+
+      <div id="taskProgressLabel" class="progress-number">
+        0%
+      </div>
+
+    </div>
+
+    <div class="modal-buttons">
+
+      <button class="btn cancel" onclick="closeTaskModal()">
+        ยกเลิก
+      </button>
+
+      <button class="btn save" onclick="saveTask()">
+        เพิ่มงาน
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+const STORAGE_KEY = "personal-project-dashboard-v1";
+
+let projects = [];
+let editingProjectId = null;
+let selectedProjectId = null;
+
+
+/* =========================
+   LOAD
+========================= */
+
+function loadData(){
+
+  const saved = localStorage.getItem(STORAGE_KEY);
+
+  if(saved){
+    try{
+      projects = JSON.parse(saved);
+    }catch(e){
+      projects = [];
+    }
+  }
+
+}
+
+
+/* =========================
+   SAVE STORAGE
+========================= */
+
+function saveData(){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(projects)
+  );
+
+}
+
+
+/* =========================
+   DATE
+========================= */
+
+function formatDate(dateString){
+
+  if(!dateString){
+    return "-";
+  }
+
+  const parts = dateString.split("-");
+
+  if(parts.length !== 3){
+    return dateString;
+  }
+
+  return (
+    Number(parts[2]) +
+    "/" +
+    Number(parts[1]) +
+    "/" +
+    (Number(parts[0]) + 543).toString().slice(-2)
+  );
+
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+function statusText(status){
+
+  const map = {
+    active:"กำลังดำเนินการ",
+    wait:"ยังไม่เริ่ม",
+    done:"เสร็จแล้ว",
+    delay:"ล่าช้า",
+    pause:"พักงาน"
+  };
+
+  return map[status] || status;
+
+}
+
+
+/* =========================
+   RENDER
+========================= */
+
+function render(){
+
+  const list =
+    document.getElementById("projectList");
+
+  list.innerHTML = "";
+
+
+  /* OVERALL */
+
+  let totalProgress = 0;
+
+  projects.forEach(p => {
+    totalProgress += Number(p.progress || 0);
+  });
+
+  const overall =
+    projects.length
+      ? Math.round(totalProgress / projects.length)
+      : 0;
+
+
+  document.getElementById("overallPercent").textContent =
+    overall + "%";
+
+  document.getElementById("overallBar").style.width =
+    overall + "%";
+
+  document.getElementById("projectCount").textContent =
+    projects.length + " Projects";
+
+
+  document.getElementById("activeCount").textContent =
+    projects.filter(p => p.status === "active").length;
+
+  document.getElementById("doneCount").textContent =
+    projects.filter(p => p.status === "done").length;
+
+  document.getElementById("delayCount").textContent =
+    projects.filter(p => p.status === "delay").length;
+
+
+  /* EMPTY */
+
+  if(projects.length === 0){
+
+    list.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">📊</div>
+        <strong>ยังไม่มีโครงการ</strong>
+        <div style="font-size:12px;margin-top:5px;">
+          กด + เพื่อเพิ่มโครงการแรก
+        </div>
+      </div>
+    `;
+
+    return;
+  }
+
+
+  /* PROJECT CARDS */
+
+  projects.forEach(project => {
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "project-card";
+
+    card.onclick =
+      () => openDetail(project.id);
+
+
+    const tasks =
+      project.tasks || [];
+
+    const finishedTasks =
+      tasks.filter(t => Number(t.progress) >= 100).length;
+
+
+    card.innerHTML = `
+
+      <div class="card-top">
+
+        <div>
+
+          <div class="project-name">
+            ${escapeHTML(project.name)}
+          </div>
+
+          <div class="project-location">
+            ${escapeHTML(project.location || "ไม่ระบุสถานที่")}
+          </div>
+
+        </div>
+
+        <div class="status ${project.status}">
+          ${statusText(project.status)}
+        </div>
+
+      </div>
+
+
+      <div class="card-progress">
+
+        <span>ความคืบหน้า</span>
+
+        <span class="percent">
+          ${project.progress || 0}%
+        </span>
+
+      </div>
+
+
+      <div class="card-bar">
+        <div style="width:${project.progress || 0}%"></div>
+      </div>
+
+
+      <div class="card-bottom">
+
+        <span>
+          ✓ ${finishedTasks}/${tasks.length} งาน
+        </span>
+
+        <span>
+          Due ${formatDate(project.endDate)}
+        </span>
+
+      </div>
+
+    `;
+
+
+    list.appendChild(card);
+
+  });
+
+}
+
+
+/* =========================
+   PROJECT MODAL
+========================= */
+
+function openProjectModal(projectId = null){
+
+  editingProjectId =
+    projectId;
+
+
+  document.getElementById("projectModalTitle").textContent =
+    projectId
+      ? "แก้ไขโครงการ"
+      : "เพิ่มโครงการ";
+
+
+  if(projectId){
+
+    const project =
+      projects.find(p => p.id === projectId);
+
+    if(!project){
+      return;
+    }
+
+    document.getElementById("projectName").value =
+      project.name || "";
+
+    document.getElementById("projectLocation").value =
+      project.location || "";
+
+    document.getElementById("startDate").value =
+      project.startDate || "";
+
+    document.getElementById("endDate").value =
+      project.endDate || "";
+
+    document.getElementById("projectStatus").value =
+      project.status || "active";
+
+    document.getElementById("projectProgress").value =
+      project.progress || 0;
+
+    document.getElementById("projectNote").value =
+      project.note || "";
+
+  }
+
+  else{
+
+    document.getElementById("projectName").value = "";
+    document.getElementById("projectLocation").value = "";
+    document.getElementById("startDate").value = "";
+    document.getElementById("endDate").value = "";
+    document.getElementById("projectStatus").value = "active";
+    document.getElementById("projectProgress").value = 0;
+    document.getElementById("projectNote").value = "";
+
+  }
+
+
+  updateProgressLabel();
+
+  document
+    .getElementById("projectModal")
+    .classList.add("show");
+
+}
+
+
+function closeProjectModal(){
+
+  document
+    .getElementById("projectModal")
+    .classList.remove("show");
+
+}
+
+
+/* =========================
+   PROGRESS
+========================= */
+
+function updateProgressLabel(){
+
+  document.getElementById("progressLabel").textContent =
+    document.getElementById("projectProgress").value + "%";
+
+}
+
+
+/* =========================
+   SAVE PROJECT
+========================= */
+
+function saveProject(){
+
+  const name =
+    document.getElementById("projectName").value.trim();
+
+  if(!name){
+    alert("กรุณาใส่ชื่อโครงการ");
+    return;
+  }
+
+
+  const data = {
+
+    name:name,
+
+    location:
+      document.getElementById("projectLocation").value.trim(),
+
+    startDate:
+      document.getElementById("startDate").value,
+
+    endDate:
+      document.getElementById("endDate").value,
+
+    status:
+      document.getElementById("projectStatus").value,
+
+    progress:
+      Number(document.getElementById("projectProgress").value),
+
+    note:
+      document.getElementById("projectNote").value.trim()
+
+  };
+
+
+  if(editingProjectId){
+
+    const project =
+      projects.find(p => p.id === editingProjectId);
+
+    if(project){
+
+      Object.assign(
+        project,
+        data
+      );
+
+    }
+
+  }
+
+  else{
+
+    projects.unshift({
+
+      id:
+        Date.now(),
+
+      ...data,
+
+      tasks:[],
+
+      createdAt:
+        new Date().toISOString()
+
+    });
+
+  }
+
+
+  saveData();
+
+  closeProjectModal();
+
+  render();
+
+}
+
+
+/* =========================
+   DETAIL
+========================= */
+
+function openDetail(id){
+
+  selectedProjectId = id;
+
+  const project =
+    projects.find(p => p.id === id);
+
+  if(!project){
+    return;
+  }
+
+
+  const tasks =
+    project.tasks || [];
+
+
+  const circle =
+    `conic-gradient(
+      var(--navy) ${project.progress}%,
+      #edf0f3 ${project.progress}% 100%
+    )`;
+
+
+  let taskHTML = "";
+
+
+  if(tasks.length === 0){
+
+    taskHTML = `
+      <div style="
+        text-align:center;
+        color:var(--muted);
+        padding:18px 0;
+        font-size:11px;
+      ">
+        ยังไม่มีรายการงาน
+      </div>
+    `;
+
+  }
+
+  else{
+
+    tasks.forEach(task => {
+
+      taskHTML += `
+
+        <div class="task">
+
+          <div class="task-row">
+
+            <div class="task-name">
+              ${escapeHTML(task.name)}
+            </div>
+
+            <div class="task-pct">
+              ${task.progress}%
+            </div>
+
+          </div>
+
+          <div class="task-bar">
+            <div style="width:${task.progress}%"></div>
+          </div>
+
+          <span
+            class="task-delete"
+            onclick="deleteTask(event,${task.id})"
+          >
+            ลบรายการ
+          </span>
+
+        </div>
+
+      `;
+
+    });
+
+  }
+
+
+  document.getElementById("detailContent").innerHTML = `
+
+    <div class="status ${project.status}"
+         style="display:inline-block;">
+      ${statusText(project.status)}
+    </div>
+
+
+    <div class="detail-title">
+      ${escapeHTML(project.name)}
+    </div>
+
+
+    <div class="detail-location">
+      ${escapeHTML(project.location || "ไม่ระบุสถานที่")}
+    </div>
+
+
+    <div class="big-progress">
+
+      <div
+        class="progress-circle"
+        style="background:${circle}"
+      >
+        <span>${project.progress}%</span>
+      </div>
+
+    </div>
+
+
+    <div class="info-grid">
+
+      <div class="info">
+        <small>วันที่เริ่ม</small>
+        <strong>${formatDate(project.startDate)}</strong>
+      </div>
+
+      <div class="info">
+        <small>กำหนดเสร็จ</small>
+        <strong>${formatDate(project.endDate)}</strong>
+      </div>
+
+      <div class="info">
+        <small>รายการงาน</small>
+        <strong>${tasks.length} งาน</strong>
+      </div>
+
+      <div class="info">
+        <small>งานเสร็จ</small>
+        <strong>
+          ${tasks.filter(t => Number(t.progress) >= 100).length} งาน
+        </strong>
+      </div>
+
+    </div>
+
+
+    ${
+      project.note
+      ?
+      `
+      <div class="note">
+        ${escapeHTML(project.note)}
+      </div>
+      `
+      :
+      ""
+    }
+
+
+    <div class="task-section">
+
+      <div class="task-title">
+        รายการงาน
+      </div>
+
+      ${taskHTML}
+
+    </div>
+
+
+    <div class="detail-buttons">
+
+      <button
+        class="btn delete-btn"
+        onclick="deleteProject()"
+      >
+        ลบ
+      </button>
+
+      <button
+        class="btn edit-btn"
+        onclick="editCurrentProject()"
+      >
+        แก้ไข
+      </button>
+
+      <button
+        class="btn task-btn"
+        onclick="openTaskModal()"
+      >
+        + เพิ่มงาน
+      </button>
+
+    </div>
+
+  `;
+
+
+  document
+    .getElementById("detailModal")
+    .classList.add("show");
+
+}
+
+
+function closeDetail(){
+
+  document
+    .getElementById("detailModal")
+    .classList.remove("show");
+
+}
+
+
+/* =========================
+   EDIT
+========================= */
+
+function editCurrentProject(){
+
+  const id =
+    selectedProjectId;
+
+  closeDetail();
+
+  openProjectModal(id);
+
+}
+
+
+/* =========================
+   DELETE PROJECT
+========================= */
+
+function deleteProject(){
+
+  const project =
+    projects.find(p => p.id === selectedProjectId);
+
+  if(!project){
+    return;
+  }
+
+  if(
+    !confirm(
+      "ลบโครงการ \"" +
+      project.name +
+      "\" ใช่หรือไม่?"
+    )
+  ){
+    return;
+  }
+
+
+  projects =
+    projects.filter(
+      p => p.id !== selectedProjectId
+    );
+
+
+  saveData();
+
+  closeDetail();
+
+  render();
+
+}
+
+
+/* =========================
+   TASK
+========================= */
+
+function openTaskModal(){
+
+  document.getElementById("taskName").value = "";
+
+  document.getElementById("taskProgress").value = 0;
+
+  updateTaskLabel();
+
+
+  document
+    .getElementById("taskModal")
+    .classList.add("show");
+
+}
+
+
+function closeTaskModal(){
+
+  document
+    .getElementById("taskModal")
+    .classList.remove("show");
+
+}
+
+
+function updateTaskLabel(){
+
+  document.getElementById("taskProgressLabel").textContent =
+    document.getElementById("taskProgress").value + "%";
+
+}
+
+
+/* =========================
+   SAVE TASK
+========================= */
+
+function saveTask(){
+
+  const name =
+    document.getElementById("taskName").value.trim();
+
+
+  if(!name){
+    alert("กรุณาใส่ชื่อรายการงาน");
+    return;
+  }
+
+
+  const project =
+    projects.find(
+      p => p.id === selectedProjectId
+    );
+
+
+  if(!project){
+    return;
+  }
+
+
+  if(!project.tasks){
+    project.tasks = [];
+  }
+
+
+  project.tasks.push({
+
+    id:
+      Date.now(),
+
+    name:
+      name,
+
+    progress:
+      Number(
+        document.getElementById("taskProgress").value
+      )
+
+  });
+
+
+  saveData();
+
+  closeTaskModal();
+
+  openDetail(selectedProjectId);
+
+  render();
+
+}
+
+
+/* =========================
+   DELETE TASK
+========================= */
+
+function deleteTask(event,taskId){
+
+  event.stopPropagation();
+
+  const project =
+    projects.find(
+      p => p.id === selectedProjectId
+    );
+
+
+  if(!project){
+    return;
+  }
+
+
+  project.tasks =
+    (project.tasks || [])
+      .filter(
+        task => task.id !== taskId
+      );
+
+
+  saveData();
+
+  openDetail(selectedProjectId);
+
+  render();
+
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHTML(value){
+
+  return String(value || "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================
+   TODAY
+========================= */
+
+function showToday(){
+
+  const now =
+    new Date();
+
+  document.getElementById("todayText").textContent =
+    now.toLocaleDateString(
+      "th-TH",
+      {
+        day:"numeric",
+        month:"short",
+        year:"2-digit"
+      }
+    );
+
+}
+
+
+/* =========================
+   CLOSE BACKGROUND
+========================= */
+
+document.querySelectorAll(".modal")
+  .forEach(modal => {
+
+    modal.addEventListener(
+      "click",
+      function(event){
+
+        if(event.target === modal){
+
+          modal.classList.remove("show");
+
+        }
+
+      }
+    );
+
+  });
+
+
+/* =========================
+   START
+========================= */
+
+loadData();
+
+showToday();
+
+render();
+
+</script>
+
+</body>
+</html>
