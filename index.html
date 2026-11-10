@@ -11,6 +11,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
+<meta name="dashboard-build" content="20261110-v8-ui">
 <title>Project Dashboard</title>
 <link rel="manifest" href="./manifest.json?build=20261110-recovery-v71">
 
@@ -1986,6 +1987,55 @@ input[type="range"]{
 .detail-hero{border-radius:0 0 22px 22px!important;background-color:#062b57!important;}
 .detail-progress-card,.detail-kpi,.detail-section,.contractor-card{border:1px solid #e0e7f0!important;box-shadow:0 5px 18px rgba(8,39,75,.06)!important;}
 @media(max-width:600px){#detailModal .detail-box{overflow-y:auto;overscroll-behavior-y:contain;}#detailModal .detail-box>.modal-head .close{display:none!important;}#detailModal .detail-hero{padding-top:22px!important;min-height:260px;}.detail-gesture-head{position:sticky!important;top:0;z-index:30;padding-top:calc(7px + env(safe-area-inset-top))!important;height:calc(28px + env(safe-area-inset-top))!important;min-height:calc(28px + env(safe-area-inset-top))!important;}.detail-status{top:18px!important;right:14px!important;}}
+
+
+
+/* ===== MOBILE-FIRST UI V8 ===== */
+:root{--v8-navy:#062b57;--v8-blue:#0b5bd3;--v8-green:#0b8a50;--v8-orange:#f47a16;--v8-red:#dc252b;--v8-purple:#6737b7;--v8-bg:#eef2f7;}
+body{background:var(--v8-bg);}
+.header{padding-top:calc(18px + env(safe-area-inset-top));background:linear-gradient(120deg,#041d3b,#06396d 62%,#062a52);border-radius:0 0 24px 24px;}
+.kpi-grid{gap:8px}.kpi{position:relative;overflow:hidden;background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.18);}
+.kpi:nth-child(1){box-shadow:inset 0 -4px #0b5bd3}.kpi:nth-child(2){box-shadow:inset 0 -4px #6737b7}.kpi:nth-child(3){box-shadow:inset 0 -4px #0b8a50}.kpi:nth-child(4){box-shadow:inset 0 -4px #f47a16}
+.project-card{border:1px solid #dde5ef;box-shadow:0 8px 24px rgba(6,43,87,.08)}
+.fab{background:linear-gradient(145deg,#0756c9,#062b57);box-shadow:0 12px 28px rgba(6,43,87,.28)}
+
+/* Project editor: clean mobile sheet */
+#projectModal{background:rgba(3,16,34,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+#projectModal .modal-box{background:#f4f7fb;border:0;}
+#projectModal .modal-head{background:linear-gradient(120deg,#05264d,#07427d);box-shadow:none}
+#projectModal .form-section-title{margin-top:22px;color:#66758a;font-size:10px;letter-spacing:.9px}
+#projectModal label{font-size:12px;color:#28384d;margin-top:12px}
+#projectModal input,#projectModal select,#projectModal textarea{min-height:48px;border:1px solid #d9e2ee;border-radius:14px;background:#fff;box-shadow:0 3px 12px rgba(6,43,87,.035)}
+#projectModal textarea{min-height:96px}
+#projectModal .modal-buttons{position:sticky;bottom:-18px;z-index:40;margin:22px -15px -18px;padding:12px 15px calc(12px + env(safe-area-inset-bottom));background:rgba(244,247,251,.94);border-top:1px solid #dfe6ef;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+#projectModal .btn{min-height:50px;border-radius:14px}.save{background:linear-gradient(135deg,#0756c9,#062b57)}
+
+/* Detail dashboard cards */
+.detail-box{background:#eef2f7}.detail-gesture-head{background:#eef2f7!important}.detail-pull-handle{width:52px;height:5px;background:#aeb9c7}
+.detail-hero{background-color:#062b57!important;border-radius:0 0 24px 24px!important;box-shadow:0 10px 28px rgba(6,43,87,.18)}
+.detail-progress-card,.detail-kpi,.detail-section,.contractor-card{background:#fff!important;border:1px solid #dde5ef!important;border-radius:16px!important;box-shadow:0 5px 18px rgba(6,43,87,.055)!important}
+.modern-kpi:nth-child(1){border-top:4px solid #0b5bd3!important}.modern-kpi:nth-child(2){border-top:4px solid #0b8a50!important}.modern-kpi:nth-child(3){border-top:4px solid #f47a16!important}.modern-kpi:nth-child(4){border-top:4px solid #6737b7!important}
+
+@media(max-width:600px){
+  .header{padding-left:13px;padding-right:13px;padding-bottom:16px;border-radius:0 0 22px 22px}
+  .topbar{align-items:center}.eyebrow{font-size:8px}.topbar h1,.header h1{font-size:21px}
+  .kpi-grid{grid-template-columns:1fr 1fr!important;gap:7px!important}.kpi{min-height:78px;padding:11px!important;border-radius:13px}.kpi-label{font-size:9px}.kpi-value{font-size:20px}.kpi-value.money{font-size:17px}
+  .content{padding-top:15px}.section-head{margin-bottom:10px}.section-head h2{font-size:18px}
+  #projectModal{padding:0;align-items:stretch}
+  #projectModal .modal-box{width:100%;height:100dvh;max-height:100dvh;border-radius:0;padding:0 15px 18px;padding-bottom:calc(18px + env(safe-area-inset-bottom));}
+  #projectModal .modal-head{margin:0 -15px 17px;padding:calc(16px + env(safe-area-inset-top)) 16px 15px;border-radius:0 0 20px 20px}
+  #projectModal .modal-head h2{font-size:19px}
+  #projectModal .close{width:40px;height:40px;border-radius:13px}
+  #projectModal .two{grid-template-columns:1fr 1fr;gap:8px}
+  #projectModal input[type=date]{font-size:13px;padding-left:9px;padding-right:7px;min-width:0}
+  #projectModal .progress-input{grid-template-columns:1fr 52px}
+  #detailModal .detail-box{height:100dvh;max-height:100dvh}
+  #detailModal .detail-hero{min-height:245px!important;padding:20px 16px 18px!important}
+  .modern-detail-body{padding:10px!important}.modern-kpi-grid{gap:8px!important}.modern-kpi{padding:12px!important;min-height:94px}
+  .detail-swipe-hint{bottom:7px}
+  .fab{right:16px;bottom:calc(16px + env(safe-area-inset-bottom));width:58px;height:58px}
+}
+@media(max-width:370px){#projectModal .two{grid-template-columns:1fr}.kpi-grid{grid-template-columns:1fr 1fr!important}}
 
 </style>
 </head>
@@ -6812,10 +6862,6 @@ function createDataToolsButton(){
     dataButton
   );
 
-
-  actions.appendChild(
-    addButton
-  );
 
 }
 
