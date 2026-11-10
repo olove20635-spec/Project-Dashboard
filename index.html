@@ -12,12 +12,12 @@
 <meta name="apple-mobile-web-app-title" content="Projects">
 
 <title>Project Dashboard</title>
-<link rel="manifest" href="./manifest.json?build=20261110-v5">
+<link rel="manifest" href="./manifest.json?build=20261110-recovery-v71">
 
 <script>
 /* Build V5: preserve localStorage; force a fresh document URL on Safari/PWA. */
 (function(){
-  var BUILD = "20261110-v5";
+  var BUILD = "20261110-recovery-v71";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -2773,60 +2773,124 @@ function normalizeProject(project){
 }
 
 
+function findRecoveryCandidates(){
+
+  const candidates = [];
+  const seen = new Set();
+
+  function addCandidate(key, raw){
+    if(!raw || seen.has(raw)) return;
+    try{
+      const parsed = JSON.parse(raw);
+      let list = null;
+      if(Array.isArray(parsed)) list = parsed;
+      else if(parsed && Array.isArray(parsed.projects)) list = parsed.projects;
+      if(!list || !list.length) return;
+      const normalized = list.map(normalizeProject).filter(Boolean);
+      if(!normalized.length) return;
+      seen.add(raw);
+      candidates.push({ key, raw, projects: normalized });
+    }catch(e){}
+  }
+
+  // Known keys from earlier builds/migrations first.
+  [
+    STORAGE_KEY + "-before-text-fields-v2",
+    STORAGE_KEY + "-backup",
+    STORAGE_KEY + "-before-migration",
+    "personal-project-dashboard-v1-backup"
+  ].forEach(key => addCandidate(key, localStorage.getItem(key)));
+
+  // Then inspect every same-origin localStorage entry without modifying it.
+  for(let i=0; i<localStorage.length; i++){
+    const key = localStorage.key(i);
+    if(!key || key === STORAGE_KEY) continue;
+    addCandidate(key, localStorage.getItem(key));
+  }
+
+  return candidates.sort((a,b) => b.projects.length - a.projects.length);
+}
+
+function showRecoveryBanner(candidate){
+  if(!candidate) return;
+  const old = document.getElementById("recoveryBanner");
+  if(old) old.remove();
+
+  const banner = document.createElement("div");
+  banner.id = "recoveryBanner";
+  banner.style.cssText = "position:fixed;left:12px;right:12px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:99999;background:#fff;border:1px solid #d8e1ef;border-radius:18px;box-shadow:0 18px 50px rgba(15,31,54,.22);padding:16px;font-family:inherit";
+  banner.innerHTML = `
+    <div style="font-weight:800;font-size:16px;color:#172033;margin-bottom:6px">พบข้อมูลโครงการเดิม ${candidate.projects.length} โครงการ</div>
+    <div style="font-size:13px;line-height:1.5;color:#5d6878;margin-bottom:12px">พบสำเนาข้อมูลเดิมในเครื่องนี้ ระบบยังไม่ได้เขียนทับข้อมูล กรุณากด “กู้คืนข้อมูล”</div>
+    <div style="display:flex;gap:8px">
+      <button id="recoveryLater" type="button" style="flex:1;border:0;border-radius:12px;padding:12px;background:#eef2f7;color:#344054;font-weight:700">ไว้ก่อน</button>
+      <button id="recoveryNow" type="button" style="flex:1.4;border:0;border-radius:12px;padding:12px;background:#3976d3;color:#fff;font-weight:800">กู้คืนข้อมูล</button>
+    </div>`;
+  document.body.appendChild(banner);
+
+  document.getElementById("recoveryLater").onclick = () => banner.remove();
+  document.getElementById("recoveryNow").onclick = () => {
+    try{
+      const current = localStorage.getItem(STORAGE_KEY);
+      if(current && current !== "[]"){
+        localStorage.setItem(STORAGE_KEY + "-pre-recovery", current);
+      }
+      localStorage.setItem(STORAGE_KEY, candidate.raw);
+      projects = candidate.projects.map(normalizeProject).filter(Boolean);
+      storageWriteBlocked = false;
+      applySavedProjectOrder();
+      projects.forEach(project => { if(project.tasks.length) recalculateProject(project); });
+      saveData();
+      banner.remove();
+      render();
+      alert("กู้คืนข้อมูลเรียบร้อยแล้ว " + projects.length + " โครงการ");
+    }catch(error){
+      console.error("Recovery error:", error);
+      alert("กู้คืนอัตโนมัติไม่สำเร็จ กรุณาอย่าล้างข้อมูลเว็บไซต์และส่งภาพหน้าจอนี้มาให้ผม");
+    }
+  };
+}
+
 function loadData(){
 
   storageWriteBlocked = false;
+  let raw = null;
+
   try{
-
-    const raw =
-      localStorage.getItem(
-        STORAGE_KEY
-      );
-
-    projects =
-      raw
-        ? JSON.parse(raw)
-        : [];
+    raw = localStorage.getItem(STORAGE_KEY);
+    projects = raw ? JSON.parse(raw) : [];
 
     if(!Array.isArray(projects)){
       throw new Error("Stored project data is not an array");
     }
-    if(raw && !localStorage.getItem(ORIGINAL_BACKUP_KEY)){
+
+    // Never create/overwrite an empty main dataset during startup.
+    if(raw && projects.length && !localStorage.getItem(ORIGINAL_BACKUP_KEY)){
       localStorage.setItem(ORIGINAL_BACKUP_KEY, raw);
     }
-
   }
   catch(error){
-
-    console.error(
-      "Load data error:",
-      error
-    );
-
+    console.error("Load data error:", error);
     storageWriteBlocked = true;
-    alert("ไม่สามารถอ่านหรือสำรองข้อมูลเดิมได้ ระบบจะไม่เขียนทับข้อมูล กรุณาสำรองข้อมูลเดิมก่อนใช้งานต่อ");
     projects = [];
-
   }
 
-  projects =
-    projects
-      .map(normalizeProject)
-      .filter(Boolean);
-
+  projects = projects.map(normalizeProject).filter(Boolean);
   applySavedProjectOrder();
+  projects.forEach(project => { if(project.tasks.length) recalculateProject(project); });
 
-  projects.forEach(project => {
-
-    if(project.tasks.length){
-      recalculateProject(project);
-    }
-
-  });
-
-  // Persist the migrated canonical schema so future loads stay consistent.
-  saveData();
-
+  // Critical recovery rule: an empty/missing main key must NEVER be persisted on load.
+  if(projects.length){
+    saveData();
+  }else{
+    storageWriteBlocked = true;
+    setTimeout(() => {
+      try{
+        const candidates = findRecoveryCandidates();
+        if(candidates.length) showRecoveryBanner(candidates[0]);
+      }catch(e){ console.error("Recovery scan error:", e); }
+    }, 250);
+  }
 }
 
 
