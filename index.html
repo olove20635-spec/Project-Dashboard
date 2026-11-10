@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261110-v12-polished">
+<meta name="dashboard-build" content="20261110-v13-icon-font">
 <title>Project Dashboard V19</title>
-<link rel="manifest" href="./manifest.json?build=20261110-v12-polished">
+<link rel="manifest" href="./manifest.json?build=20261110-v13-icon-font">
 
 
 <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
@@ -21,7 +21,7 @@
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261110-v12-polished";
+  var BUILD = "20261110-v13-icon-font";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -73,7 +73,7 @@ html,body{
   min-height:100%;
   background:var(--bg);
   color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;
+  font-family:"Thonburi","Noto Sans Thai",-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;
 }
 
 body{
@@ -2112,6 +2112,19 @@ body,input,select,textarea,button{font-family:-apple-system,BlinkMacSystemFont,"
 .export-preview-wrap{background:linear-gradient(145deg,#dfe7f1,#f7f9fc)}
 .export-preview-wrap img{max-height:68dvh;object-fit:contain;margin:auto}
 
+
+/* Icon + Thai typography polish */
+body,input,select,textarea,button{font-family:"Thonburi","Noto Sans Thai",-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;}
+.detail-title,.project-name,.contractor-name,.modern-kpi-value{letter-spacing:-.15px;}
+.modern-kpi-label,.contractor-label,.contractor-contact small,.project-text-title{letter-spacing:0;font-weight:700;}
+.detail-line-icon{color:#123a6b;background:#eef4fb!important;}
+.detail-line-icon svg{width:22px;height:22px;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.contractor-icon.detail-line-icon{width:42px;height:42px;border-radius:13px;}
+.contractor-icon.detail-line-icon svg{width:24px;height:24px;}
+.inline-line-icon{display:inline-flex;width:24px;height:24px;align-items:center;justify-content:center;border-radius:8px;background:#eef4fb;color:#123a6b;vertical-align:middle;margin-right:8px;}
+.inline-line-icon svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.payment-title{display:flex;align-items:center;color:#334155!important;font-size:12px!important;}
+@media(max-width:600px){.project-text-title:before{content:none!important}.project-note-card .project-text-title:before{content:none!important}}
 </style>
 </head>
 
@@ -5882,9 +5895,7 @@ function openDetail(id){
 
         <div class="modern-kpi">
 
-          <div class="modern-kpi-icon">
-            ฿
-          </div>
+          <div class="modern-kpi-icon detail-line-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="7" rx="6.5" ry="2.7"/><path d="M5.5 7v4c0 1.5 2.9 2.7 6.5 2.7s6.5-1.2 6.5-2.7V7M5.5 11v4c0 1.5 2.9 2.7 6.5 2.7s6.5-1.2 6.5-2.7v-4"/><path d="M12 5.2v10.3"/></svg></div>
 
           <div class="modern-kpi-label">
             มูลค่าโครงการ
@@ -5899,7 +5910,7 @@ function openDetail(id){
 
 
         <div class="modern-kpi timeline-kpi ${days.cls}">
-          <div class="modern-kpi-icon">◷</div>
+          <div class="modern-kpi-icon detail-line-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M8 3.5v4M16 3.5v4M4 9.5h16"/><path d="M8 13h3M13 13h3M8 16h3M13 16h3"/></svg></div>
           <div class="modern-kpi-label">ระยะเวลาโครงการ</div>
           <div class="timeline-dates"><span>${formatDate(project.startDate)}</span><span class="timeline-arrow">→</span><span>${formatDate(project.endDate)}</span></div>
           <div class="timeline-bar"><div style="width:${schedule.valid ? schedule.elapsedPct : 0}%"></div></div>
@@ -5917,9 +5928,7 @@ function openDetail(id){
 
               <div class="contractor-head">
 
-                <div class="contractor-icon">
-                  🏢
-                </div>
+                <div class="contractor-icon detail-line-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 20V5.5L12 3v17M12 8h7v12M3 20h18"/><path d="M8 8h1M8 11h1M8 14h1M15 11h1M15 14h1M15 17h1"/></svg></div>
 
                 <div>
 
@@ -6009,7 +6018,7 @@ function openDetail(id){
 
       ${(()=>{ const pay=getPaymentInfo(project); return (pay.total||pay.paidAmount) ? `
       <div class="project-text-card" style="margin-top:14px;">
-        <div class="project-text-title">💰 สถานะการเบิกเงิน</div>
+        <div class="project-text-title payment-title"><span class="inline-line-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="7" rx="6.5" ry="2.7"/><path d="M5.5 7v4c0 1.5 2.9 2.7 6.5 2.7s6.5-1.2 6.5-2.7V7M5.5 11v4c0 1.5 2.9 2.7 6.5 2.7s6.5-1.2 6.5-2.7v-4"/></svg></span>สถานะการเบิกเงิน</div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;">
           <div><div class="project-text-title">เบิกแล้ว</div><div style="font-weight:900;font-size:18px;">${money(pay.paidAmount)}</div></div>
           <div><div class="project-text-title">คงเหลือ</div><div style="font-weight:900;font-size:18px;">${money(pay.balance)}</div></div>
@@ -6241,11 +6250,11 @@ function fillRoundRect(ctx,x,y,w,h,r,color){
   ctx.save(); roundRectPath(ctx,x,y,w,h,r); ctx.fillStyle=color; ctx.fill(); ctx.restore();
 }
 function drawText(ctx,text,x,y,size,color="#111827",weight=600,align="left"){
-  ctx.save(); ctx.fillStyle=color; ctx.font=`${weight} ${size}px -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans Thai",Arial,sans-serif`;
+  ctx.save(); ctx.fillStyle=color; ctx.font=`${weight} ${size}px "Thonburi","Noto Sans Thai",-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif`;
   ctx.textAlign=align; ctx.textBaseline="top"; ctx.fillText(String(text??""),x,y); ctx.restore();
 }
 function drawWrappedText(ctx,text,x,y,maxWidth,lineHeight,size,color="#111827",weight=500,maxLines=99){
-  ctx.save(); ctx.fillStyle=color; ctx.font=`${weight} ${size}px -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans Thai",Arial,sans-serif`;
+  ctx.save(); ctx.fillStyle=color; ctx.font=`${weight} ${size}px "Thonburi","Noto Sans Thai",-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif`;
   ctx.textAlign="left"; ctx.textBaseline="top";
   const raw=String(text??"").replace(/\r/g,""); let lines=[];
   for(const para of raw.split("\n")){
