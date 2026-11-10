@@ -5979,41 +5979,44 @@ function saveBackgroundEditor(){
 
 function loadCanvasImage(src){
 
-  return new Promise(
-    (resolve,reject) => {
+  return new Promise((resolve,reject) => {
 
-      if(!src){
-
-        resolve(null);
-        return;
-
-      }
-
-      const image =
-        new Image();
-
-      image.onload = async () => {
-        try{
-          if(image.decode){
-            await image.decode().catch(() => {});
-          }
-        }
-        finally{
-          resolve(image);
-        }
-      };
-
-      image.onerror =
-        () => reject(
-          new Error(
-            "Image load failed"
-          )
-        );
-
-      image.src = src;
-
+    if(!src){
+      resolve(null);
+      return;
     }
-  );
+
+    const image = new Image();
+    let settled = false;
+
+    const finish = (fn,value) => {
+      if(settled) return;
+      settled = true;
+      clearTimeout(timer);
+      fn(value);
+    };
+
+    const timer = setTimeout(() => {
+      finish(reject, new Error("Image load timeout"));
+    }, 8000);
+
+    image.onload = async () => {
+      try{
+        if(image.decode){
+          try{ await image.decode(); }catch(error){}
+        }
+        finish(resolve,image);
+      }catch(error){
+        finish(reject,error);
+      }
+    };
+
+    image.onerror = () =>
+      finish(reject,new Error("Image load failed"));
+
+    image.src = src;
+
+  });
 
 }
 
@@ -6388,7 +6391,14 @@ function drawWrappedText(
 }
 
 
+let exportProjectBusy = false;
+
 async function exportProjectImage(){
+
+  if(exportProjectBusy){ return; }
+  exportProjectBusy = true;
+
+  try{
 
   const project =
     projects.find(
@@ -6416,13 +6426,25 @@ async function exportProjectImage(){
       "canvas"
     );
 
-  canvas.width = 1920;
-  canvas.height = 1080;
+  const isMobile =
+    /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) ||
+    window.innerWidth <= 768;
+
+  const exportScale = isMobile ? (2 / 3) : 1;
+
+  canvas.width = Math.round(1920 * exportScale);
+  canvas.height = Math.round(1080 * exportScale);
 
   const ctx =
     canvas.getContext(
       "2d"
     );
+
+  // Draw with the original 1920×1080 coordinate system,
+  // but use a smaller physical canvas on phones to reduce memory usage.
+  if(exportScale !== 1){
+    ctx.scale(exportScale, exportScale);
+  }
 
   ctx.imageSmoothingEnabled =
     true;
@@ -6838,59 +6860,16 @@ async function exportProjectImage(){
     safeName +
     "-summary-16x9.png";
 
-  let blob = null;
-
-  try{
-    blob = await new Promise((resolve,reject) => {
-      canvas.toBlob(
-        result => result ? resolve(result) : reject(new Error("Canvas export failed")),
-        "image/png",
-        1
-      );
-    });
-  }
-  catch(error){
-    try{
-      const dataUrl = canvas.toDataURL("image/png",1);
-      const response = await fetch(dataUrl);
-      blob = await response.blob();
-    }
-    catch(fallbackError){
-      alert("ไม่สามารถสร้างไฟล์รูปภาพได้ กรุณาลองใหม่อีกครั้ง");
-      return;
-    }
-  }
-
-  const file = new File(
-    [blob],
-    fileName,
-    {type:"image/png"}
-  );
-
-  /* Mobile/iPhone/PWA: use native share sheet when file sharing is supported. */
-  if(
-    navigator.share &&
-    navigator.canShare &&
-    navigator.canShare({files:[file]})
-  ){
-    try{
-      await navigator.share({
-        files:[file],
-        title:project.name || "Project Dashboard"
-      });
-      return;
-    }
-    catch(error){
-      /* User cancelled: do not force a second popup. */
-      if(error && error.name === "AbortError"){
-        return;
-      }
-    }
-  }
+  const blob = await new Promise((resolve,reject) => {
+    const timer = setTimeout(() => reject(new Error("Export timeout")), 12000);
+    canvas.toBlob(result => {
+      clearTimeout(timer);
+      if(result) resolve(result);
+      else reject(new Error("ไม่สามารถสร้างไฟล์ภาพได้"));
+    }, "image/png");
+  });
 
   const objectUrl = URL.createObjectURL(blob);
-
-  /* Desktop/Android browsers that honor the download attribute. */
   const link = document.createElement("a");
   link.href = objectUrl;
   link.download = fileName;
@@ -6899,8 +6878,19 @@ async function exportProjectImage(){
   link.click();
   link.remove();
 
-  /* Keep the object URL alive long enough for mobile browsers to consume it. */
-  setTimeout(() => URL.revokeObjectURL(objectUrl), 60000);
+  // Do not revoke immediately on mobile; Safari may still be reading the blob.
+  setTimeout(() => URL.revokeObjectURL(objectUrl), 30000);
+
+  // Release the large backing store as soon as possible.
+  canvas.width = 1;
+  canvas.height = 1;
+
+  }catch(error){
+    console.error("Export error:", error);
+    alert("Export ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
+  }finally{
+    exportProjectBusy = false;
+  }
 
 }
 
