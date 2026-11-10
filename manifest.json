@@ -1,0 +1,12 @@
+{
+  "name": "Project Dashboard",
+  "short_name": "Projects",
+  "description": "Personal Project Progress Dashboard",
+  "start_url": "/Project-Dashboard/",
+  "scope": "/Project-Dashboard/",
+  "display": "standalone",
+  "background_color": "#f4f6f9",
+  "theme_color": "#172033",
+  "lang": "th",
+  "icons": []
+}
