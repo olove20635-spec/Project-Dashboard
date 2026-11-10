@@ -6194,15 +6194,17 @@ async function exportProjectImage(){
     // Header — corporate dashboard style
     const hg=ctx.createLinearGradient(0,0,W,0);hg.addColorStop(0,"#073B7A");hg.addColorStop(.58,"#0757A6");hg.addColorStop(1,"#0B73C9");
     ctx.fillStyle=hg;ctx.fillRect(0,0,W,126);
+    // White logo zone fading cleanly into corporate blue
+    const logoFade=ctx.createLinearGradient(0,0,330,0);logoFade.addColorStop(0,"#FFFFFF");logoFade.addColorStop(.68,"#FFFFFF");logoFade.addColorStop(1,"rgba(255,255,255,0)");ctx.fillStyle=logoFade;ctx.fillRect(0,0,350,126);
     ctx.fillStyle="rgba(255,255,255,.10)";ctx.beginPath();ctx.moveTo(1260,0);ctx.lineTo(1490,0);ctx.lineTo(1420,126);ctx.lineTo(1190,126);ctx.closePath();ctx.fill();
-    if(brandLogo){const maxW=225,maxH=72,ratio=Math.min(maxW/brandLogo.width,maxH/brandLogo.height);ctx.drawImage(brandLogo,30,26,brandLogo.width*ratio,brandLogo.height*ratio);}
-    drawText(ctx,"PROJECT PERFORMANCE DASHBOARD",292,31,16,"rgba(255,255,255,.76)",800);
-    drawWrappedText(ctx,project.name||"-",292,55,980,42,34,"#FFFFFF",900,1);
-    drawText(ctx,"📍 "+(project.location||"ไม่ระบุสถานที่"),292,98,16,"rgba(255,255,255,.84)",600);
+    if(brandLogo){const maxW=230,maxH=82,ratio=Math.min(maxW/brandLogo.width,maxH/brandLogo.height);ctx.drawImage(brandLogo,26,22,brandLogo.width*ratio,brandLogo.height*ratio);}
+    drawText(ctx,"PROJECT PERFORMANCE DASHBOARD",370,25,20,"rgba(255,255,255,.84)",850);
+    drawWrappedText(ctx,project.name||"-",370,55,900,48,40,"#FFFFFF",900,1);
+    drawText(ctx,"📍 "+(project.location||"ไม่ระบุสถานที่"),370,101,19,"rgba(255,255,255,.90)",650);
     fillRoundRect(ctx,1518,28,360,70,16,"rgba(0,31,72,.32)");
-    drawText(ctx,"สถานะโครงการ",1545,41,13,"rgba(255,255,255,.68)",700);
-    drawText(ctx,statusText(project.status),1545,65,22,"#FFFFFF",900);
-    drawText(ctx,progress+"%",1845,43,30,"#FFFFFF",900,"right");
+    drawText(ctx,"สถานะโครงการ",1545,38,16,"rgba(255,255,255,.68)",700);
+    drawText(ctx,statusText(project.status),1545,64,25,"#FFFFFF",900);
+    drawText(ctx,progress+"%",1845,39,36,"#FFFFFF",900,"right");
 
     // KPI cards
     const ky=148,kh=122,gap=14,kx=28,kw=(W-56-gap*3)/4;
@@ -6213,48 +6215,48 @@ async function exportProjectImage(){
       ["⌛","เวลาคงเหลือ",days.short,days.overdue?"#D93636":"#6B38B8"],
       ["✓","ความคืบหน้า",progress+"%","#11965A"]
     ];
-    kpis.forEach((c,i)=>{const x=kx+i*(kw+gap);fillRoundRect(ctx,x,ky,kw,kh,16,c[3]);fillRoundRect(ctx,x+18,ky+24,58,58,29,"rgba(255,255,255,.18)");drawText(ctx,c[0],x+47,ky+38,25,"#FFFFFF",900,"center");drawText(ctx,c[1],x+94,ky+24,14,"rgba(255,255,255,.82)",700);drawWrappedText(ctx,c[2],x+94,ky+53,kw-112,32,25,"#FFFFFF",900,2);});
+    kpis.forEach((c,i)=>{const x=kx+i*(kw+gap);fillRoundRect(ctx,x,ky,kw,kh,16,c[3]);fillRoundRect(ctx,x+18,ky+24,66,66,33,"rgba(255,255,255,.18)");drawText(ctx,c[0],x+51,ky+38,31,"#FFFFFF",900,"center");drawText(ctx,c[1],x+102,ky+20,17,"rgba(255,255,255,.82)",700);drawWrappedText(ctx,c[2],x+102,ky+52,kw-120,36,29,"#FFFFFF",900,2);});
 
     // Main left panel: project visual + timeline
     fillRoundRect(ctx,28,290,1230,420,16,"#FFFFFF");
     fillRoundRect(ctx,28,290,1230,48,16,"#06498D");ctx.fillStyle="#06498D";ctx.fillRect(28,322,1230,16);
-    drawText(ctx,"PROJECT OVERVIEW",50,304,18,"#FFFFFF",900);
+    drawText(ctx,"PROJECT OVERVIEW",50,302,21,"#FFFFFF",900);
     const px=48,py=358,pw=510,ph=250;
     ctx.save();roundRectPath(ctx,px,py,pw,ph,14);ctx.clip();
     if(image){drawCoverPositioned(ctx,image,px,py,pw,ph,bgPosition);ctx.fillStyle="rgba(1,25,55,.16)";ctx.fillRect(px,py,pw,ph);}else{const pg=ctx.createLinearGradient(px,py,px+pw,py+ph);pg.addColorStop(0,"#0A4E91");pg.addColorStop(1,"#071F42");ctx.fillStyle=pg;ctx.fillRect(px,py,pw,ph);}
     ctx.restore();
-    drawText(ctx,"ความคืบหน้า",590,368,15,"#74849A",700);drawText(ctx,progress+"%",1218,360,30,"#0B3C75",900,"right");
+    drawText(ctx,"ความคืบหน้า",590,364,18,"#74849A",700);drawText(ctx,progress+"%",1218,356,34,"#0B3C75",900,"right");
     fillRoundRect(ctx,590,410,628,18,9,"#E7EDF5");if(progress>0)fillRoundRect(ctx,590,410,628*progress/100,18,9,"#1267D6");
     const elapsed=schedule?.valid?Math.max(0,Math.min(100,Math.round(schedule.elapsedPct))):0;
-    drawText(ctx,"เวลาที่ใช้ไป",590,457,15,"#74849A",700);drawText(ctx,schedule?.valid?elapsed+"%":"-",1218,449,24,"#6B38B8",900,"right");
+    drawText(ctx,"เวลาที่ใช้ไป",590,453,18,"#74849A",700);drawText(ctx,schedule?.valid?elapsed+"%":"-",1218,445,29,"#6B38B8",900,"right");
     fillRoundRect(ctx,590,496,628,18,9,"#E7EDF5");if(schedule?.valid&&elapsed>0)fillRoundRect(ctx,590,496,628*elapsed/100,18,9,"#6B38B8");
-    if(schedule?.valid){const d=progress-elapsed;fillRoundRect(ctx,590,540,360,44,22,d>=0?"#E8F7F0":"#FFF0F0");drawText(ctx,d>=0?"▲ งานนำหน้าแผน "+Math.abs(d)+"%":"▼ งานช้ากว่าแผน "+Math.abs(d)+"%",612,551,15,d>=0?"#138A58":"#C83232",850);}
-    drawText(ctx,"เริ่มต้น",48,628,13,"#8290A3",700);drawText(ctx,project.startDate?formatDate(project.startDate):"-",48,651,20,"#152B45",850);
-    drawText(ctx,"กำหนดเสร็จ",245,628,13,"#8290A3",700);drawText(ctx,project.endDate?formatDate(project.endDate):"-",245,651,20,"#152B45",850);
-    drawText(ctx,"คงเหลือ",442,628,13,"#8290A3",700);drawText(ctx,days.short,442,651,20,days.overdue?"#D93636":"#6B38B8",850);
+    if(schedule?.valid){const d=progress-elapsed;fillRoundRect(ctx,590,540,360,44,22,d>=0?"#E8F7F0":"#FFF0F0");drawText(ctx,d>=0?"▲ งานนำหน้าแผน "+Math.abs(d)+"%":"▼ งานช้ากว่าแผน "+Math.abs(d)+"%",612,548,18,d>=0?"#138A58":"#C83232",850);}
+    drawText(ctx,"เริ่มต้น",48,624,16,"#8290A3",700);drawText(ctx,project.startDate?formatDate(project.startDate):"-",48,650,24,"#152B45",850);
+    drawText(ctx,"กำหนดเสร็จ",245,624,16,"#8290A3",700);drawText(ctx,project.endDate?formatDate(project.endDate):"-",245,650,24,"#152B45",850);
+    drawText(ctx,"คงเหลือ",442,624,16,"#8290A3",700);drawText(ctx,days.short,442,650,24,days.overdue?"#D93636":"#6B38B8",850);
 
     // Right insight panel
     fillRoundRect(ctx,1274,290,618,420,16,"#FFFFFF");
     fillRoundRect(ctx,1274,290,618,48,16,"#06498D");ctx.fillStyle="#06498D";ctx.fillRect(1274,322,618,16);
-    drawText(ctx,"KEY INSIGHTS",1296,304,18,"#FFFFFF",900);
+    drawText(ctx,"KEY INSIGHTS",1296,302,21,"#FFFFFF",900);
     const cx=1440,cy=478,r=112;ctx.lineWidth=28;ctx.strokeStyle="#E7EDF5";ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();ctx.strokeStyle="#1267D6";ctx.lineCap="round";ctx.beginPath();ctx.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+Math.PI*2*progress/100);ctx.stroke();ctx.lineCap="butt";
-    drawText(ctx,progress+"%",cx,cy-20,40,"#0B3C75",900,"center");drawText(ctx,"PROGRESS",cx,cy+30,13,"#8290A3",800,"center");
+    drawText(ctx,progress+"%",cx,cy-23,46,"#0B3C75",900,"center");drawText(ctx,"PROGRESS",cx,cy+32,15,"#8290A3",800,"center");
     const insights=[["●","สถานะ",statusText(project.status),"#1267D6"],["◷","Timeline",schedule?.valid?elapsed+"% ของเวลา":"-","#6B38B8"],["⌛","คงเหลือ",days.short,days.overdue?"#D93636":"#F47B16"]];
-    insights.forEach((v,i)=>{const y=380+i*86;drawText(ctx,v[0],1592,y,18,v[3],900);drawText(ctx,v[1],1622,y-3,13,"#8290A3",700);drawText(ctx,v[2],1622,y+22,19,"#17304D",850);});
+    insights.forEach((v,i)=>{const y=380+i*86;drawText(ctx,v[0],1588,y-2,24,v[3],900);drawText(ctx,v[1],1628,y-5,16,"#8290A3",700);drawText(ctx,v[2],1628,y+22,22,"#17304D",850);});
 
     // Bottom panels
-    fillRoundRect(ctx,28,730,1210,292,16,"#FFFFFF");fillRoundRect(ctx,28,730,1210,46,16,"#06498D");ctx.fillStyle="#06498D";ctx.fillRect(28,760,1210,16);drawText(ctx,"PROJECT DETAILS",50,743,17,"#FFFFFF",900);
-    drawText(ctx,"รายละเอียดโครงการ",52,800,14,"#8290A3",750);drawWrappedText(ctx,getProjectDescription(project)||"ยังไม่มีรายละเอียดเพิ่มเติม",52,830,1130,28,18,"#263D58",550,4);
-    ctx.fillStyle="#E7EDF4";ctx.fillRect(52,930,1130,1);drawText(ctx,"หมายเหตุ",52,950,14,"#8290A3",750);drawWrappedText(ctx,getProjectRemark(project)||"-",52,978,1130,25,17,"#263D58",550,2);
+    fillRoundRect(ctx,28,730,1210,292,16,"#FFFFFF");fillRoundRect(ctx,28,730,1210,46,16,"#06498D");ctx.fillStyle="#06498D";ctx.fillRect(28,760,1210,16);drawText(ctx,"PROJECT DETAILS",50,741,20,"#FFFFFF",900);
+    drawText(ctx,"รายละเอียดโครงการ",52,798,17,"#8290A3",750);drawWrappedText(ctx,getProjectDescription(project)||"ยังไม่มีรายละเอียดเพิ่มเติม",52,830,1130,31,21,"#263D58",550,4);
+    ctx.fillStyle="#E7EDF4";ctx.fillRect(52,930,1130,1);drawText(ctx,"หมายเหตุ",52,947,17,"#8290A3",750);drawWrappedText(ctx,getProjectRemark(project)||"-",52,978,1130,28,20,"#263D58",550,2);
 
-    fillRoundRect(ctx,1254,730,638,292,16,"#FFFFFF");fillRoundRect(ctx,1254,730,638,46,16,"#06498D");ctx.fillStyle="#06498D";ctx.fillRect(1254,760,638,16);drawText(ctx,"CONTRACTOR",1276,743,17,"#FFFFFF",900);
+    fillRoundRect(ctx,1254,730,638,292,16,"#FFFFFF");fillRoundRect(ctx,1254,730,638,46,16,"#06498D");ctx.fillStyle="#06498D";ctx.fillRect(1254,760,638,16);drawText(ctx,"CONTRACTOR",1276,741,20,"#FFFFFF",900);
     const rows=[["▦","บริษัท",project.contractorCompany||"-","#1267D6"],["●","ผู้ประสานงาน",project.contractorContact||"-","#11965A"],["☎","โทรศัพท์",project.contractorPhone||"-","#F47B16"]];
-    rows.forEach((v,i)=>{const y=804+i*67;fillRoundRect(ctx,1278,y,44,44,12,v[3]+"18");drawText(ctx,v[0],1300,y+10,17,v[3],900,"center");drawText(ctx,v[1],1340,y,12,"#8290A3",700);drawWrappedText(ctx,v[2],1340,y+22,500,24,18,"#20364F",850,1);});
+    rows.forEach((v,i)=>{const y=804+i*67;fillRoundRect(ctx,1278,y,52,52,14,v[3]+"18");drawText(ctx,v[0],1304,y+11,22,v[3],900,"center");drawText(ctx,v[1],1350,y-1,15,"#8290A3",700);drawWrappedText(ctx,v[2],1350,y+24,490,27,21,"#20364F",850,1);});
 
     // Corporate footer
     const fg=ctx.createLinearGradient(0,0,W,0);fg.addColorStop(0,"#06498D");fg.addColorStop(.65,"#0B73C9");fg.addColorStop(1,"#1FA760");ctx.fillStyle=fg;ctx.fillRect(0,1042,W,38);
-    drawText(ctx,"PROJECT DASHBOARD  •  PERFORMANCE  •  DELIVERY",36,1051,12,"#FFFFFF",800);
-    const generatedDate=new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"short",year:"2-digit"}).format(new Date());drawText(ctx,"อัปเดต "+generatedDate,1880,1051,12,"#FFFFFF",650,"right");
+    drawText(ctx,"PROJECT DASHBOARD  •  PERFORMANCE  •  DELIVERY",36,1050,15,"#FFFFFF",850);
+    const generatedDate=new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"short",year:"2-digit"}).format(new Date());drawText(ctx,"อัปเดต "+generatedDate,1850,1050,15,"#FFFFFF",750,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
