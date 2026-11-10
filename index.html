@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261110-v12-polished">
-<title>Project Dashboard V19</title>
-<link rel="manifest" href="./manifest.json?build=20261110-v12-polished">
+<meta name="dashboard-build" content="20261110-v23-payment-fix">
+<title>Project Dashboard V23</title>
+<link rel="manifest" href="./manifest.json?build=20261110-v23-payment-fix">
 
 
 <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
@@ -21,7 +21,7 @@
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261110-v12-polished";
+  var BUILD = "20261110-v23-payment-fix";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -2112,6 +2112,20 @@ body,input,select,textarea,button{font-family:-apple-system,BlinkMacSystemFont,"
 .export-preview-wrap{background:linear-gradient(145deg,#dfe7f1,#f7f9fc)}
 .export-preview-wrap img{max-height:68dvh;object-fit:contain;margin:auto}
 
+
+/* V23 — FIX: ช่องงวดงานกรอกได้บนมือถือ */
+#paymentTotalInstallments{background:#fff!important;color:#18202e!important;opacity:1!important;-webkit-text-fill-color:#18202e!important;pointer-events:auto!important;touch-action:manipulation;}
+.payment-installment-row input,.payment-installment-row select{pointer-events:auto!important;touch-action:manipulation;position:relative;z-index:2;}
+@media(max-width:600px){
+  .payment-installment-row{grid-template-columns:1fr 42px!important;gap:10px!important;padding:13px!important;}
+  .payment-installment-no{grid-column:1/2;text-align:left;padding:0!important;align-self:center;}
+  .payment-remove{grid-column:2/3;grid-row:1;}
+  .payment-installment-row .payment-desc{grid-column:1/3!important;}
+  .payment-installment-row>div:not(.payment-installment-no):not(.payment-desc):not(.payment-status){grid-column:1/2;}
+  .payment-installment-row .payment-status{grid-column:1/3!important;}
+  .payment-installment-row input,.payment-installment-row select{min-height:48px!important;font-size:16px!important;}
+}
+
 </style>
 </head>
 
@@ -2220,7 +2234,7 @@ body,input,select,textarea,button{font-family:-apple-system,BlinkMacSystemFont,"
 
     <div class="form-section-title">งวดงาน / การเบิก</div>
     <div class="two">
-      <div><label>จำนวนงวดทั้งหมด</label><input id="paymentTotalInstallments" type="number" readonly></div>
+      <div><label>จำนวนงวดทั้งหมด</label><input id="paymentTotalInstallments" type="number" inputmode="numeric" min="0" step="1" placeholder="เช่น 5"></div>
       <div><label>เบิกแล้ว (งวด)</label><input id="paymentPaidInstallments" type="number" readonly></div>
     </div>
     <label>ยอดเบิกสะสม (บาท)</label>
@@ -4569,7 +4583,7 @@ function renderPaymentInstallments(project){
   items.forEach(item=>addPaymentInstallmentRow(item));
   updatePaymentSummaryInputs();
 }
-function addPaymentInstallmentRow(item={}){
+function addPaymentInstallmentRow(item={},skipSummary=false){
   const box=document.getElementById("paymentInstallmentList"); if(!box) return;
   const row=document.createElement("div"); row.className="payment-installment-row";
   row.innerHTML=`<div class="payment-installment-no">งวด ${box.children.length+1}</div>
@@ -4580,7 +4594,7 @@ function addPaymentInstallmentRow(item={}){
   row.querySelector(".pay-status").value=item.status||"not_due";
   row.querySelector(".payment-remove").onclick=()=>{row.remove();renumberPaymentRows();updatePaymentSummaryInputs();};
   row.querySelectorAll("input,select").forEach(el=>el.addEventListener("input",updatePaymentSummaryInputs));
-  box.appendChild(row); renumberPaymentRows(); updatePaymentSummaryInputs();
+  box.appendChild(row); renumberPaymentRows(); if(!skipSummary) updatePaymentSummaryInputs();
 }
 function renumberPaymentRows(){document.querySelectorAll("#paymentInstallmentList .payment-installment-no").forEach((el,i)=>el.textContent=`งวด ${i+1}`);}
 function collectPaymentInstallments(){
@@ -4589,8 +4603,25 @@ function collectPaymentInstallments(){
 function updatePaymentSummaryInputs(){
   const items=collectPaymentInstallments(),paid=items.filter(x=>x.status==="paid"),amt=paid.reduce((s,x)=>s+Number(x.amount||0),0);
   const a=document.getElementById("paymentTotalInstallments"),b=document.getElementById("paymentPaidInstallments"),c=document.getElementById("paymentPaidAmount");
-  if(a)a.value=items.length;if(b)b.value=paid.length;if(c)c.value=amt;
+  // จำนวนงวดทั้งหมดให้ผู้ใช้กรอกได้เอง จึงไม่เขียนทับขณะกำลังพิมพ์
+  if(a && document.activeElement!==a) a.value=items.length;
+  if(b)b.value=paid.length;if(c)c.value=amt;
 }
+function syncPaymentInstallmentCount(){
+  const input=document.getElementById("paymentTotalInstallments");
+  const box=document.getElementById("paymentInstallmentList");
+  if(!input||!box)return;
+  let wanted=Math.max(0,Math.min(100,parseInt(input.value||"0",10)||0));
+  while(box.children.length<wanted) addPaymentInstallmentRow({},true);
+  while(box.children.length>wanted) box.lastElementChild.remove();
+  renumberPaymentRows();
+  updatePaymentSummaryInputs();
+}
+
+
+// จำนวนงวด: พิมพ์ตัวเลขได้ และสร้างช่องรายละเอียดงวดให้ทันที
+document.getElementById("paymentTotalInstallments")?.addEventListener("input", syncPaymentInstallmentCount);
+document.getElementById("paymentTotalInstallments")?.addEventListener("change", syncPaymentInstallmentCount);
 
 function closeProjectModal(){
 
