@@ -2050,6 +2050,17 @@ body{background:var(--v8-bg);}
 
 .detail-buttons,.secondary-actions{isolation:isolate;}
 .detail-buttons button,.secondary-actions button{position:relative!important;z-index:999!important;pointer-events:auto!important;touch-action:manipulation!important;}
+
+/* ===== V10 POPUP / DETAIL FIX ===== */
+/* Keep secondary dialogs above the project detail and center them on phones. */
+#projectModal,#taskModal,#backgroundModal,#confirmModal{z-index:320;}
+@media(max-width:600px){
+  #taskModal,#backgroundModal,#confirmModal{align-items:center!important;padding:calc(14px + env(safe-area-inset-top)) 14px calc(14px + env(safe-area-inset-bottom))!important;}
+  #taskModal .modal-box,#backgroundModal .modal-box{max-height:min(82dvh,720px)!important;border-radius:26px!important;}
+  #confirmModal .confirm-card{margin:auto;}
+  /* Project detail no longer has the decorative pull bar. */
+  #detailModal .detail-hero{padding-top:calc(22px + env(safe-area-inset-top))!important;}
+}
 </style>
 </head>
 
@@ -2277,8 +2288,6 @@ body{background:var(--v8-bg);}
 <div id="detailModal" class="modal">
 
   <div class="detail-box">
-
-    <div class="modal-head detail-gesture-head" aria-hidden="true"><div class="detail-pull-handle"></div></div>
 
     <div id="detailContent"></div>
 
@@ -4383,7 +4392,7 @@ function openProjectModal(
       "projectDescription"
     )
     .value =
-      project?.remark ||
+      project?.note ||
       "";
 
 
@@ -4392,7 +4401,7 @@ function openProjectModal(
       "projectNote"
     )
     .value =
-      project?.note ||
+      project?.remark ||
       "";
 
 
@@ -4468,6 +4477,8 @@ function updateProgressLabel(){
 
 
 function saveProject(){
+
+  const projectIdBeingEdited = editingProjectId;
 
   const name =
     document
@@ -4640,6 +4651,10 @@ function saveProject(){
 
   render();
 
+  if(projectIdBeingEdited){
+    openDetail(projectIdBeingEdited);
+  }
+
 }
 
 
@@ -4647,16 +4662,16 @@ function saveProject(){
 
 
 /* ==================================================
-   RESTORED PROJECT / TASK / BACKGROUND ACTIONS (V9)
+   RESTORED PROJECT / TASK / BACKGROUND ACTIONS (V10)
 ================================================== */
 
 function editProject(){
 
-  const id =
-    selectedProjectId;
+  const id = selectedProjectId;
+  if(!id) return;
 
-  closeDetail();
-
+  // Keep the current project detail mounted underneath the editor.
+  // After Save, the user returns to this same project instead of the dashboard.
   openProjectModal(id);
 
 }
@@ -5036,17 +5051,11 @@ function openBackgroundEditor(){
 
   updateBackgroundPreview();
 
-  document
-    .getElementById(
-      "backgroundModal"
-    )
-    .classList.add(
-      "show"
-    );
+  const backgroundModal = document.getElementById("backgroundModal");
+  backgroundModal.classList.add("show");
+  backgroundModal.style.zIndex = "360";
 
-  resetModalScroll(
-    "backgroundModal"
-  );
+  resetModalScroll("backgroundModal");
 
 }
 
@@ -5307,29 +5316,8 @@ function runDetailAction(action){
 }
 
 function setupDetailActions(){
-  const content = document.getElementById("detailContent");
-  if(!content || content.dataset.actionsReady) return;
-  content.dataset.actionsReady = "1";
-
-  let lastTouchActionAt = 0;
-
-  content.addEventListener("touchend", event => {
-    const button = event.target.closest("[data-detail-action]");
-    if(!button) return;
-    event.preventDefault();
-    event.stopPropagation();
-    lastTouchActionAt = Date.now();
-    runDetailAction(button.dataset.detailAction);
-  }, {passive:false});
-
-  content.addEventListener("click", event => {
-    const button = event.target.closest("[data-detail-action]");
-    if(!button) return;
-    event.preventDefault();
-    event.stopPropagation();
-    if(Date.now()-lastTouchActionAt < 700) return;
-    runDetailAction(button.dataset.detailAction);
-  });
+  // V10: actions are bound directly on each button.
+  // This avoids iOS touch delegation swallowing modal/export actions.
 }
 
 function setupDetailSwipe(){
@@ -5349,7 +5337,7 @@ function setupDetailSwipe(){
     }
     const t=event.touches[0];
     sx=t.clientX; sy=t.clientY;
-    atTop=box.scrollTop<=2;
+    atTop=box.scrollTop<=8;
     active=true; pulling=false;
     box.style.transition="";
   }, {passive:true});
@@ -5377,7 +5365,7 @@ function setupDetailSwipe(){
 
     if(pulling){
       box.style.transition="transform .30s cubic-bezier(.32,.72,0,1), opacity .22s ease";
-      if(dy>90){
+      if(dy>70){
         closeDetail(true);
         return;
       }
@@ -5979,21 +5967,21 @@ function openDetail(id){
 
         <button
           class="btn delete-btn"
-          data-detail-action="delete"
+          data-detail-action="delete" onclick="event.stopPropagation(); deleteProject()"
         >
           ลบ
         </button>
 
         <button
           class="btn edit-btn"
-          data-detail-action="edit"
+          data-detail-action="edit" onclick="event.stopPropagation(); editProject()"
         >
           แก้ไข
         </button>
 
         <button
           class="btn task-btn"
-          data-detail-action="task"
+          data-detail-action="task" onclick="event.stopPropagation(); openTaskModal()"
         >
           + เพิ่มรายการงาน
         </button>
@@ -6005,14 +5993,14 @@ function openDetail(id){
 
         <button
           class="btn background-btn"
-          data-detail-action="background"
+          data-detail-action="background" onclick="event.stopPropagation(); openBackgroundEditor()"
         >
           ภาพพื้นหลัง
         </button>
 
         <button
           class="btn export-btn"
-          data-detail-action="export"
+          data-detail-action="export" onclick="event.stopPropagation(); exportProjectImage()"
         >
           Export 16:9
         </button>
@@ -6072,6 +6060,9 @@ async function exportProjectImage(){
 
   if(exportProjectBusy){ return; }
   exportProjectBusy = true;
+  const exportButton = document.querySelector('[data-detail-action="export"]');
+  const exportButtonText = exportButton ? exportButton.textContent : "";
+  if(exportButton){ exportButton.disabled = true; exportButton.textContent = "กำลังสร้างภาพ..."; }
 
   try{
 
@@ -6258,6 +6249,7 @@ async function exportProjectImage(){
     alert("Export ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
   }finally{
     exportProjectBusy = false;
+    if(exportButton){ exportButton.disabled = false; exportButton.textContent = exportButtonText || "Export 16:9"; }
   }
 
 }
