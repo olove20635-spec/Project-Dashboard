@@ -19,57 +19,59 @@
   --navy:#172033;
   --navy2:#293750;
   --bg:#f4f6f9;
-  --card:#ffffff;
+  --card:#fff;
   --text:#18202e;
-  --muted:#8b93a3;
+  --muted:#929aaa;
   --line:#e8ebf0;
-  --green:#20a66a;
-  --greenBg:#e9f8f0;
-  --orange:#e99528;
-  --orangeBg:#fff4e3;
-  --red:#e45656;
-  --redBg:#ffeded;
+  --green:#1d9b63;
+  --greenBg:#e8f7ef;
   --blue:#3976d3;
   --blueBg:#edf4ff;
+  --red:#df5353;
+  --redBg:#ffeded;
+  --orange:#e69328;
+  --orangeBg:#fff4e4;
 }
 
 html,body{
   margin:0;
   min-height:100%;
   background:var(--bg);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
 body{
   padding-bottom:calc(90px + env(safe-area-inset-bottom));
 }
 
+/* ================= HEADER ================= */
+
 .header{
   background:linear-gradient(145deg,var(--navy),var(--navy2));
   color:white;
   padding:
-    calc(16px + env(safe-area-inset-top))
+    calc(17px + env(safe-area-inset-top))
     18px
-    25px;
+    23px;
   border-radius:0 0 28px 28px;
 }
 
 .topbar{
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
 }
 
-.title-small{
-  font-size:11px;
-  letter-spacing:1.5px;
-  opacity:.6;
+.eyebrow{
+  font-size:10px;
+  letter-spacing:1.6px;
+  opacity:.55;
 }
 
 .header h1{
-  margin:3px 0 0;
-  font-size:25px;
+  margin:4px 0 0;
+  font-size:24px;
 }
 
 .add-top{
@@ -77,87 +79,98 @@ body{
   height:43px;
   border:0;
   border-radius:14px;
-  background:rgba(255,255,255,.13);
+  background:rgba(255,255,255,.12);
   color:white;
   font-size:27px;
 }
 
-.overall{
-  margin-top:25px;
+/* ================= KPI ================= */
+
+.kpi-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-top:21px;
 }
 
-.overall-row{
+.kpi{
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:17px;
+  padding:12px 13px;
+}
+
+.kpi-label{
+  font-size:10px;
+  color:rgba(255,255,255,.62);
+}
+
+.kpi-value{
+  margin-top:4px;
+  font-size:21px;
+  font-weight:800;
+}
+
+.kpi-value.money{
+  font-size:19px;
+}
+
+/* ================= OVERALL ================= */
+
+.overall{
+  margin-top:18px;
+}
+
+.overall-top{
   display:flex;
   justify-content:space-between;
   align-items:flex-end;
 }
 
 .overall-label{
-  font-size:12px;
-  opacity:.65;
+  font-size:11px;
+  color:rgba(255,255,255,.62);
 }
 
-.overall-value{
-  font-size:37px;
+.overall-percent{
+  font-size:26px;
   font-weight:800;
 }
 
-.progress-bg{
-  height:9px;
-  background:rgba(255,255,255,.14);
+.overall-bar{
+  height:8px;
+  margin-top:8px;
   border-radius:20px;
+  background:rgba(255,255,255,.13);
   overflow:hidden;
-  margin-top:10px;
 }
 
-.progress-fill{
+.overall-fill{
   height:100%;
-  background:white;
+  width:0;
   border-radius:20px;
+  background:white;
   transition:.3s;
 }
 
-.stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-  margin-top:18px;
-}
-
-.stat{
-  background:rgba(255,255,255,.09);
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:15px;
-  padding:10px;
-  text-align:center;
-}
-
-.stat strong{
-  display:block;
-  font-size:19px;
-}
-
-.stat span{
-  font-size:10px;
-  opacity:.65;
-}
+/* ================= CONTENT ================= */
 
 .content{
   max-width:720px;
   margin:auto;
-  padding:18px 13px;
+  padding:19px 13px;
 }
 
 .section-head{
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
   margin-bottom:12px;
 }
 
 .section-head h2{
-  font-size:17px;
   margin:0;
+  font-size:18px;
 }
 
 .section-head span{
@@ -170,106 +183,119 @@ body{
   gap:12px;
 }
 
+/* ================= PROJECT CARD ================= */
+
 .project-card{
   background:white;
-  border-radius:20px;
+  border-radius:21px;
   padding:16px;
   box-shadow:0 4px 18px rgba(25,35,55,.055);
   cursor:pointer;
 }
 
-.card-top{
+.card-head{
   display:flex;
   justify-content:space-between;
-  gap:10px;
+  gap:12px;
 }
 
 .project-name{
-  font-size:17px;
+  font-size:16px;
+  line-height:1.4;
   font-weight:750;
-  margin-bottom:3px;
 }
 
 .project-location{
+  margin-top:3px;
   font-size:11px;
   color:var(--muted);
 }
 
 .status{
-  height:fit-content;
   white-space:nowrap;
-  border-radius:20px;
+  height:fit-content;
   padding:5px 8px;
+  border-radius:20px;
   font-size:9px;
   font-weight:700;
 }
 
 .status.active{
-  color:var(--blue);
   background:var(--blueBg);
+  color:var(--blue);
 }
 
 .status.done{
-  color:var(--green);
   background:var(--greenBg);
+  color:var(--green);
 }
 
 .status.delay{
-  color:var(--red);
   background:var(--redBg);
+  color:var(--red);
 }
 
 .status.wait{
-  color:#7a818d;
   background:#f0f1f3;
+  color:#737b87;
 }
 
 .status.pause{
-  color:var(--orange);
   background:var(--orangeBg);
+  color:var(--orange);
 }
 
-.card-progress{
+.progress-row{
   display:flex;
   justify-content:space-between;
-  align-items:center;
+  align-items:flex-end;
   margin-top:17px;
 }
 
-.card-progress span{
-  font-size:11px;
+.progress-label{
+  font-size:10px;
   color:var(--muted);
 }
 
-.percent{
-  font-size:21px !important;
-  color:var(--text) !important;
+.project-percent{
+  font-size:25px;
   font-weight:800;
 }
 
 .card-bar{
   height:7px;
-  background:#eef0f3;
-  border-radius:10px;
+  background:#edf0f3;
+  border-radius:20px;
   overflow:hidden;
   margin-top:7px;
 }
 
-.card-bar div{
+.card-fill{
   height:100%;
   background:var(--navy);
-  border-radius:10px;
+  border-radius:20px;
 }
 
 .card-bottom{
   display:flex;
   justify-content:space-between;
-  margin-top:14px;
-  padding-top:12px;
+  align-items:center;
   border-top:1px solid var(--line);
+  margin-top:13px;
+  padding-top:12px;
+}
+
+.project-value{
+  font-size:13px;
+  font-weight:750;
+}
+
+.detail-link{
   font-size:10px;
   color:var(--muted);
 }
+
+/* ================= EMPTY ================= */
 
 .empty{
   text-align:center;
@@ -278,9 +304,11 @@ body{
 }
 
 .empty-icon{
-  font-size:43px;
+  font-size:40px;
   margin-bottom:10px;
 }
+
+/* ================= FAB ================= */
 
 .fab{
   position:fixed;
@@ -288,8 +316,8 @@ body{
   bottom:calc(22px + env(safe-area-inset-bottom));
   width:58px;
   height:58px;
-  border-radius:19px;
   border:0;
+  border-radius:19px;
   background:var(--navy);
   color:white;
   font-size:29px;
@@ -297,7 +325,7 @@ body{
   z-index:20;
 }
 
-/* MODAL */
+/* ================= MODAL ================= */
 
 .modal{
   display:none;
@@ -319,20 +347,21 @@ body{
   display:flex;
 }
 
-.modal-box{
-  background:white;
+.modal-box,
+.detail-box{
   width:100%;
   max-width:540px;
   max-height:90vh;
   overflow-y:auto;
+  background:white;
   border-radius:24px;
   padding:19px;
 }
 
 .modal-head{
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
   margin-bottom:18px;
 }
 
@@ -342,19 +371,19 @@ body{
 }
 
 .close{
-  border:0;
-  background:#f0f1f3;
   width:35px;
   height:35px;
+  border:0;
   border-radius:11px;
+  background:#f0f1f3;
   font-size:18px;
 }
 
 label{
   display:block;
+  margin:14px 0 6px;
   font-size:11px;
   font-weight:700;
-  margin:14px 0 6px;
 }
 
 input,select,textarea{
@@ -368,14 +397,16 @@ input,select,textarea{
   outline:none;
 }
 
-textarea{
-  min-height:75px;
-  resize:none;
+input:focus,
+select:focus,
+textarea:focus{
+  background:white;
+  border-color:#8ea0bd;
 }
 
-input:focus,select:focus,textarea:focus{
-  border-color:#8ea0bd;
-  background:white;
+textarea{
+  min-height:78px;
+  resize:none;
 }
 
 .two{
@@ -386,9 +417,9 @@ input:focus,select:focus,textarea:focus{
 
 .progress-input{
   display:grid;
-  grid-template-columns:1fr 55px;
+  grid-template-columns:1fr 58px;
   align-items:center;
-  gap:12px;
+  gap:10px;
 }
 
 input[type="range"]{
@@ -397,8 +428,8 @@ input[type="range"]{
 
 .progress-number{
   text-align:center;
-  font-weight:800;
   font-size:16px;
+  font-weight:800;
 }
 
 .modal-buttons{
@@ -411,7 +442,7 @@ input[type="range"]{
 .btn{
   border:0;
   border-radius:13px;
-  padding:14px;
+  padding:14px 8px;
   font-size:14px;
   font-weight:700;
 }
@@ -426,33 +457,28 @@ input[type="range"]{
   color:white;
 }
 
-/* DETAIL */
+/* ================= DETAIL ================= */
 
-.detail-box{
-  background:white;
-  width:100%;
-  max-width:540px;
-  max-height:90vh;
-  overflow-y:auto;
-  border-radius:24px;
-  padding:19px;
+.detail-status{
+  display:inline-block;
 }
 
 .detail-title{
-  font-size:22px;
+  margin-top:11px;
+  font-size:21px;
+  line-height:1.4;
   font-weight:800;
-  margin-top:8px;
 }
 
 .detail-location{
+  margin-top:4px;
   font-size:12px;
   color:var(--muted);
-  margin-top:3px;
 }
 
-.big-progress{
+.detail-progress{
   text-align:center;
-  margin:22px 0;
+  padding:22px 0 19px;
 }
 
 .progress-circle{
@@ -466,7 +492,7 @@ input[type="range"]{
   position:relative;
 }
 
-.progress-circle:after{
+.progress-circle::after{
   content:"";
   position:absolute;
   width:102px;
@@ -478,14 +504,26 @@ input[type="range"]{
 .progress-circle span{
   position:relative;
   z-index:2;
-  font-size:26px;
+  font-size:27px;
   font-weight:800;
+}
+
+.detail-value{
+  margin-top:5px;
+  font-size:21px;
+  font-weight:800;
+}
+
+.detail-value-label{
+  font-size:10px;
+  color:var(--muted);
 }
 
 .info-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:9px;
+  margin-top:17px;
 }
 
 .info{
@@ -496,9 +534,9 @@ input[type="range"]{
 
 .info small{
   display:block;
-  color:var(--muted);
   font-size:9px;
-  margin-bottom:4px;
+  color:var(--muted);
+  margin-bottom:5px;
 }
 
 .info strong{
@@ -507,37 +545,13 @@ input[type="range"]{
 
 .note{
   margin-top:12px;
-  background:#f6f7f9;
   padding:13px;
+  background:#f6f7f9;
   border-radius:14px;
   font-size:12px;
   line-height:1.5;
   white-space:pre-wrap;
 }
-
-.detail-buttons{
-  display:grid;
-  grid-template-columns:.8fr 1fr 1.5fr;
-  gap:8px;
-  margin-top:18px;
-}
-
-.delete-btn{
-  background:var(--redBg);
-  color:var(--red);
-}
-
-.edit-btn{
-  background:#eef0f3;
-  color:var(--text);
-}
-
-.task-btn{
-  background:var(--navy);
-  color:white;
-}
-
-/* TASKS */
 
 .task-section{
   margin-top:20px;
@@ -552,10 +566,6 @@ input[type="range"]{
 .task{
   padding:11px 0;
   border-bottom:1px solid var(--line);
-}
-
-.task:last-child{
-  border-bottom:0;
 }
 
 .task-row{
@@ -578,8 +588,8 @@ input[type="range"]{
   height:5px;
   background:#edf0f3;
   border-radius:10px;
-  margin-top:6px;
   overflow:hidden;
+  margin-top:6px;
 }
 
 .task-bar div{
@@ -588,11 +598,32 @@ input[type="range"]{
 }
 
 .task-delete{
+  display:inline-block;
+  margin-top:6px;
   font-size:9px;
   color:var(--red);
-  margin-top:6px;
-  display:inline-block;
-  cursor:pointer;
+}
+
+.detail-buttons{
+  display:grid;
+  grid-template-columns:.75fr 1fr 1.45fr;
+  gap:8px;
+  margin-top:19px;
+}
+
+.delete-btn{
+  background:var(--redBg);
+  color:var(--red);
+}
+
+.edit-btn{
+  background:#eef0f3;
+  color:var(--text);
+}
+
+.task-btn{
+  background:var(--navy);
+  color:white;
 }
 
 @media(max-width:380px){
@@ -605,6 +636,14 @@ input[type="range"]{
     padding-left:10px;
     padding-right:10px;
   }
+
+  .kpi-value{
+    font-size:19px;
+  }
+
+  .kpi-value.money{
+    font-size:17px;
+  }
 }
 </style>
 </head>
@@ -614,46 +653,56 @@ input[type="range"]{
 <header class="header">
 
   <div class="topbar">
+
     <div>
-      <div class="title-small">PERSONAL WORKSPACE</div>
+      <div class="eyebrow">PERSONAL WORKSPACE</div>
       <h1>Project Dashboard</h1>
     </div>
 
     <button class="add-top" onclick="openProjectModal()">+</button>
+
+  </div>
+
+  <div class="kpi-grid">
+
+    <div class="kpi">
+      <div class="kpi-label">โครงการทั้งหมด</div>
+      <div class="kpi-value" id="totalProjects">0</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-label">มูลค่ารวม</div>
+      <div class="kpi-value money" id="totalValue">฿0</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-label">สำเร็จแล้ว</div>
+      <div class="kpi-value" id="completedProjects">0</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-label">กำลังดำเนินการ</div>
+      <div class="kpi-value" id="activeProjects">0</div>
+    </div>
+
   </div>
 
   <div class="overall">
 
-    <div class="overall-row">
-      <div>
-        <div class="overall-label">Overall Progress</div>
-        <div class="overall-value" id="overallPercent">0%</div>
+    <div class="overall-top">
+
+      <div class="overall-label">
+        ความคืบหน้ารวม
       </div>
 
-      <div class="overall-label" id="projectCount">0 Projects</div>
+      <div class="overall-percent" id="overallPercent">
+        0%
+      </div>
+
     </div>
 
-    <div class="progress-bg">
-      <div id="overallBar" class="progress-fill" style="width:0%"></div>
-    </div>
-
-  </div>
-
-  <div class="stats">
-
-    <div class="stat">
-      <strong id="activeCount">0</strong>
-      <span>กำลังทำ</span>
-    </div>
-
-    <div class="stat">
-      <strong id="doneCount">0</strong>
-      <span>เสร็จแล้ว</span>
-    </div>
-
-    <div class="stat">
-      <strong id="delayCount">0</strong>
-      <span>ล่าช้า</span>
+    <div class="overall-bar">
+      <div id="overallFill" class="overall-fill"></div>
     </div>
 
   </div>
@@ -664,8 +713,11 @@ input[type="range"]{
 <main class="content">
 
   <div class="section-head">
+
     <h2>โครงการของฉัน</h2>
+
     <span id="todayText"></span>
+
   </div>
 
   <div id="projectList" class="project-list"></div>
@@ -676,22 +728,47 @@ input[type="range"]{
 <button class="fab" onclick="openProjectModal()">+</button>
 
 
-<!-- ADD / EDIT PROJECT -->
+<!-- PROJECT FORM -->
 
 <div id="projectModal" class="modal">
 
   <div class="modal-box">
 
     <div class="modal-head">
-      <h2 id="projectModalTitle">เพิ่มโครงการ</h2>
+
+      <h2 id="projectModalTitle">
+        เพิ่มโครงการ
+      </h2>
+
       <button class="close" onclick="closeProjectModal()">×</button>
+
     </div>
 
     <label>ชื่อโครงการ</label>
-    <input id="projectName" type="text" placeholder="เช่น Fire Alarm โรงฟักไข่">
+
+    <input
+      id="projectName"
+      type="text"
+      placeholder="เช่น งานติดตั้งระบบ HVAC"
+    >
 
     <label>สถานที่ / ลูกค้า</label>
-    <input id="projectLocation" type="text" placeholder="เช่น โรงฟักไข่">
+
+    <input
+      id="projectLocation"
+      type="text"
+      placeholder="เช่น โรงฟักไข่ PWF ราชบุรี"
+    >
+
+    <label>มูลค่าโครงการ (บาท)</label>
+
+    <input
+      id="projectValue"
+      type="number"
+      inputmode="decimal"
+      min="0"
+      placeholder="เช่น 8500000"
+    >
 
     <div class="two">
 
@@ -730,7 +807,9 @@ input[type="range"]{
         oninput="updateProgressLabel()"
       >
 
-      <div id="progressLabel" class="progress-number">0%</div>
+      <div id="progressLabel" class="progress-number">
+        0%
+      </div>
 
     </div>
 
@@ -738,7 +817,7 @@ input[type="range"]{
 
     <textarea
       id="projectNote"
-      placeholder="รายละเอียดงาน ปัญหา สิ่งที่ต้องติดตาม..."
+      placeholder="รายละเอียด ปัญหา หรือสิ่งที่ต้องติดตาม"
     ></textarea>
 
     <div class="modal-buttons">
@@ -758,7 +837,7 @@ input[type="range"]{
 </div>
 
 
-<!-- PROJECT DETAIL -->
+<!-- DETAIL -->
 
 <div id="detailModal" class="modal">
 
@@ -776,15 +855,18 @@ input[type="range"]{
 </div>
 
 
-<!-- ADD TASK -->
+<!-- TASK -->
 
 <div id="taskModal" class="modal">
 
   <div class="modal-box">
 
     <div class="modal-head">
+
       <h2>เพิ่มรายการงาน</h2>
+
       <button class="close" onclick="closeTaskModal()">×</button>
+
     </div>
 
     <label>รายการงาน</label>
@@ -792,7 +874,7 @@ input[type="range"]{
     <input
       id="taskName"
       type="text"
-      placeholder="เช่น ติดตั้งอุปกรณ์ Loop 2"
+      placeholder="เช่น ติดตั้ง Duct"
     >
 
     <label>ความคืบหน้า</label>
@@ -833,6 +915,12 @@ input[type="range"]{
 
 <script>
 
+/*
+  สำคัญ:
+  ใช้ KEY เดิม
+  Project ที่บันทึกไว้แล้วจึงยังอยู่
+*/
+
 const STORAGE_KEY = "personal-project-dashboard-v1";
 
 let projects = [];
@@ -840,28 +928,34 @@ let editingProjectId = null;
 let selectedProjectId = null;
 
 
-/* =========================
-   LOAD
-========================= */
+/* ================= LOAD ================= */
 
 function loadData(){
 
   const saved = localStorage.getItem(STORAGE_KEY);
 
   if(saved){
+
     try{
+
       projects = JSON.parse(saved);
+
+      if(!Array.isArray(projects)){
+        projects = [];
+      }
+
     }catch(e){
+
       projects = [];
+
     }
+
   }
 
 }
 
 
-/* =========================
-   SAVE STORAGE
-========================= */
+/* ================= SAVE ================= */
 
 function saveData(){
 
@@ -873,36 +967,21 @@ function saveData(){
 }
 
 
-/* =========================
-   DATE
-========================= */
+/* ================= ESCAPE ================= */
 
-function formatDate(dateString){
+function escapeHTML(value){
 
-  if(!dateString){
-    return "-";
-  }
-
-  const parts = dateString.split("-");
-
-  if(parts.length !== 3){
-    return dateString;
-  }
-
-  return (
-    Number(parts[2]) +
-    "/" +
-    Number(parts[1]) +
-    "/" +
-    (Number(parts[0]) + 543).toString().slice(-2)
-  );
+  return String(value || "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 
 }
 
 
-/* =========================
-   STATUS
-========================= */
+/* ================= STATUS ================= */
 
 function statusText(status){
 
@@ -919,9 +998,88 @@ function statusText(status){
 }
 
 
-/* =========================
-   RENDER
-========================= */
+/* ================= DATE ================= */
+
+function formatDate(value){
+
+  if(!value){
+    return "-";
+  }
+
+  const p = value.split("-");
+
+  if(p.length !== 3){
+    return value;
+  }
+
+  return (
+    Number(p[2]) +
+    "/" +
+    Number(p[1]) +
+    "/" +
+    String(Number(p[0]) + 543).slice(-2)
+  );
+
+}
+
+
+/* ================= MONEY ================= */
+
+function money(value){
+
+  const number =
+    Number(value || 0);
+
+  return "฿" +
+    number.toLocaleString("th-TH");
+}
+
+
+/*
+  หน้า Dashboard
+  ถ้าตัวเลขใหญ่จะย่อเป็น M
+*/
+
+function compactMoney(value){
+
+  const n =
+    Number(value || 0);
+
+  if(n >= 1000000){
+
+    return "฿" +
+      (n / 1000000)
+        .toLocaleString(
+          "th-TH",
+          {
+            maximumFractionDigits:2
+          }
+        ) +
+      " M";
+
+  }
+
+  if(n >= 1000){
+
+    return "฿" +
+      (n / 1000)
+        .toLocaleString(
+          "th-TH",
+          {
+            maximumFractionDigits:1
+          }
+        ) +
+      " K";
+
+  }
+
+  return "฿" +
+    n.toLocaleString("th-TH");
+
+}
+
+
+/* ================= RENDER ================= */
 
 function render(){
 
@@ -931,38 +1089,77 @@ function render(){
   list.innerHTML = "";
 
 
-  /* OVERALL */
+  /* จำนวนทั้งหมด */
 
-  let totalProgress = 0;
+  document.getElementById("totalProjects").textContent =
+    projects.length;
 
-  projects.forEach(p => {
-    totalProgress += Number(p.progress || 0);
-  });
+
+  /* มูลค่ารวม */
+
+  const totalValue =
+    projects.reduce(
+      (sum,p) =>
+        sum + Number(p.value || 0),
+      0
+    );
+
+  document.getElementById("totalValue").textContent =
+    compactMoney(totalValue);
+
+
+  /* สำเร็จ */
+
+  const completed =
+    projects.filter(
+      p => p.status === "done"
+    ).length;
+
+  document.getElementById("completedProjects").textContent =
+    completed;
+
+
+  /*
+    กำลังดำเนินการ
+
+    รวม active + delay
+    เพราะยังเป็นโครงการที่ยังทำอยู่
+  */
+
+  const active =
+    projects.filter(
+      p =>
+        p.status === "active" ||
+        p.status === "delay"
+    ).length;
+
+  document.getElementById("activeProjects").textContent =
+    active;
+
+
+  /* OVERALL PROGRESS */
+
+  const progressTotal =
+    projects.reduce(
+      (sum,p) =>
+        sum + Number(p.progress || 0),
+      0
+    );
 
   const overall =
     projects.length
-      ? Math.round(totalProgress / projects.length)
+      ? Math.round(
+          progressTotal /
+          projects.length
+        )
       : 0;
 
 
   document.getElementById("overallPercent").textContent =
     overall + "%";
 
-  document.getElementById("overallBar").style.width =
+  document.getElementById("overallFill").style.width =
     overall + "%";
-
-  document.getElementById("projectCount").textContent =
-    projects.length + " Projects";
-
-
-  document.getElementById("activeCount").textContent =
-    projects.filter(p => p.status === "active").length;
-
-  document.getElementById("doneCount").textContent =
-    projects.filter(p => p.status === "done").length;
-
-  document.getElementById("delayCount").textContent =
-    projects.filter(p => p.status === "delay").length;
 
 
   /* EMPTY */
@@ -971,15 +1168,20 @@ function render(){
 
     list.innerHTML = `
       <div class="empty">
+
         <div class="empty-icon">📊</div>
+
         <strong>ยังไม่มีโครงการ</strong>
+
         <div style="font-size:12px;margin-top:5px;">
           กด + เพื่อเพิ่มโครงการแรก
         </div>
+
       </div>
     `;
 
     return;
+
   }
 
 
@@ -997,16 +1199,9 @@ function render(){
       () => openDetail(project.id);
 
 
-    const tasks =
-      project.tasks || [];
-
-    const finishedTasks =
-      tasks.filter(t => Number(t.progress) >= 100).length;
-
-
     card.innerHTML = `
 
-      <div class="card-top">
+      <div class="card-head">
 
         <div>
 
@@ -1027,31 +1222,38 @@ function render(){
       </div>
 
 
-      <div class="card-progress">
+      <div class="progress-row">
 
-        <span>ความคืบหน้า</span>
+        <div class="progress-label">
+          ความคืบหน้า
+        </div>
 
-        <span class="percent">
-          ${project.progress || 0}%
-        </span>
+        <div class="project-percent">
+          ${Number(project.progress || 0)}%
+        </div>
 
       </div>
 
 
       <div class="card-bar">
-        <div style="width:${project.progress || 0}%"></div>
+
+        <div
+          class="card-fill"
+          style="width:${Number(project.progress || 0)}%"
+        ></div>
+
       </div>
 
 
       <div class="card-bottom">
 
-        <span>
-          ✓ ${finishedTasks}/${tasks.length} งาน
-        </span>
+        <div class="project-value">
+          ${money(project.value)}
+        </div>
 
-        <span>
-          Due ${formatDate(project.endDate)}
-        </span>
+        <div class="detail-link">
+          ดูรายละเอียด ›
+        </div>
 
       </div>
 
@@ -1065,9 +1267,7 @@ function render(){
 }
 
 
-/* =========================
-   PROJECT MODAL
-========================= */
+/* ================= PROJECT MODAL ================= */
 
 function openProjectModal(projectId = null){
 
@@ -1084,17 +1284,23 @@ function openProjectModal(projectId = null){
   if(projectId){
 
     const project =
-      projects.find(p => p.id === projectId);
+      projects.find(
+        p => p.id === projectId
+      );
 
     if(!project){
       return;
     }
+
 
     document.getElementById("projectName").value =
       project.name || "";
 
     document.getElementById("projectLocation").value =
       project.location || "";
+
+    document.getElementById("projectValue").value =
+      Number(project.value || 0);
 
     document.getElementById("startDate").value =
       project.startDate || "";
@@ -1106,7 +1312,7 @@ function openProjectModal(projectId = null){
       project.status || "active";
 
     document.getElementById("projectProgress").value =
-      project.progress || 0;
+      Number(project.progress || 0);
 
     document.getElementById("projectNote").value =
       project.note || "";
@@ -1116,17 +1322,26 @@ function openProjectModal(projectId = null){
   else{
 
     document.getElementById("projectName").value = "";
+
     document.getElementById("projectLocation").value = "";
+
+    document.getElementById("projectValue").value = "";
+
     document.getElementById("startDate").value = "";
+
     document.getElementById("endDate").value = "";
+
     document.getElementById("projectStatus").value = "active";
+
     document.getElementById("projectProgress").value = 0;
+
     document.getElementById("projectNote").value = "";
 
   }
 
 
   updateProgressLabel();
+
 
   document
     .getElementById("projectModal")
@@ -1144,30 +1359,33 @@ function closeProjectModal(){
 }
 
 
-/* =========================
-   PROGRESS
-========================= */
+/* ================= PROGRESS ================= */
 
 function updateProgressLabel(){
 
   document.getElementById("progressLabel").textContent =
-    document.getElementById("projectProgress").value + "%";
+    document.getElementById("projectProgress").value +
+    "%";
 
 }
 
 
-/* =========================
-   SAVE PROJECT
-========================= */
+/* ================= SAVE PROJECT ================= */
 
 function saveProject(){
 
   const name =
-    document.getElementById("projectName").value.trim();
+    document.getElementById("projectName")
+      .value
+      .trim();
+
 
   if(!name){
+
     alert("กรุณาใส่ชื่อโครงการ");
+
     return;
+
   }
 
 
@@ -1176,22 +1394,38 @@ function saveProject(){
     name:name,
 
     location:
-      document.getElementById("projectLocation").value.trim(),
+      document.getElementById("projectLocation")
+        .value
+        .trim(),
+
+    value:
+      Number(
+        document.getElementById("projectValue")
+          .value || 0
+      ),
 
     startDate:
-      document.getElementById("startDate").value,
+      document.getElementById("startDate")
+        .value,
 
     endDate:
-      document.getElementById("endDate").value,
+      document.getElementById("endDate")
+        .value,
 
     status:
-      document.getElementById("projectStatus").value,
+      document.getElementById("projectStatus")
+        .value,
 
     progress:
-      Number(document.getElementById("projectProgress").value),
+      Number(
+        document.getElementById("projectProgress")
+          .value
+      ),
 
     note:
-      document.getElementById("projectNote").value.trim()
+      document.getElementById("projectNote")
+        .value
+        .trim()
 
   };
 
@@ -1199,7 +1433,10 @@ function saveProject(){
   if(editingProjectId){
 
     const project =
-      projects.find(p => p.id === editingProjectId);
+      projects.find(
+        p => p.id === editingProjectId
+      );
+
 
     if(project){
 
@@ -1216,8 +1453,7 @@ function saveProject(){
 
     projects.unshift({
 
-      id:
-        Date.now(),
+      id:Date.now(),
 
       ...data,
 
@@ -1240,16 +1476,19 @@ function saveProject(){
 }
 
 
-/* =========================
-   DETAIL
-========================= */
+/* ================= DETAIL ================= */
 
 function openDetail(id){
 
-  selectedProjectId = id;
+  selectedProjectId =
+    id;
+
 
   const project =
-    projects.find(p => p.id === id);
+    projects.find(
+      p => p.id === id
+    );
+
 
   if(!project){
     return;
@@ -1260,10 +1499,15 @@ function openDetail(id){
     project.tasks || [];
 
 
+  const progress =
+    Number(project.progress || 0);
+
+
   const circle =
+
     `conic-gradient(
-      var(--navy) ${project.progress}%,
-      #edf0f3 ${project.progress}% 100%
+      var(--navy) ${progress}%,
+      #edf0f3 ${progress}% 100%
     )`;
 
 
@@ -1273,6 +1517,7 @@ function openDetail(id){
   if(tasks.length === 0){
 
     taskHTML = `
+
       <div style="
         text-align:center;
         color:var(--muted);
@@ -1281,6 +1526,7 @@ function openDetail(id){
       ">
         ยังไม่มีรายการงาน
       </div>
+
     `;
 
   }
@@ -1300,13 +1546,17 @@ function openDetail(id){
             </div>
 
             <div class="task-pct">
-              ${task.progress}%
+              ${Number(task.progress || 0)}%
             </div>
 
           </div>
 
           <div class="task-bar">
-            <div style="width:${task.progress}%"></div>
+
+            <div
+              style="width:${Number(task.progress || 0)}%"
+            ></div>
+
           </div>
 
           <span
@@ -1325,10 +1575,15 @@ function openDetail(id){
   }
 
 
+  const completedTasks =
+    tasks.filter(
+      t => Number(t.progress || 0) >= 100
+    ).length;
+
+
   document.getElementById("detailContent").innerHTML = `
 
-    <div class="status ${project.status}"
-         style="display:inline-block;">
+    <div class="status ${project.status} detail-status">
       ${statusText(project.status)}
     </div>
 
@@ -1343,13 +1598,29 @@ function openDetail(id){
     </div>
 
 
-    <div class="big-progress">
+    <div class="detail-progress">
 
       <div
         class="progress-circle"
         style="background:${circle}"
       >
-        <span>${project.progress}%</span>
+
+        <span>
+          ${progress}%
+        </span>
+
+      </div>
+
+      <div style="margin-top:17px;">
+
+        <div class="detail-value-label">
+          มูลค่าโครงการ
+        </div>
+
+        <div class="detail-value">
+          ${money(project.value)}
+        </div>
+
       </div>
 
     </div>
@@ -1358,25 +1629,46 @@ function openDetail(id){
     <div class="info-grid">
 
       <div class="info">
+
         <small>วันที่เริ่ม</small>
-        <strong>${formatDate(project.startDate)}</strong>
-      </div>
 
-      <div class="info">
-        <small>กำหนดเสร็จ</small>
-        <strong>${formatDate(project.endDate)}</strong>
-      </div>
-
-      <div class="info">
-        <small>รายการงาน</small>
-        <strong>${tasks.length} งาน</strong>
-      </div>
-
-      <div class="info">
-        <small>งานเสร็จ</small>
         <strong>
-          ${tasks.filter(t => Number(t.progress) >= 100).length} งาน
+          ${formatDate(project.startDate)}
         </strong>
+
+      </div>
+
+
+      <div class="info">
+
+        <small>กำหนดเสร็จ</small>
+
+        <strong>
+          ${formatDate(project.endDate)}
+        </strong>
+
+      </div>
+
+
+      <div class="info">
+
+        <small>รายการงาน</small>
+
+        <strong>
+          ${tasks.length} งาน
+        </strong>
+
+      </div>
+
+
+      <div class="info">
+
+        <small>งานเสร็จ</small>
+
+        <strong>
+          ${completedTasks} งาน
+        </strong>
+
       </div>
 
     </div>
@@ -1386,9 +1678,9 @@ function openDetail(id){
       project.note
       ?
       `
-      <div class="note">
-        ${escapeHTML(project.note)}
-      </div>
+        <div class="note">
+          ${escapeHTML(project.note)}
+        </div>
       `
       :
       ""
@@ -1450,9 +1742,7 @@ function closeDetail(){
 }
 
 
-/* =========================
-   EDIT
-========================= */
+/* ================= EDIT ================= */
 
 function editCurrentProject(){
 
@@ -1466,18 +1756,20 @@ function editCurrentProject(){
 }
 
 
-/* =========================
-   DELETE PROJECT
-========================= */
+/* ================= DELETE PROJECT ================= */
 
 function deleteProject(){
 
   const project =
-    projects.find(p => p.id === selectedProjectId);
+    projects.find(
+      p => p.id === selectedProjectId
+    );
+
 
   if(!project){
     return;
   }
+
 
   if(
     !confirm(
@@ -1486,7 +1778,9 @@ function deleteProject(){
       "\" ใช่หรือไม่?"
     )
   ){
+
     return;
+
   }
 
 
@@ -1505,15 +1799,15 @@ function deleteProject(){
 }
 
 
-/* =========================
-   TASK
-========================= */
+/* ================= TASK ================= */
 
 function openTaskModal(){
 
-  document.getElementById("taskName").value = "";
+  document.getElementById("taskName").value =
+    "";
 
-  document.getElementById("taskProgress").value = 0;
+  document.getElementById("taskProgress").value =
+    0;
 
   updateTaskLabel();
 
@@ -1537,24 +1831,29 @@ function closeTaskModal(){
 function updateTaskLabel(){
 
   document.getElementById("taskProgressLabel").textContent =
-    document.getElementById("taskProgress").value + "%";
+
+    document.getElementById("taskProgress").value +
+    "%";
 
 }
 
 
-/* =========================
-   SAVE TASK
-========================= */
+/* ================= SAVE TASK ================= */
 
 function saveTask(){
 
   const name =
-    document.getElementById("taskName").value.trim();
+    document.getElementById("taskName")
+      .value
+      .trim();
 
 
   if(!name){
+
     alert("กรุณาใส่ชื่อรายการงาน");
+
     return;
+
   }
 
 
@@ -1570,21 +1869,22 @@ function saveTask(){
 
 
   if(!project.tasks){
+
     project.tasks = [];
+
   }
 
 
   project.tasks.push({
 
-    id:
-      Date.now(),
+    id:Date.now(),
 
-    name:
-      name,
+    name:name,
 
     progress:
       Number(
-        document.getElementById("taskProgress").value
+        document.getElementById("taskProgress")
+          .value
       )
 
   });
@@ -1601,13 +1901,12 @@ function saveTask(){
 }
 
 
-/* =========================
-   DELETE TASK
-========================= */
+/* ================= DELETE TASK ================= */
 
 function deleteTask(event,taskId){
 
   event.stopPropagation();
+
 
   const project =
     projects.find(
@@ -1636,33 +1935,13 @@ function deleteTask(event,taskId){
 }
 
 
-/* =========================
-   ESCAPE HTML
-========================= */
-
-function escapeHTML(value){
-
-  return String(value || "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-
-}
-
-
-/* =========================
-   TODAY
-========================= */
+/* ================= TODAY ================= */
 
 function showToday(){
 
-  const now =
-    new Date();
-
   document.getElementById("todayText").textContent =
-    now.toLocaleDateString(
+
+    new Date().toLocaleDateString(
       "th-TH",
       {
         day:"numeric",
@@ -1674,11 +1953,10 @@ function showToday(){
 }
 
 
-/* =========================
-   CLOSE BACKGROUND
-========================= */
+/* ================= BACKGROUND CLOSE ================= */
 
-document.querySelectorAll(".modal")
+document
+  .querySelectorAll(".modal")
   .forEach(modal => {
 
     modal.addEventListener(
@@ -1697,9 +1975,7 @@ document.querySelectorAll(".modal")
   });
 
 
-/* =========================
-   START
-========================= */
+/* ================= START ================= */
 
 loadData();
 
