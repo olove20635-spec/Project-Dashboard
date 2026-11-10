@@ -1932,6 +1932,28 @@ input[type="range"]{
     grid-template-columns:1fr;
   }
 }
+
+
+/* ===== MOBILE DETAIL V4 ===== */
+@media(max-width:600px){
+  #detailModal{padding:0;align-items:stretch;background:#f2f4f8;}
+  #detailModal .detail-box{width:100%;height:100dvh;max-height:none;border:0;border-radius:0;box-shadow:none;}
+  #detailModal .detail-box>.modal-head .close{top:calc(46px + env(safe-area-inset-top));right:14px;width:42px;height:42px;}
+  #detailModal .detail-status{top:calc(48px + env(safe-area-inset-top));right:66px;}
+  #detailModal .detail-hero{padding-top:calc(64px + env(safe-area-inset-top));min-height:300px;}
+}
+.drag-handle{display:none!important;}
+
+/* custom confirm */
+.confirm-card{width:min(92vw,420px);overflow:hidden;border-radius:24px;background:#fff;box-shadow:0 28px 80px rgba(5,12,25,.35);}
+.confirm-head{padding:20px 20px 16px;color:#fff;background:linear-gradient(135deg,#172033,#334c73);font-size:17px;font-weight:850;}
+.confirm-body{padding:22px 20px 10px;color:#4d5869;font-size:14px;line-height:1.6;}
+.confirm-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 20px 20px;}
+.confirm-actions .danger{color:#fff;background:linear-gradient(145deg,#d94f4f,#bd3434);}
+
+/* swipe hint */
+.detail-swipe-hint{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);z-index:4;padding:5px 9px;border-radius:999px;background:rgba(8,15,27,.35);color:rgba(255,255,255,.75);font-size:8px;backdrop-filter:blur(6px);pointer-events:none;}
+
 </style>
 </head>
 
@@ -1945,9 +1967,7 @@ input[type="range"]{
       <h1>Project Dashboard</h1>
     </div>
 
-    <button class="add-top" onclick="openProjectModal()" aria-label="เพิ่มโครงการ">
-      +
-    </button>
+
   </div>
 
   <div class="kpi-grid">
@@ -2352,6 +2372,18 @@ input[type="range"]{
 
   </div>
 
+</div>
+
+
+<div id="confirmModal" class="modal">
+  <div class="confirm-card">
+    <div class="confirm-head" id="confirmTitle">ยืนยันรายการ</div>
+    <div class="confirm-body" id="confirmMessage"></div>
+    <div class="confirm-actions">
+      <button class="btn cancel" id="confirmCancel">ยกเลิก</button>
+      <button class="btn danger" id="confirmOk">ยืนยัน</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -3514,19 +3546,6 @@ function setupCardSorting(
   card.dataset.id =
     String(projectId);
 
-  const handle =
-    document.createElement(
-      "div"
-    );
-
-  handle.className =
-    "drag-handle";
-
-  handle.textContent =
-    "⋮⋮";
-
-  card.appendChild(handle);
-
 
   card.addEventListener(
     "pointerdown",
@@ -4411,6 +4430,37 @@ function saveProject(){
 }
 
 
+
+function customConfirm(message,title="ยืนยันรายการ"){
+  return new Promise(resolve => {
+    const modal=document.getElementById("confirmModal");
+    document.getElementById("confirmTitle").textContent=title;
+    document.getElementById("confirmMessage").textContent=message;
+    const ok=document.getElementById("confirmOk");
+    const cancel=document.getElementById("confirmCancel");
+    let finished=false;
+    const done=value=>{ if(finished)return; finished=true; modal.classList.remove("show"); ok.onclick=null; cancel.onclick=null; resolve(value); };
+    ok.onclick=()=>done(true); cancel.onclick=()=>done(false);
+    modal.onclick=e=>{if(e.target===modal)done(false);};
+    modal.classList.add("show");
+  });
+}
+
+let detailSwipeStartX=0, detailSwipeStartY=0;
+function setupDetailSwipe(){
+  const box=document.querySelector("#detailModal .detail-box");
+  if(!box || box.dataset.swipeReady)return;
+  box.dataset.swipeReady="1";
+  box.addEventListener("touchstart",e=>{const t=e.touches[0]; detailSwipeStartX=t.clientX; detailSwipeStartY=t.clientY;},{passive:true});
+  box.addEventListener("touchend",e=>{
+    const t=e.changedTouches[0]; const dx=t.clientX-detailSwipeStartX; const dy=t.clientY-detailSwipeStartY;
+    if(Math.abs(dx)<65 || Math.abs(dx)<Math.abs(dy)*1.4)return;
+    const i=projects.findIndex(p=>p.id===selectedProjectId); if(i<0)return;
+    const next=dx<0?i+1:i-1; if(next>=0 && next<projects.length) openDetail(projects[next].id);
+  },{passive:true});
+}
+
+
 /* ==================================================
    DETAIL
 ================================================== */
@@ -4607,6 +4657,8 @@ function openDetail(id){
       <div class="detail-status ${project.status}">
         ${statusText(project.status)}
       </div>
+
+      <div class="detail-swipe-hint">ปัดซ้าย–ขวาเพื่อเปลี่ยนโครงการ</div>
 
       <div class="detail-hero-top">
 
@@ -5059,6 +5111,8 @@ function openDetail(id){
     "detailModal"
   );
 
+  setupDetailSwipe();
+
 
   saveData();
 
@@ -5094,7 +5148,7 @@ function editProject(){
 }
 
 
-function deleteProject(){
+async function deleteProject(){
 
   const project =
     projects.find(
@@ -5107,13 +5161,7 @@ function deleteProject(){
     return;
   }
 
-  if(
-    !confirm(
-      `ต้องการลบโครงการ "${project.name}" ใช่หรือไม่?`
-    )
-  ){
-    return;
-  }
+  if(!(await customConfirm(`ต้องการลบโครงการ "${project.name}" ใช่หรือไม่?`,"ลบโครงการ"))){ return; }
 
   const id =
     selectedProjectId;
@@ -5440,7 +5488,7 @@ function editTask(
 }
 
 
-function deleteTask(
+async function deleteTask(
   event,
   taskId
 ){
@@ -5468,13 +5516,7 @@ function deleteTask(
     return;
   }
 
-  if(
-    !confirm(
-      `ต้องการลบรายการ "${task.name}" ใช่หรือไม่?`
-    )
-  ){
-    return;
-  }
+  if(!(await customConfirm(`ต้องการลบรายการ "${task.name}" ใช่หรือไม่?`,"ลบรายการงาน"))){ return; }
 
   project.tasks =
     project.tasks.filter(
@@ -6884,9 +6926,16 @@ async function exportProjectImage(){
     safeName +
     "-summary-16x9.png";
 
+  let outputCanvas = canvas;
+  if(isMobile){
+    const small=document.createElement("canvas"); small.width=1280; small.height=720;
+    const smallCtx=small.getContext("2d"); smallCtx.imageSmoothingEnabled=true; smallCtx.imageSmoothingQuality="high";
+    smallCtx.drawImage(canvas,0,0,1280,720); outputCanvas=small;
+  }
+
   const blob = await new Promise((resolve,reject) => {
     const timer = setTimeout(() => reject(new Error("Export timeout")), 12000);
-    canvas.toBlob(result => {
+    outputCanvas.toBlob(result => {
       clearTimeout(timer);
       if(result) resolve(result);
       else reject(new Error("ไม่สามารถสร้างไฟล์ภาพได้"));
@@ -6930,8 +6979,8 @@ async function exportProjectImage(){
   }
 
   // Release the large backing store as soon as possible.
-  canvas.width = 1;
-  canvas.height = 1;
+  canvas.width = 1; canvas.height = 1;
+  if(outputCanvas !== canvas){ outputCanvas.width=1; outputCanvas.height=1; }
 
   }catch(error){
     console.error("Export error:", error);
@@ -8291,16 +8340,6 @@ function createDataToolsButton(){
   }
 
 
-  const addButton =
-    topbar.querySelector(
-      ".add-top"
-    );
-
-
-  if(!addButton){
-    return;
-  }
-
 
   const actions =
     document.createElement(
@@ -8348,10 +8387,7 @@ function createDataToolsButton(){
     openDataTools;
 
 
-  topbar.insertBefore(
-    actions,
-    addButton
-  );
+  topbar.appendChild(actions);
 
 
   actions.appendChild(
