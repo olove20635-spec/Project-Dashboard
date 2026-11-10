@@ -2051,7 +2051,7 @@ body{background:var(--v8-bg);}
 .detail-buttons,.secondary-actions{isolation:isolate;}
 .detail-buttons button,.secondary-actions button{position:relative!important;z-index:999!important;pointer-events:auto!important;touch-action:manipulation!important;}
 
-/* ===== V10 POPUP / DETAIL FIX ===== */
+/* ===== V11 POPUP / DETAIL FIX ===== */
 /* Keep secondary dialogs above the project detail and center them on phones. */
 #projectModal,#taskModal,#backgroundModal,#confirmModal{z-index:320;}
 @media(max-width:600px){
@@ -2061,6 +2061,18 @@ body{background:var(--v8-bg);}
   /* Project detail no longer has the decorative pull bar. */
   #detailModal .detail-hero{padding-top:calc(22px + env(safe-area-inset-top))!important;}
 }
+
+/* ===== V11 MOBILE SAFE AREA + ACTION + TIME BAR ===== */
+.time-remaining-wrap{margin-top:10px}.time-remaining-bar{height:7px;border-radius:999px;background:#edf0f5;overflow:hidden}.time-remaining-bar>div{height:100%;border-radius:inherit;background:linear-gradient(90deg,#6737b7,#8a63d2);transition:width .3s ease}.time-remaining-caption{margin-top:6px;font-size:10px;color:#7b8798;font-weight:700}.time-remaining-wrap.overdue .time-remaining-bar>div{background:#dc252b}.time-remaining-wrap.done .time-remaining-bar>div{background:#0b8a50}
+#detailBackgroundBtn,#detailExportBtn{pointer-events:auto!important;touch-action:manipulation!important;position:relative!important;z-index:1001!important}
+@media(max-width:600px){
+  #detailModal{padding:calc(env(safe-area-inset-top) + 10px) 0 0!important;align-items:flex-start!important;background:#eef2f7!important;}
+  #detailModal .detail-box{height:calc(100dvh - env(safe-area-inset-top) - 10px)!important;max-height:calc(100dvh - env(safe-area-inset-top) - 10px)!important;border-radius:22px 22px 0 0!important;overflow-y:auto!important;}
+  #detailModal .detail-hero{padding-top:20px!important;border-radius:22px 22px 24px 24px!important;}
+  #detailModal .detail-status{top:18px!important;right:14px!important;}
+  .modern-kpi:nth-child(4){min-height:124px!important;}
+}
+
 </style>
 </head>
 
@@ -2517,6 +2529,7 @@ let editingTaskId = null;
 let pendingBackgroundImage = "";
 let pendingBackgroundPosition = 50;
 let pendingBackgroundRemove = false;
+let exportProjectBusy = false;
 
 let bgDragging = false;
 let bgDragStartY = 0;
@@ -2711,6 +2724,24 @@ function daysInfo(project){
     cls:"overdue"
   };
 
+}
+
+function scheduleInfo(project){
+  if(!project || !project.endDate){
+    return {valid:false,total:0,remaining:0,elapsedPct:0,remainingPct:0,label:"ไม่ระบุกำหนดเสร็จ"};
+  }
+  const today=new Date(); today.setHours(0,0,0,0);
+  const end=new Date(project.endDate+"T00:00:00");
+  const remaining=Math.ceil((end-today)/86400000);
+  if(!project.startDate){
+    return {valid:false,total:0,remaining,elapsedPct:0,remainingPct:0,label:remaining>=0?`เหลืออีก ${remaining} วัน`:`เกินกำหนด ${Math.abs(remaining)} วัน`};
+  }
+  const start=new Date(project.startDate+"T00:00:00");
+  const total=Math.max(1,Math.ceil((end-start)/86400000));
+  const elapsed=Math.max(0,Math.ceil((today-start)/86400000));
+  const elapsedPct=Math.max(0,Math.min(100,Math.round(elapsed/total*100)));
+  const remainingPct=Math.max(0,Math.min(100,100-elapsedPct));
+  return {valid:true,total,remaining,elapsedPct,remainingPct,label:remaining>=0?`เหลือ ${Math.max(0,remaining)} จาก ${total} วัน`:`เกินกำหนด ${Math.abs(remaining)} วัน`};
 }
 
 
@@ -4662,7 +4693,7 @@ function saveProject(){
 
 
 /* ==================================================
-   RESTORED PROJECT / TASK / BACKGROUND ACTIONS (V10)
+   RESTORED PROJECT / TASK / BACKGROUND ACTIONS (V11)
 ================================================== */
 
 function editProject(){
@@ -5052,22 +5083,18 @@ function openBackgroundEditor(){
   updateBackgroundPreview();
 
   const backgroundModal = document.getElementById("backgroundModal");
+  if(!backgroundModal){ alert("ไม่พบหน้าต่างภาพพื้นหลัง"); return; }
+  backgroundModal.style.zIndex = "500";
   backgroundModal.classList.add("show");
-  backgroundModal.style.zIndex = "360";
-
-  resetModalScroll("backgroundModal");
+  backgroundModal.style.display = "flex";
+  requestAnimationFrame(()=>resetModalScroll("backgroundModal"));
 
 }
 
 function cancelBackgroundEditor(){
 
-  document
-    .getElementById(
-      "backgroundModal"
-    )
-    .classList.remove(
-      "show"
-    );
+  const bgModal = document.getElementById("backgroundModal");
+  if(bgModal){ bgModal.classList.remove("show"); bgModal.style.display=""; }
 
   pendingBackgroundImage = "";
   pendingBackgroundPosition = 50;
@@ -5316,8 +5343,21 @@ function runDetailAction(action){
 }
 
 function setupDetailActions(){
-  // V10: actions are bound directly on each button.
-  // This avoids iOS touch delegation swallowing modal/export actions.
+  const bind=(id,handler)=>{
+    const el=document.getElementById(id);
+    if(!el) return;
+    // Replacing with a clone removes any stale listeners left by previous detail renders.
+    const fresh=el.cloneNode(true);
+    el.replaceWith(fresh);
+    fresh.addEventListener("click",event=>{
+      event.preventDefault(); event.stopPropagation(); handler();
+    },false);
+    fresh.addEventListener("touchend",event=>{
+      event.preventDefault(); event.stopPropagation(); handler();
+    },{passive:false});
+  };
+  bind("detailBackgroundBtn",()=>openBackgroundEditor());
+  bind("detailExportBtn",()=>exportProjectImage());
 }
 
 function setupDetailSwipe(){
@@ -5425,6 +5465,8 @@ function openDetail(id){
 
   const days =
     daysInfo(project);
+
+  const schedule = scheduleInfo(project);
 
   const background =
     getProjectBackground(
@@ -5750,6 +5792,10 @@ function openDetail(id){
           <div class="modern-kpi-value">
             ${days.text}
           </div>
+          <div class="time-remaining-wrap ${days.cls}">
+            <div class="time-remaining-bar"><div style="width:${schedule.valid ? schedule.remainingPct : (days.cls === "overdue" ? 100 : 0)}%"></div></div>
+            <div class="time-remaining-caption">${schedule.valid ? schedule.label : (project.endDate ? days.text : "ยังไม่ได้กำหนดวันเริ่ม/สิ้นสุด")}</div>
+          </div>
 
         </div>
 
@@ -5993,14 +6039,14 @@ function openDetail(id){
 
         <button
           class="btn background-btn"
-          data-detail-action="background" onclick="event.stopPropagation(); openBackgroundEditor()"
+          id="detailBackgroundBtn" data-detail-action="background"
         >
           ภาพพื้นหลัง
         </button>
 
         <button
           class="btn export-btn"
-          data-detail-action="export" onclick="event.stopPropagation(); exportProjectImage()"
+          id="detailExportBtn" data-detail-action="export"
         >
           Export 16:9
         </button>
