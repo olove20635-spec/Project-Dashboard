@@ -16,7 +16,7 @@
 <link rel="manifest" href="./manifest.json?build=20261110-recovery-v71">
 
 <script>
-/* Build V5: preserve localStorage; force a fresh document URL on Safari/PWA. */
+/* Build V8.2: persistence + iOS detail action fix. */
 (function(){
   var BUILD = "20261110-recovery-v71";
   try {
@@ -2042,6 +2042,12 @@ body{background:var(--v8-bg);}
 .detail-buttons,.secondary-actions{position:relative;z-index:80;pointer-events:auto!important;}
 .detail-buttons .btn,.secondary-actions .btn{position:relative;z-index:81;pointer-events:auto!important;touch-action:manipulation;-webkit-tap-highlight-color:rgba(11,91,211,.12);user-select:none;-webkit-user-select:none;}
 @media(max-width:600px){.detail-buttons .btn,.secondary-actions .btn{min-height:52px;}}
+
+/* V8.2 iOS action safety */
+.detail-buttons,.secondary-actions{touch-action:auto!important;}
+.detail-buttons .btn,.secondary-actions .btn{cursor:pointer!important;-webkit-user-select:none;user-select:none;}
+.detail-buttons .btn:active,.secondary-actions .btn:active{transform:scale(.97);filter:brightness(.97);}
+
 </style>
 </head>
 
@@ -2938,7 +2944,10 @@ function loadData(){
   if(projects.length){
     saveData();
   }else{
-    storageWriteBlocked = true;
+    // Empty data is a valid state. Do not write [] during startup,
+    // but keep future user saves enabled. Previous recovery build left
+    // this flag true, which made newly-created projects disappear after reload.
+    storageWriteBlocked = false;
     setTimeout(() => {
       try{
         const candidates = findRecoveryCandidates();
@@ -4597,24 +4606,114 @@ function customConfirm(message,title="ยืนยันรายการ"){
 }
 
 let detailSwipeStartX=0, detailSwipeStartY=0, detailSwipeAtTop=false;
+let detailGesturePointerId=null;
+
+function runDetailAction(action){
+  if(action === "delete") return deleteProject();
+  if(action === "edit") return editProject();
+  if(action === "task") return openTaskModal();
+  if(action === "background") return openBackgroundEditor();
+  if(action === "export") return exportProjectImage();
+}
+
+function setupDetailActions(){
+  const content=document.getElementById("detailContent");
+  if(!content || content.dataset.actionsReady) return;
+  content.dataset.actionsReady="1";
+
+  // Delegated click is reliable on desktop and normal mobile taps.
+  content.addEventListener("click", event => {
+    const button=event.target.closest("[data-detail-action]");
+    if(!button) return;
+    event.preventDefault();
+    event.stopPropagation();
+    runDetailAction(button.dataset.detailAction);
+  });
+
+  // iOS fallback: some Safari/PWA builds suppress click after a gesture-capable
+  // scroll container. Fire on touchend only when the finger stayed on the button.
+  let touchButton=null, touchX=0, touchY=0, touchRanAt=0;
+  content.addEventListener("touchstart", event => {
+    const button=event.target.closest("[data-detail-action]");
+    if(!button) { touchButton=null; return; }
+    const t=event.touches[0];
+    touchButton=button; touchX=t.clientX; touchY=t.clientY;
+  }, {passive:true});
+  content.addEventListener("touchend", event => {
+    if(!touchButton) return;
+    const t=event.changedTouches[0];
+    const moved=Math.hypot(t.clientX-touchX,t.clientY-touchY);
+    const button=event.target.closest("[data-detail-action]");
+    if(button===touchButton && moved<14){
+      event.preventDefault();
+      event.stopPropagation();
+      touchRanAt=Date.now();
+      runDetailAction(button.dataset.detailAction);
+    }
+    touchButton=null;
+  }, {passive:false});
+  content.addEventListener("click", event => {
+    if(Date.now()-touchRanAt<700 && event.target.closest("[data-detail-action]")){
+      event.preventDefault(); event.stopImmediatePropagation();
+    }
+  }, true);
+}
+
 function setupDetailSwipe(){
   const box=document.querySelector("#detailModal .detail-box");
-  if(!box || box.dataset.swipeReady)return; box.dataset.swipeReady="1";
-  let detailTouchInteractive=false;
-  const isInteractiveTarget = target => !!target.closest("button, a, input, select, textarea, label, [role='button'], .task-edit, .task-delete");
-  box.addEventListener("touchstart",e=>{
-    detailTouchInteractive=isInteractiveTarget(e.target);
-    if(detailTouchInteractive){ detailSwipeAtTop=false; return; }
-    const t=e.touches[0];detailSwipeStartX=t.clientX;detailSwipeStartY=t.clientY;detailSwipeAtTop=box.scrollTop<=2;box.style.transition="";
-  },{passive:true});
-  box.addEventListener("touchmove",e=>{
-    if(detailTouchInteractive||!detailSwipeAtTop)return;
-    const t=e.touches[0],dy=t.clientY-detailSwipeStartY,dx=t.clientX-detailSwipeStartX;if(dy>0&&Math.abs(dy)>Math.abs(dx)*1.15){const move=Math.min(150,dy*.42);box.style.transform=`translateY(${move}px)`;box.style.opacity=String(Math.max(.72,1-move/520));}
-  },{passive:true});
-  box.addEventListener("touchend",e=>{
-    if(detailTouchInteractive){ detailTouchInteractive=false; return; }
-    const t=e.changedTouches[0],dx=t.clientX-detailSwipeStartX,dy=t.clientY-detailSwipeStartY;box.style.transition="transform .28s cubic-bezier(.22,.8,.22,1), opacity .22s ease";if(detailSwipeAtTop&&dy>115&&Math.abs(dy)>Math.abs(dx)*1.15){closeDetail(true);return;}box.style.transform="";box.style.opacity="";if(Math.abs(dx)<65||Math.abs(dx)<Math.abs(dy)*1.35)return;const i=projects.findIndex(p=>p.id===selectedProjectId);if(i<0||!projects.length)return;const next=dx<0?(i+1)%projects.length:(i-1+projects.length)%projects.length;openDetail(projects[next].id);
-  },{passive:true});
+  if(!box || box.dataset.swipeReady) return;
+  box.dataset.swipeReady="1";
+  let blocked=false;
+
+  const isBlockedTarget = target => !!target.closest(
+    "button, a, input, select, textarea, label, [role='button'], [data-detail-action], .detail-buttons, .secondary-actions, .task-actions, .task-edit, .task-delete"
+  );
+
+  box.addEventListener("pointerdown", event => {
+    blocked=isBlockedTarget(event.target);
+    if(blocked || event.pointerType === "mouse") return;
+    detailGesturePointerId=event.pointerId;
+    detailSwipeStartX=event.clientX;
+    detailSwipeStartY=event.clientY;
+    detailSwipeAtTop=box.scrollTop<=2;
+    box.style.transition="";
+  }, {passive:true});
+
+  box.addEventListener("pointermove", event => {
+    if(blocked || detailGesturePointerId!==event.pointerId || !detailSwipeAtTop) return;
+    const dy=event.clientY-detailSwipeStartY;
+    const dx=event.clientX-detailSwipeStartX;
+    if(dy>0 && Math.abs(dy)>Math.abs(dx)*1.15){
+      const move=Math.min(150,dy*.42);
+      box.style.transform=`translateY(${move}px)`;
+      box.style.opacity=String(Math.max(.72,1-move/520));
+    }
+  }, {passive:true});
+
+  const finishGesture = event => {
+    if(blocked || detailGesturePointerId!==event.pointerId){
+      blocked=false; detailGesturePointerId=null; return;
+    }
+    const dx=event.clientX-detailSwipeStartX;
+    const dy=event.clientY-detailSwipeStartY;
+    detailGesturePointerId=null;
+    box.style.transition="transform .28s cubic-bezier(.22,.8,.22,1), opacity .22s ease";
+    if(detailSwipeAtTop && dy>115 && Math.abs(dy)>Math.abs(dx)*1.15){
+      closeDetail(true); return;
+    }
+    box.style.transform=""; box.style.opacity="";
+    if(Math.abs(dx)<65 || Math.abs(dx)<Math.abs(dy)*1.35) return;
+    const i=projects.findIndex(p=>p.id===selectedProjectId);
+    if(i<0 || !projects.length) return;
+    const next=dx<0 ? (i+1)%projects.length : (i-1+projects.length)%projects.length;
+    openDetail(projects[next].id);
+  };
+  box.addEventListener("pointerup", finishGesture, {passive:true});
+  box.addEventListener("pointercancel", event => {
+    if(detailGesturePointerId===event.pointerId){
+      detailGesturePointerId=null; blocked=false; box.style.transform=""; box.style.opacity="";
+    }
+  }, {passive:true});
 }
 
 /* ==================================================
@@ -5194,21 +5293,21 @@ function openDetail(id){
 
         <button
           class="btn delete-btn"
-          onclick="deleteProject()"
+          data-detail-action="delete"
         >
           ลบ
         </button>
 
         <button
           class="btn edit-btn"
-          onclick="editProject()"
+          data-detail-action="edit"
         >
           แก้ไข
         </button>
 
         <button
           class="btn task-btn"
-          onclick="openTaskModal()"
+          data-detail-action="task"
         >
           + เพิ่มรายการงาน
         </button>
@@ -5220,14 +5319,14 @@ function openDetail(id){
 
         <button
           class="btn background-btn"
-          onclick="openBackgroundEditor()"
+          data-detail-action="background"
         >
           ภาพพื้นหลัง
         </button>
 
         <button
           class="btn export-btn"
-          onclick="exportProjectImage()"
+          data-detail-action="export"
         >
           Export 16:9
         </button>
@@ -5267,6 +5366,7 @@ function openDetail(id){
     "detailModal"
   );
 
+  setupDetailActions();
   setupDetailSwipe();
 
 
