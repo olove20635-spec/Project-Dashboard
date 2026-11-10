@@ -2048,6 +2048,8 @@ body{background:var(--v8-bg);}
 .detail-buttons .btn,.secondary-actions .btn{cursor:pointer!important;-webkit-user-select:none;user-select:none;}
 .detail-buttons .btn:active,.secondary-actions .btn:active{transform:scale(.97);filter:brightness(.97);}
 
+.detail-buttons,.secondary-actions{isolation:isolate;}
+.detail-buttons button,.secondary-actions button{position:relative!important;z-index:999!important;pointer-events:auto!important;touch-action:manipulation!important;}
 </style>
 </head>
 
@@ -2958,27 +2960,77 @@ function loadData(){
 }
 
 
-function saveData(){
+const PROJECT_IDB_DB = "project-dashboard-db-v1";
+const PROJECT_IDB_STORE = "state";
+const PROJECT_IDB_KEY = "projects";
+const PROJECT_UPDATED_KEY = STORAGE_KEY + "-updated-at";
 
-  if(storageWriteBlocked) return;
+function openProjectDB(){
+  return new Promise((resolve,reject)=>{
+    if(!window.indexedDB){ reject(new Error("IndexedDB unavailable")); return; }
+    const req=indexedDB.open(PROJECT_IDB_DB,1);
+    req.onupgradeneeded=()=>{
+      const db=req.result;
+      if(!db.objectStoreNames.contains(PROJECT_IDB_STORE)) db.createObjectStore(PROJECT_IDB_STORE);
+    };
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error);
+  });
+}
 
+async function persistProjectsIDB(snapshot,updatedAt){
   try{
+    const db=await openProjectDB();
+    await new Promise((resolve,reject)=>{
+      const tx=db.transaction(PROJECT_IDB_STORE,"readwrite");
+      tx.objectStore(PROJECT_IDB_STORE).put({projects:snapshot,updatedAt},PROJECT_IDB_KEY);
+      tx.oncomplete=resolve; tx.onerror=()=>reject(tx.error); tx.onabort=()=>reject(tx.error);
+    });
+    db.close();
+  }catch(e){ console.error("IndexedDB save error:",e); }
+}
 
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(projects)
-    );
+async function hydrateProjectsFromIDB(){
+  try{
+    const db=await openProjectDB();
+    const record=await new Promise((resolve,reject)=>{
+      const tx=db.transaction(PROJECT_IDB_STORE,"readonly");
+      const req=tx.objectStore(PROJECT_IDB_STORE).get(PROJECT_IDB_KEY);
+      req.onsuccess=()=>resolve(req.result||null); req.onerror=()=>reject(req.error);
+    });
+    db.close();
+    if(!record || !Array.isArray(record.projects) || !record.projects.length) return;
+    const localUpdated=Number(localStorage.getItem(PROJECT_UPDATED_KEY)||0);
+    const localHas=Array.isArray(projects) && projects.length>0;
+    if(!localHas || Number(record.updatedAt||0)>localUpdated){
+      projects=record.projects.map(normalizeProject).filter(Boolean);
+      applySavedProjectOrder();
+      projects.forEach(p=>{if(p.tasks.length)recalculateProject(p);});
+      try{
+        localStorage.setItem(STORAGE_KEY,JSON.stringify(projects));
+        localStorage.setItem(PROJECT_UPDATED_KEY,String(record.updatedAt||Date.now()));
+      }catch(e){ console.warn("LocalStorage restore skipped:",e); }
+      render();
+    }else{
+      persistProjectsIDB(JSON.parse(JSON.stringify(projects)),localUpdated||Date.now());
+    }
+  }catch(e){ console.error("IndexedDB load error:",e); }
+}
 
+function saveData(){
+  if(storageWriteBlocked) return false;
+  const snapshot=JSON.parse(JSON.stringify(projects));
+  const updatedAt=Date.now();
+  let localOK=true;
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(snapshot));
+    localStorage.setItem(PROJECT_UPDATED_KEY,String(updatedAt));
+  }catch(error){
+    localOK=false;
+    console.error("LocalStorage save error; using IndexedDB fallback:",error);
   }
-  catch(error){
-
-    console.error(
-      "Save data error:",
-      error
-    );
-
-  }
-
+  persistProjectsIDB(snapshot,updatedAt);
+  return localOK;
 }
 
 
@@ -4625,6 +4677,7 @@ function setupDetailActions(){
   content.addEventListener("click", event => {
     const button=event.target.closest("[data-detail-action]");
     if(!button) return;
+    if(button.hasAttribute("onclick")) return;
     event.preventDefault();
     event.stopPropagation();
     runDetailAction(button.dataset.detailAction);
@@ -4635,7 +4688,7 @@ function setupDetailActions(){
   let touchButton=null, touchX=0, touchY=0, touchRanAt=0;
   content.addEventListener("touchstart", event => {
     const button=event.target.closest("[data-detail-action]");
-    if(!button) { touchButton=null; return; }
+    if(!button || button.hasAttribute("onclick")) { touchButton=null; return; }
     const t=event.touches[0];
     touchButton=button; touchX=t.clientX; touchY=t.clientY;
   }, {passive:true});
@@ -5293,21 +5346,21 @@ function openDetail(id){
 
         <button
           class="btn delete-btn"
-          data-detail-action="delete"
+          data-detail-action="delete" onclick="event.stopPropagation(); deleteProject();"
         >
           ลบ
         </button>
 
         <button
           class="btn edit-btn"
-          data-detail-action="edit"
+          data-detail-action="edit" onclick="event.stopPropagation(); editProject();"
         >
           แก้ไข
         </button>
 
         <button
           class="btn task-btn"
-          data-detail-action="task"
+          data-detail-action="task" onclick="event.stopPropagation(); openTaskModal();"
         >
           + เพิ่มรายการงาน
         </button>
@@ -5319,14 +5372,14 @@ function openDetail(id){
 
         <button
           class="btn background-btn"
-          data-detail-action="background"
+          data-detail-action="background" onclick="event.stopPropagation(); openBackgroundEditor();"
         >
           ภาพพื้นหลัง
         </button>
 
         <button
           class="btn export-btn"
-          data-detail-action="export"
+          data-detail-action="export" onclick="event.stopPropagation(); exportProjectImage();"
         >
           Export 16:9
         </button>
@@ -5884,6 +5937,7 @@ function initializeApp(){
   updateTodayText();
 
   render();
+  hydrateProjectsFromIDB();
 
 }
 
