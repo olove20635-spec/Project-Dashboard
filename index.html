@@ -6281,25 +6281,72 @@ function getPaymentInfo(project){
 
 
 function drawIcon(ctx,type,cx,cy,size,color="#0A315D"){
-  ctx.save(); ctx.strokeStyle=color; ctx.fillStyle=color; ctx.lineWidth=Math.max(4,size*.075); ctx.lineCap="round"; ctx.lineJoin="round";
-  const r=size*.34;
+  ctx.save();
+  ctx.strokeStyle=color; ctx.fillStyle=color;
+  ctx.lineWidth=Math.max(3,size*.055); ctx.lineCap="round"; ctx.lineJoin="round";
+  const r=size*.36;
+
   if(type==="progress"){
-    ctx.beginPath();ctx.moveTo(cx-r*.9,cy+r*.05);ctx.lineTo(cx-r*.25,cy+r*.72);ctx.lineTo(cx+r*.95,cy-r*.78);ctx.stroke();
+    // เครนก่อสร้างแบบเดียวกับภาพตัวอย่าง
+    const x=cx-r*.95, y=cy+r*.78;
+    ctx.beginPath();
+    ctx.moveTo(x+r*.25,y); ctx.lineTo(x+r*.25,cy-r*.78);
+    ctx.moveTo(x,cy-r*.78); ctx.lineTo(cx+r*.95,cy-r*.78);
+    ctx.moveTo(x+r*.25,cy-r*.78); ctx.lineTo(cx+r*.55,cy-r*.28);
+    ctx.moveTo(x+r*.25,cy-r*.78); ctx.lineTo(x-r*.18,cy-r*.30);
+    ctx.stroke();
+    // โครงเสา
+    for(let i=0;i<3;i++){
+      const yy=cy-r*.48+i*r*.40;
+      ctx.beginPath();ctx.moveTo(x+r*.05,yy);ctx.lineTo(x+r*.45,yy+r*.28);ctx.moveTo(x+r*.45,yy);ctx.lineTo(x+r*.05,yy+r*.28);ctx.stroke();
+    }
+    // สลิง + ตะขอ
+    ctx.beginPath();ctx.moveTo(cx+r*.55,cy-r*.78);ctx.lineTo(cx+r*.55,cy+r*.15);ctx.arc(cx+r*.55,cy+r*.28,r*.12,-Math.PI/2,Math.PI*.8);ctx.stroke();
+    // อาคารเล็ก
+    ctx.fillRect(cx+r*.18,cy+r*.28,r*.72,r*.55);
+    ctx.fillStyle="#D8B43E";ctx.fillRect(cx+r*.38,cy+r*.42,r*.13,r*.13);ctx.fillRect(cx+r*.62,cy+r*.42,r*.13,r*.13);
+
   }else if(type==="money"){
-    for(let i=0;i<3;i++){const ox=(i-1)*r*.55, oy=(i===0?0:i===1?r*.18:r*.36);ctx.beginPath();ctx.ellipse(cx+ox,cy+oy,r*.48,r*.20,0,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.moveTo(cx+ox-r*.48,cy+oy);ctx.lineTo(cx+ox-r*.48,cy+oy+r*.46);ctx.moveTo(cx+ox+r*.48,cy+oy);ctx.lineTo(cx+ox+r*.48,cy+oy+r*.46);ctx.stroke();}
+    // เหรียญซ้อน 3 กอง
+    const stacks=[[-r*.48,r*.22,2],[0,0,3],[r*.48,r*.30,2]];
+    stacks.forEach(([ox,oy,n])=>{
+      for(let i=0;i<n;i++){
+        const yy=cy+oy+i*r*.22;
+        ctx.beginPath();ctx.ellipse(cx+ox,yy,r*.34,r*.14,0,0,Math.PI*2);ctx.stroke();
+        if(i<n-1){ctx.beginPath();ctx.moveTo(cx+ox-r*.34,yy);ctx.lineTo(cx+ox-r*.34,yy+r*.22);ctx.moveTo(cx+ox+r*.34,yy);ctx.lineTo(cx+ox+r*.34,yy+r*.22);ctx.stroke();}
+      }
+    });
+
   }else if(type==="calendar"){
-    roundRectPath(ctx,cx-r,cy-r*.7,r*2,r*1.55,r*.12);ctx.stroke();ctx.beginPath();ctx.moveTo(cx-r,cy-r*.18);ctx.lineTo(cx+r,cy-r*.18);ctx.moveTo(cx-r*.52,cy-r*.95);ctx.lineTo(cx-r*.52,cy-r*.48);ctx.moveTo(cx+r*.52,cy-r*.95);ctx.lineTo(cx+r*.52,cy-r*.48);ctx.stroke();
-    for(let yy=0;yy<2;yy++)for(let xx=0;xx<3;xx++){ctx.beginPath();ctx.arc(cx-r*.52+xx*r*.52,cy+r*.18+yy*r*.38,r*.07,0,Math.PI*2);ctx.fill();}
+    // ปฏิทินกรอบใหญ่ + ช่องวันที่สีทอง
+    roundRectPath(ctx,cx-r,cy-r*.72,r*2,r*1.52,r*.10);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx-r,cy-r*.18);ctx.lineTo(cx+r,cy-r*.18);ctx.moveTo(cx-r*.52,cy-r*.96);ctx.lineTo(cx-r*.52,cy-r*.48);ctx.moveTo(cx+r*.52,cy-r*.96);ctx.lineTo(cx+r*.52,cy-r*.48);ctx.stroke();
+    ctx.fillStyle="#D8B43E";
+    for(let yy=0;yy<2;yy++)for(let xx=0;xx<3;xx++)ctx.fillRect(cx-r*.58+xx*r*.48,cy+r*.04+yy*r*.34,r*.17,r*.17);
+
   }else if(type==="payment"){
-    ctx.beginPath();ctx.arc(cx,cy,r*.86,0,Math.PI*2);ctx.stroke();ctx.font=`900 ${Math.round(size*.52)}px Arial`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("฿",cx,cy+1);
+    // เหรียญซ้อนสำหรับหัวข้อการเบิกเงิน
+    ctx.strokeStyle=color;
+    for(let i=0;i<3;i++){
+      const ox=(i-1)*r*.38, oy=(i===1?-r*.18:r*.10);
+      ctx.beginPath();ctx.ellipse(cx+ox,cy+oy,r*.34,r*.14,0,0,Math.PI*2);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(cx+ox-r*.34,cy+oy);ctx.lineTo(cx+ox-r*.34,cy+oy+r*.34);ctx.moveTo(cx+ox+r*.34,cy+oy);ctx.lineTo(cx+ox+r*.34,cy+oy+r*.34);ctx.stroke();
+    }
+
   }else if(type==="info"){
-    roundRectPath(ctx,cx-r*.72,cy-r*.78,r*1.44,r*1.56,r*.12);ctx.stroke();ctx.beginPath();for(let i=-1;i<=1;i++){ctx.moveTo(cx-r*.36,cy+i*r*.38);ctx.lineTo(cx+r*.38,cy+i*r*.38);}ctx.stroke();
+    // คลิปบอร์ด
+    roundRectPath(ctx,cx-r*.68,cy-r*.72,r*1.36,r*1.48,r*.10);ctx.stroke();
+    roundRectPath(ctx,cx-r*.28,cy-r*.88,r*.56,r*.30,r*.08);ctx.stroke();
+    for(let i=0;i<3;i++){const yy=cy-r*.28+i*r*.38;ctx.beginPath();ctx.moveTo(cx-r*.36,yy);ctx.lineTo(cx+r*.38,yy);ctx.stroke();}
+
   }else if(type==="note"){
-    roundRectPath(ctx,cx-r*.72,cy-r*.8,r*1.44,r*1.6,r*.1);ctx.stroke();ctx.beginPath();for(let i=-1;i<=1;i++){ctx.moveTo(cx-r*.38,cy+i*r*.38);ctx.lineTo(cx+r*.38,cy+i*r*.38);}ctx.stroke();
+    // ปฏิทิน/บันทึก
+    roundRectPath(ctx,cx-r*.72,cy-r*.72,r*1.44,r*1.46,r*.10);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx-r*.72,cy-r*.22);ctx.lineTo(cx+r*.72,cy-r*.22);ctx.moveTo(cx-r*.38,cy-r*.92);ctx.lineTo(cx-r*.38,cy-r*.48);ctx.moveTo(cx+r*.38,cy-r*.92);ctx.lineTo(cx+r*.38,cy-r*.48);ctx.stroke();
+    ctx.fillStyle="#D8B43E";ctx.fillRect(cx-r*.38,cy+r*.02,r*.20,r*.20);ctx.fillRect(cx,cy+r*.02,r*.20,r*.20);ctx.fillRect(cx+r*.38,cy+r*.02,r*.20,r*.20);
   }
   ctx.restore();
 }
-
 async function exportProjectImage(){
   if(exportProjectBusy) return;
   exportProjectBusy=true;
