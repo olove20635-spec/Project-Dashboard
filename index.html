@@ -2099,6 +2099,19 @@ body{background:var(--v8-bg);}
 /* V22 — งวดงาน / การเบิก */
 .payment-installment-list{display:grid;gap:10px;margin-top:10px}.payment-installment-row{background:#f7f9fc;border:1px solid #e2e8f0;border-radius:16px;padding:12px;display:grid;grid-template-columns:72px 1.5fr 1fr 1fr 42px;gap:8px;align-items:end}.payment-installment-row label{margin:0 0 5px;font-size:11px;color:#64748b}.payment-installment-row input,.payment-installment-row select{margin:0;min-width:0}.payment-installment-no{font-weight:900;text-align:center;padding-bottom:12px;color:#0b315e}.payment-remove{width:38px;height:38px;border:0;border-radius:12px;background:#fee2e2;color:#b91c1c;font-size:20px;font-weight:900}.payment-add{width:100%;margin-top:10px;border:1px dashed #93b4df;background:#eef5ff;color:#1457a6;border-radius:14px;padding:12px;font-weight:850}.payment-summary-hint{font-size:12px;color:#64748b;margin-top:6px}.payment-detail-list{display:grid;gap:7px;margin-top:12px}.payment-detail-row{display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:center;padding:9px 11px;border-radius:12px;background:#f7f9fc}.payment-detail-row strong{font-size:13px}.payment-detail-row small{color:#64748b}.payment-pill{padding:5px 8px;border-radius:999px;font-size:11px;font-weight:850}.payment-pill.paid{background:#dcfce7;color:#15803d}.payment-pill.waiting{background:#fef3c7;color:#a16207}.payment-pill.preparing{background:#dbeafe;color:#1d4ed8}.payment-pill.not_due{background:#e5e7eb;color:#475569}@media(max-width:600px){.payment-installment-row{grid-template-columns:54px 1fr 1fr 42px}.payment-installment-row .payment-desc{grid-column:2/5}.payment-installment-row .payment-status{grid-column:2/4}}
 
+
+/* V23 export preview + refined controls */
+#exportReadyModal{display:none;z-index:700;align-items:center;justify-content:center;padding:18px;background:rgba(3,16,34,.64);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+#exportReadyModal.show{display:flex!important}.export-preview-card{width:min(96vw,980px);max-height:94dvh;display:flex;flex-direction:column}.export-ready-head{display:flex;align-items:center;justify-content:space-between;gap:16px}.export-ready-head h3{font-size:22px}.export-preview-close{flex:0 0 46px;width:46px;height:46px;border:0;border-radius:15px;background:rgba(255,255,255,.14);color:#fff;font-size:30px;line-height:1}.export-preview-wrap{padding:14px;background:#e9eef5;overflow:auto}.export-preview-wrap img{display:block;width:100%;height:auto;border-radius:14px;box-shadow:0 8px 28px rgba(3,18,40,.18)}
+@media(max-width:600px){#exportReadyModal{padding:calc(12px + env(safe-area-inset-top)) 10px calc(12px + env(safe-area-inset-bottom))}.export-preview-card{width:100%;max-height:88dvh;border-radius:24px}.export-ready-head{padding:18px}.export-ready-head h3{font-size:19px}.export-preview-wrap{padding:8px}.export-ready-actions{padding:12px;grid-template-columns:1fr 1.25fr}}
+
+/* V24 — export polish */
+body,input,select,textarea,button{font-family:-apple-system,BlinkMacSystemFont,"Thonburi","Noto Sans Thai","Segoe UI",Tahoma,sans-serif}
+#backgroundModal .bg-preview{cursor:ns-resize;min-height:230px;touch-action:none}
+#backgroundModal .bg-guide{pointer-events:none}
+.export-preview-wrap{background:linear-gradient(145deg,#dfe7f1,#f7f9fc)}
+.export-preview-wrap img{max-height:68dvh;object-fit:contain;margin:auto}
+
 </style>
 </head>
 
@@ -2247,6 +2260,9 @@ body{background:var(--v8-bg);}
       </div>
 
     </div>
+
+    <label>ผู้ควบคุมงาน</label>
+    <input id="projectController" type="text" placeholder="ชื่อผู้ควบคุมงาน / วิศวกรประจำโครงการ">
 
     <div class="form-section-title">แผนงาน</div>
 
@@ -2539,9 +2555,10 @@ body{background:var(--v8-bg);}
 </div>
 
 <div id="exportReadyModal" class="modal">
-  <div class="export-ready-card">
-    <div class="export-ready-head"><div class="export-ready-icon">↗</div><h3>Export พร้อมแล้ว</h3><p>เลือกแชร์ภาพหรือบันทึกไฟล์ลงเครื่อง</p></div>
-    <div class="export-ready-actions"><button class="btn export-download" onclick="closeExportReady()">ปิด</button><button class="btn export-share" id="exportShareBtn" onclick="sharePreparedExport()">แชร์ / บันทึกภาพ</button></div>
+  <div class="export-ready-card export-preview-card">
+    <div class="export-ready-head"><div><h3>ตัวอย่างภาพก่อนส่งออก</h3><p>ตรวจสอบภาพ แล้วเลือกแชร์หรือบันทึกภาพ</p></div><button type="button" class="export-preview-close" onclick="closeExportReady()">×</button></div>
+    <div class="export-preview-wrap"><img id="exportPreviewImage" alt="ตัวอย่างภาพ Export"></div>
+    <div class="export-ready-actions"><button class="btn export-download" onclick="closeExportReady()">กลับไปแก้ไข</button><button class="btn export-share" id="exportShareBtn" onclick="sharePreparedExport()">แชร์ / บันทึกภาพ</button></div>
   </div>
 </div>
 <script>
@@ -2834,6 +2851,8 @@ function normalizeProject(project){
 
   project.contractorPhone =
     project.contractorPhone || "";
+
+  project.controller = project.controller || "";
 
 
   // Canonical text schema:
@@ -4425,6 +4444,10 @@ function openProjectModal(
       "";
 
 
+  const controllerInput = document.getElementById("projectController");
+  if(controllerInput) controllerInput.value = project?.controller || "";
+
+
   document
     .getElementById(
       "startDate"
@@ -4666,6 +4689,8 @@ function saveProject(){
         )
         .value
         .trim(),
+
+    controller: (document.getElementById("projectController")?.value || "").trim(),
 
     startDate:
       document
@@ -5722,7 +5747,8 @@ function openDetail(id){
     !!(
       project.contractorCompany ||
       project.contractorContact ||
-      project.contractorPhone
+      project.contractorPhone ||
+      project.controller
     );
 
 
@@ -5933,6 +5959,7 @@ function openDetail(id){
                       "-"
                     )}
                   </strong>
+                  ${project.controller ? `<div class="contractor-extra"><span>ผู้ควบคุมงาน</span><strong>${escapeHTML(project.controller)}</strong></div>` : ""}
 
                 </div>
 
@@ -6189,7 +6216,7 @@ function closeDetail(animated=false){
 
 
 let preparedExportBlob=null, preparedExportName="", preparedExportTitle="";
-function closeExportReady(){ const m=document.getElementById("exportReadyModal"); if(m){m.classList.remove("show");m.style.display="";} }
+function closeExportReady(){ const m=document.getElementById("exportReadyModal"),img=document.getElementById("exportPreviewImage"); if(m){m.classList.remove("show");m.style.display="none";} if(img?.dataset.url){URL.revokeObjectURL(img.dataset.url);delete img.dataset.url;img.removeAttribute("src");} }
 async function sharePreparedExport(){
   if(!preparedExportBlob) return;
   const file=new File([preparedExportBlob],preparedExportName||"project-dashboard.png",{type:"image/png"});
@@ -6282,85 +6309,79 @@ async function exportProjectImage(){
     const project=projects.find(p=>p.id===selectedProjectId);
     if(!project) throw new Error("ไม่พบข้อมูลโครงการ");
     if(project.tasks?.length) recalculateProject(project);
-    const progress=clamp(project.progress,0,100), days=daysInfo(project), pay=getPaymentInfo(project);
+    const progress=clamp(project.progress,0,100), days=daysInfo(project), schedule=scheduleInfo(project), pay=getPaymentInfo(project);
     const background=getProjectBackground(project.id), bgPosition=getProjectBackgroundPosition(project.id);
     let image=null,brandLogo=null;
     if(background){try{image=await loadCanvasImage(background);}catch(e){console.warn(e);}}
     try{brandLogo=await loadCanvasImage(EXPORT_BRAND_LOGO);}catch(e){console.warn(e);}
 
-    const canvas=document.createElement("canvas"); canvas.width=1280; canvas.height=720;
+    const canvas=document.createElement("canvas"); canvas.width=1920; canvas.height=1080;
     const ctx=canvas.getContext("2d"); ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";
-    const S=1280/1920; ctx.scale(S,S); const W=1920,H=1080;
-    ctx.fillStyle="#F7F9FC";ctx.fillRect(0,0,W,H);
+    const W=1920,H=1080;
+    ctx.fillStyle="#F4F7FB";ctx.fillRect(0,0,W,H);
 
-    // Header แบบสรุปสถานะโครงการ — ไทยล้วน
+    // HEADER — โลโก้บนพื้นขาว + fade ฟุ้งเฉียงเข้าหาน้ำเงิน
     ctx.fillStyle="#FFFFFF";ctx.fillRect(0,0,W,245);
-    // diagonal fade: white -> pale blue -> navy, no hard white edge
-    const headGrad=ctx.createLinearGradient(180,0,920,220);
-    headGrad.addColorStop(0,"rgba(255,255,255,0)"); headGrad.addColorStop(.34,"rgba(232,242,252,.35)"); headGrad.addColorStop(.66,"rgba(20,92,160,.88)"); headGrad.addColorStop(1,"#073B73");
-    ctx.fillStyle=headGrad;ctx.beginPath();ctx.moveTo(420,0);ctx.lineTo(W,0);ctx.lineTo(W,245);ctx.lineTo(650,245);ctx.closePath();ctx.fill();
-    if(brandLogo){const mw=320,mh=110,r=Math.min(mw/brandLogo.width,mh/brandLogo.height);ctx.drawImage(brandLogo,58,24,brandLogo.width*r,brandLogo.height*r);}
-    // gold accent
-    ctx.strokeStyle="#D6B13B";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(560,0);ctx.lineTo(710,145);ctx.stroke();
-    fillRoundRect(ctx,58,142,12,82,6,"#D6B13B");
-    drawText(ctx,"สรุปสถานะโครงการ",92,128,38,"#0A2F5B",900);
-    drawWrappedText(ctx,project.location||"-",92,171,760,45,41,"#0A2F5B",900,1);
-    drawWrappedText(ctx,project.name||"-",92,214,850,27,20,"#294765",700,1);
-    // image right
-    ctx.save();roundRectPath(ctx,1010,18,850,205,20);ctx.clip();
-    if(image){drawCoverPositioned(ctx,image,1010,18,850,205,bgPosition);ctx.fillStyle="rgba(4,39,76,.08)";ctx.fillRect(1010,18,850,205);}else{ctx.fillStyle="#DDE8F2";ctx.fillRect(1010,18,850,205);}
-    ctx.restore();
+    const hg=ctx.createLinearGradient(330,-40,1120,260);
+    hg.addColorStop(0,"rgba(255,255,255,0)"); hg.addColorStop(.18,"rgba(255,255,255,.03)");
+    hg.addColorStop(.38,"rgba(201,225,246,.34)"); hg.addColorStop(.58,"rgba(75,145,202,.72)");
+    hg.addColorStop(.78,"rgba(11,79,139,.96)"); hg.addColorStop(1,"#073B73");
+    ctx.fillStyle=hg;ctx.beginPath();ctx.moveTo(360,0);ctx.lineTo(W,0);ctx.lineTo(W,245);ctx.lineTo(620,245);ctx.closePath();ctx.fill();
+    if(brandLogo){const mw=335,mh=108,r=Math.min(mw/brandLogo.width,mh/brandLogo.height);ctx.drawImage(brandLogo,55,22,brandLogo.width*r,brandLogo.height*r);}
+    ctx.strokeStyle="#D8B43E";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(545,0);ctx.lineTo(710,145);ctx.stroke();
+    fillRoundRect(ctx,58,143,12,78,6,"#D8B43E");
+    drawWrappedText(ctx,project.name||"-",92,132,820,48,42,"#0A2F5B",900,2);
+    drawText(ctx,"●",94,205,18,"#E53935",900); drawWrappedText(ctx,project.location||"-",124,199,770,30,25,"#294765",800,1);
 
-    // Top KPI 3 cards
-    const y=270,h=220,g=18,x=28,w=(W-56-g*2)/3;
-    const cards=[
-      {title:"ความคืบหน้างาน",icon:"🏗",value:progress+"%",color:"#079C7A",sub:progress+"%"},
-      {title:"มูลค่างาน",icon:"◉",value:money(project.value)+" บาท",color:"#079C7A",sub:""},
-      {title:"ระยะเวลาคงเหลือ",icon:"▣",value:days.short,color:days.overdue?"#D93636":"#079C7A",sub:""}
+    // ภาพขวาบน — ใหญ่, crop ตามตำแหน่งที่ผู้ใช้ปรับ, fade ด้านซ้ายแบบนุ่ม
+    ctx.save();roundRectPath(ctx,1010,16,855,212,24);ctx.clip();
+    if(image){drawCoverPositioned(ctx,image,1010,16,855,212,bgPosition);}else{ctx.fillStyle="#DCE7F2";ctx.fillRect(1010,16,855,212);}
+    const fade=ctx.createLinearGradient(1010,0,1340,0);fade.addColorStop(0,"rgba(7,59,115,.92)");fade.addColorStop(.34,"rgba(7,59,115,.48)");fade.addColorStop(.72,"rgba(7,59,115,.08)");fade.addColorStop(1,"rgba(7,59,115,0)");ctx.fillStyle=fade;ctx.fillRect(1010,16,400,212);ctx.restore();
+
+    // KPI 3 ช่อง
+    const topY=270, cardH=220, gap=18, left=28, cardW=(W-56-gap*2)/3;
+    const kpis=[
+      {title:"ความคืบหน้างาน",type:"progress",value:progress+"%",color:"#079C7A"},
+      {title:"มูลค่างาน",type:"money",value:money(project.value)+" บาท",color:"#079C7A"},
+      {title:"ระยะเวลาคงเหลือ",type:"calendar",value:days.short,color:days.cls==="overdue"?"#D93636":"#079C7A"}
     ];
-    cards.forEach((c,i)=>{const xx=x+i*(w+g);fillRoundRect(ctx,xx,y,w,h,20,"#FFFFFF");ctx.strokeStyle="#D9E1EA";ctx.lineWidth=2;roundRectPath(ctx,xx,y,w,h,20);ctx.stroke();drawIcon(ctx,i===0?"progress":i===1?"money":"calendar",xx+76,y+86,64,"#0A315D");ctx.fillStyle="#D6B13B";ctx.fillRect(xx+150,y+34,4,92);drawText(ctx,c.title,xx+180,y+24,28,"#0A2F5B",900);drawWrappedText(ctx,c.value,xx+180,y+67,w-205,58,48,c.color,900,1);if(i!==1){fillRoundRect(ctx,xx+150,y+150,w-185,32,16,"#E5E9EF");const pct=i===0?progress:(project.startDate&&project.endDate?Math.max(0,Math.min(100,100-(days.remaining/(Math.max(1,days.total||1))*100))):0);if(pct>0)fillRoundRect(ctx,xx+150,y+150,(w-185)*pct/100,32,16,"#08A483");if(i===0)drawText(ctx,progress+"%",xx+150+(w-185)/2,y+151,22,"#FFFFFF",900,"center");}}
-    );
+    kpis.forEach((c,i)=>{const x=left+i*(cardW+gap);fillRoundRect(ctx,x,topY,cardW,cardH,20,"#FFFFFF");ctx.strokeStyle="#D6E0EB";ctx.lineWidth=2;roundRectPath(ctx,x,topY,cardW,cardH,20);ctx.stroke();drawIcon(ctx,c.type,x+72,topY+87,76,"#0A315D");ctx.fillStyle="#D8B43E";ctx.fillRect(x+150,topY+34,4,92);drawText(ctx,c.title,x+180,topY+27,30,"#0A2F5B",900);drawWrappedText(ctx,c.value,x+180,topY+72,cardW-205,58,48,c.color,900,1);
+      if(i===0){fillRoundRect(ctx,x+150,topY+151,cardW-185,34,17,"#E2E7ED");if(progress>0)fillRoundRect(ctx,x+150,topY+151,(cardW-185)*progress/100,34,17,"#08A483");drawText(ctx,progress+"%",x+150+(cardW-185)/2,topY+154,21,progress>8?"#FFFFFF":"#173650",900,"center");}
+      if(i===2 && schedule.valid){fillRoundRect(ctx,x+150,topY+151,cardW-185,34,17,"#E2E7ED");if(schedule.elapsedPct>0)fillRoundRect(ctx,x+150,topY+151,(cardW-185)*schedule.elapsedPct/100,34,17,"#08A483");drawText(ctx,Math.max(0,schedule.remainingPct)+"% เหลือ",x+150+(cardW-185)/2,topY+154,20,schedule.elapsedPct<80?"#173650":"#FFFFFF",900,"center");}
+    });
 
-    // Payment status left
-    fillRoundRect(ctx,28,510,1000,285,20,"#FFFFFF");
-    fillRoundRect(ctx,28,510,1000,56,20,"#0A315D");ctx.fillStyle="#0A315D";ctx.fillRect(28,546,1000,20);
-    drawIcon(ctx,"payment",72,538,38,"#E0BC42");drawText(ctx,"สถานะการเบิกเงิน",105,520,30,"#FFFFFF",900);
-    drawText(ctx,"เบิกแล้ว",70,594,28,"#0A2F5B",850);drawText(ctx,money(pay.paidAmount)+" บาท",250,588,37,"#079C7A",900);
-    drawText(ctx,"คงเหลือ",70,646,28,"#0A2F5B",850);drawText(ctx,money(pay.balance)+" บาท",250,640,37,"#079C7A",900);
-    fillRoundRect(ctx,620,604,350,32,16,"#E5E9EF");if(pay.percent>0)fillRoundRect(ctx,620,604,350*pay.percent/100,32,16,"#08A483");drawText(ctx,pay.percent.toFixed(pay.percent%1?2:0)+"%",795,605,21,"#FFFFFF",900,"center");
-    const boxes=[[`ทั้งหมด`,`${pay.total} งวด`],[`เบิกแล้ว`,`${pay.paid} งวด`],[`คงเหลือ`,`${pay.remaining} งวด`]];
-    boxes.forEach((b,i)=>{const bx=70+i*300;fillRoundRect(ctx,bx,700,270,72,14,i===0?"#E8F7F3":i===1?"#E7F7F0":"#ECF7F5");drawText(ctx,b[0],bx+135,708,20,"#173650",800,"center");drawText(ctx,b[1],bx+135,735,30,"#087E68",900,"center");});
+    // สถานะการเบิกเงิน
+    fillRoundRect(ctx,28,510,1000,285,20,"#FFFFFF");fillRoundRect(ctx,28,510,1000,58,20,"#0A315D");ctx.fillStyle="#0A315D";ctx.fillRect(28,548,1000,20);
+    drawIcon(ctx,"payment",72,539,48,"#E0BC42");drawText(ctx,"สถานะการเบิกเงิน",112,521,31,"#FFFFFF",900);
+    drawText(ctx,"เบิกแล้ว",70,596,29,"#0A2F5B",900);drawText(ctx,money(pay.paidAmount)+" บาท",250,589,38,"#079C7A",900);
+    drawText(ctx,"คงเหลือ",70,648,29,"#0A2F5B",900);drawText(ctx,money(pay.balance)+" บาท",250,641,38,"#079C7A",900);
+    fillRoundRect(ctx,620,606,350,34,17,"#E1E6EC");if(pay.percent>0)fillRoundRect(ctx,620,606,350*pay.percent/100,34,17,"#08A483");drawText(ctx,pay.percent.toFixed(pay.percent%1?2:0)+"%",795,609,21,pay.percent>20?"#FFFFFF":"#173650",900,"center");
+    [["ทั้งหมด",pay.total+" งวด"],["เบิกแล้ว",pay.paid+" งวด"],["คงเหลือ",pay.remaining+" งวด"]].forEach((b,i)=>{const bx=70+i*300;fillRoundRect(ctx,bx,701,270,72,14,"#E8F7F3");drawText(ctx,b[0],bx+135,709,21,"#173650",800,"center");drawText(ctx,b[1],bx+135,736,31,"#087E68",900,"center");});
 
-    // Project info right
-    fillRoundRect(ctx,1048,510,844,285,20,"#FFFFFF");fillRoundRect(ctx,1048,510,844,56,20,"#0A315D");ctx.fillStyle="#0A315D";ctx.fillRect(1048,546,844,20);
-    drawIcon(ctx,"info",1092,538,36,"#E0BC42");drawText(ctx,"ข้อมูลโครงการ",1124,520,30,"#FFFFFF",900);
-    const info=[
-      ["ผู้รับเหมา",project.contractorCompany||"-"],
-      ["ผู้ประสานงาน",project.contractorContact||"-"],
-      ["โทรศัพท์",project.contractorPhone||"-"],
-      ["วันเริ่มงาน",project.startDate?formatDate(project.startDate):"-"],
-      ["วันแล้วเสร็จ",project.endDate?formatDate(project.endDate):"-"]
-    ];
-    info.forEach((r,i)=>{const yy=580+i*39;if(i%2===0){ctx.fillStyle="#F2F5F8";ctx.fillRect(1068,yy-4,804,36);}drawText(ctx,r[0],1090,yy,22,"#0A2F5B",850);ctx.fillStyle="#D6B13B";ctx.fillRect(1330,yy,3,25);drawWrappedText(ctx,r[1],1360,yy,480,27,22,"#263D58",750,1);});
+    // ข้อมูลโครงการ + ผู้ควบคุมงาน
+    fillRoundRect(ctx,1048,510,844,285,20,"#FFFFFF");fillRoundRect(ctx,1048,510,844,58,20,"#0A315D");ctx.fillStyle="#0A315D";ctx.fillRect(1048,548,844,20);
+    drawIcon(ctx,"info",1092,539,46,"#E0BC42");drawText(ctx,"ข้อมูลโครงการ",1132,521,31,"#FFFFFF",900);
+    const info=[["ผู้รับเหมา",project.contractorCompany||"-"],["ผู้ประสานงาน",project.contractorContact||"-"],["โทรศัพท์",project.contractorPhone||"-"],["ผู้ควบคุมงาน",project.controller||"-"],["วันเริ่มงาน",project.startDate?formatDate(project.startDate):"-"],["วันแล้วเสร็จ",project.endDate?formatDate(project.endDate):"-"]];
+    info.forEach((r,i)=>{const yy=578+i*33;if(i%2===0){ctx.fillStyle="#F1F4F7";ctx.fillRect(1068,yy-4,804,31);}drawText(ctx,r[0],1090,yy,22,"#0A2F5B",900);ctx.fillStyle="#D8B43E";ctx.fillRect(1330,yy,3,22);drawWrappedText(ctx,r[1],1360,yy,480,27,22,"#263D58",800,1);});
 
-    // Notes / delivery schedule
-    fillRoundRect(ctx,28,818,1864,205,20,"#FFFFFF");ctx.strokeStyle="#D6B13B";ctx.lineWidth=3;roundRectPath(ctx,28,818,1864,205,20);ctx.stroke();
-    fillRoundRect(ctx,28,818,1864,58,20,"#0A315D");ctx.fillStyle="#0A315D";ctx.fillRect(28,856,1864,20);
-    drawIcon(ctx,"note",72,846,36,"#E0BC42");drawText(ctx,"หมายเหตุ / กำหนดเข้าหน้างาน",105,828,30,"#FFFFFF",900);
+    // หมายเหตุ — จัด icon และข้อความให้อยู่แนวเดียวกัน
+    fillRoundRect(ctx,28,818,1864,205,20,"#FFFFFF");ctx.strokeStyle="#D8B43E";ctx.lineWidth=3;roundRectPath(ctx,28,818,1864,205,20);ctx.stroke();
+    fillRoundRect(ctx,28,818,1864,58,20,"#0A315D");ctx.fillStyle="#0A315D";ctx.fillRect(28,856,1864,20);drawIcon(ctx,"note",72,846,46,"#E0BC42");drawText(ctx,"หมายเหตุ / กำหนดเข้าหน้างาน",112,828,31,"#FFFFFF",900);
     const note=getProjectRemark(project)||getProjectDescription(project)||"ยังไม่มีหมายเหตุเพิ่มเติม";
-    fillRoundRect(ctx,48,900,1824,92,14,"#FFFDF6");drawText(ctx,"➜",78,922,35,"#D6B13B",900);drawWrappedText(ctx,note,135,910,1690,37,28,"#0A2F5B",800,2);
+    fillRoundRect(ctx,48,900,1824,92,14,"#FFFDF6");drawText(ctx,"➜",76,920,38,"#D8B43E",900);drawWrappedText(ctx,note,138,914,1685,38,29,"#0A2F5B",850,2);
 
-    // footer — move update far from right edge
+    // Footer — เขียนเดือนเต็มและเว้นขอบมากพอ
     const fg=ctx.createLinearGradient(0,0,W,0);fg.addColorStop(0,"#0A315D");fg.addColorStop(.72,"#087DB3");fg.addColorStop(1,"#079C7A");ctx.fillStyle=fg;ctx.fillRect(0,1040,W,40);
-    drawText(ctx,"สรุปสถานะโครงการ",38,1048,17,"#FFFFFF",850);
-    const generatedDate=new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"short",year:"2-digit"}).format(new Date());drawText(ctx,"อัปเดต "+generatedDate,1680,1048,18,"#FFFFFF",850,"right");
+    drawText(ctx,"PROJECT DASHBOARD",38,1048,17,"#FFFFFF",850);
+    const generatedDate=new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"long",year:"numeric"}).format(new Date());drawText(ctx,"อัปเดต "+generatedDate,1810,1048,19,"#FFFFFF",900,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
     const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error("ไม่สามารถสร้างไฟล์ภาพได้")),"image/png"));
-    const file=new File([blob],fileName,{type:"image/png"});
-    if(navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))){try{await navigator.share({files:[file],title:project.name||"สรุปสถานะโครงการ"});}catch(e){if(e?.name!=="AbortError") throw e;}}
-    else{const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=fileName;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),30000);showToast("บันทึกภาพ Export แล้ว");}
+    preparedExportBlob=blob;preparedExportName=fileName;preparedExportTitle=project.name||"สรุปโครงการ";
+    const previewUrl=URL.createObjectURL(blob), preview=document.getElementById("exportPreviewImage");
+    if(preview){if(preview.dataset.url)URL.revokeObjectURL(preview.dataset.url);preview.src=previewUrl;preview.dataset.url=previewUrl;}
+    const ready=document.getElementById("exportReadyModal");if(ready){ready.style.display="flex";ready.classList.add("show");requestAnimationFrame(()=>resetModalScroll("exportReadyModal"));}
     canvas.width=1;canvas.height=1;
   }catch(error){console.error("Export error:",error);showToast("Export ไม่สำเร็จ: "+(error?.message||"กรุณาลองใหม่"),"error");}
   finally{exportProjectBusy=false;if(exportButton){exportButton.disabled=false;exportButton.textContent=oldText;}}
@@ -6435,19 +6456,19 @@ const bgPreviewElement =
   );
 
 
-bgPreviewElement.addEventListener(
+bgPreviewElement?.addEventListener(
   "pointerdown",
   startBackgroundDrag
 );
 
 
-bgPreviewElement.addEventListener(
+bgPreviewElement?.addEventListener(
   "pointermove",
   moveBackgroundDrag
 );
 
 
-bgPreviewElement.addEventListener(
+bgPreviewElement?.addEventListener(
   "pointerup",
   endBackgroundDrag
 );
@@ -6725,7 +6746,8 @@ function drawProjectInformationForExport(
     !!(
       project.contractorCompany ||
       project.contractorContact ||
-      project.contractorPhone
+      project.contractorPhone ||
+      project.controller
     );
 
   const description =
