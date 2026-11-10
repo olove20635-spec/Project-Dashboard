@@ -2166,6 +2166,19 @@ body,input,select,textarea,button{
   border-left:5px solid #f0a21a!important;
 }
 
+
+/* V26 — CPF IMSUK typography */
+html,body,button,input,select,textarea{
+  font-family:"CPF IMSUK","CPF ImSuk","CPF ImSuk Regular","Thonburi","Noto Sans Thai",Tahoma,sans-serif !important;
+}
+.detail-title,.project-name,.contractor-name,.modern-kpi-value,
+.main-progress-head strong,.hero-donut-value,.project-percent,
+.kpi-value,.payment-detail-row strong{
+  font-family:"CPF IMSUK","CPF ImSuk","CPF ImSuk Regular","Thonburi","Noto Sans Thai",Tahoma,sans-serif !important;
+  font-weight:700 !important;
+  letter-spacing:0 !important;
+}
+
 </style>
 </head>
 
@@ -2191,7 +2204,7 @@ body,input,select,textarea,button{
 
     <div class="kpi">
       <div class="kpi-label">มูลค่ารวม</div>
-      <div class="kpi-value money" id="totalValue">฿0</div>
+      <div class="kpi-value money" id="totalValue">0</div>
     </div>
 
     <div class="kpi">
@@ -2701,7 +2714,7 @@ function taskStatusText(status){
 
 function money(value){
 
-  return "฿" +
+  return "" +
     Number(value || 0)
       .toLocaleString("th-TH");
 
@@ -2715,7 +2728,7 @@ function compactMoney(value){
 
   if(n >= 1000000){
 
-    return "฿" +
+    return "" +
       (n / 1000000)
         .toLocaleString(
           "th-TH",
@@ -2729,7 +2742,7 @@ function compactMoney(value){
 
   if(n >= 1000){
 
-    return "฿" +
+    return "" +
       (n / 1000)
         .toLocaleString(
           "th-TH",
