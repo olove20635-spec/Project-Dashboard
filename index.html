@@ -6,12 +6,11 @@
 <meta name="theme-color" content="#172033">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Projects">
 
 <title>Project Dashboard</title>
 
-  <link rel="manifest" href="./manifest.json">
-
-<meta name="apple-mobile-web-app-title" content="Projects">
+<link rel="manifest" href="./manifest.json">
 
 <style>
 *{
@@ -357,6 +356,7 @@ body{
   max-width:540px;
   max-height:90vh;
   overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
   background:white;
   border-radius:24px;
   padding:19px;
@@ -557,18 +557,29 @@ input[type="range"]{
   white-space:pre-wrap;
 }
 
+/* ================= TASK ================= */
+
 .task-section{
   margin-top:20px;
 }
 
 .task-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
   font-size:14px;
   font-weight:750;
   margin-bottom:8px;
 }
 
+.task-summary{
+  font-size:10px;
+  color:var(--muted);
+  font-weight:500;
+}
+
 .task{
-  padding:11px 0;
+  padding:13px 0;
   border-bottom:1px solid var(--line);
 }
 
@@ -580,12 +591,61 @@ input[type="range"]{
 
 .task-name{
   font-size:12px;
-  font-weight:650;
+  font-weight:700;
+  line-height:1.4;
 }
 
 .task-pct{
-  font-size:11px;
-  font-weight:750;
+  font-size:12px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.task-meta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-top:7px;
+}
+
+.task-status{
+  display:inline-block;
+  padding:4px 7px;
+  border-radius:20px;
+  font-size:8px;
+  font-weight:700;
+}
+
+.task-status.active{
+  background:var(--blueBg);
+  color:var(--blue);
+}
+
+.task-status.done{
+  background:var(--greenBg);
+  color:var(--green);
+}
+
+.task-status.delay{
+  background:var(--redBg);
+  color:var(--red);
+}
+
+.task-status.wait{
+  background:#f0f1f3;
+  color:#737b87;
+}
+
+.task-note{
+  margin-top:7px;
+  padding:8px 10px;
+  border-radius:10px;
+  background:#f7f8fa;
+  color:#697181;
+  font-size:10px;
+  line-height:1.45;
+  white-space:pre-wrap;
 }
 
 .task-bar{
@@ -593,19 +653,44 @@ input[type="range"]{
   background:#edf0f3;
   border-radius:10px;
   overflow:hidden;
-  margin-top:6px;
+  margin-top:8px;
 }
 
 .task-bar div{
   height:100%;
   background:var(--green);
+  border-radius:10px;
+}
+
+.task-actions{
+  display:flex;
+  gap:14px;
+  margin-top:8px;
+}
+
+.task-edit,
+.task-delete{
+  display:inline-block;
+  font-size:9px;
+  cursor:pointer;
+}
+
+.task-edit{
+  color:var(--blue);
 }
 
 .task-delete{
-  display:inline-block;
-  margin-top:6px;
-  font-size:9px;
   color:var(--red);
+}
+
+.auto-progress-info{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:12px;
+  background:#f1f5fb;
+  color:#60708b;
+  font-size:10px;
+  line-height:1.45;
 }
 
 .detail-buttons{
@@ -631,6 +716,7 @@ input[type="range"]{
 }
 
 @media(max-width:380px){
+
   .header{
     padding-left:14px;
     padding-right:14px;
@@ -648,6 +734,7 @@ input[type="range"]{
   .kpi-value.money{
     font-size:17px;
   }
+
 }
 </style>
 </head>
@@ -713,7 +800,6 @@ input[type="range"]{
 
 </header>
 
-
 <main class="content">
 
   <div class="section-head">
@@ -728,11 +814,10 @@ input[type="range"]{
 
 </main>
 
-
 <button class="fab" onclick="openProjectModal()">+</button>
 
 
-<!-- PROJECT FORM -->
+<!-- ================= PROJECT FORM ================= -->
 
 <div id="projectModal" class="modal">
 
@@ -817,6 +902,10 @@ input[type="range"]{
 
     </div>
 
+    <div id="projectProgressHint" class="auto-progress-info" style="display:none;">
+      โครงการนี้มีรายการงานแล้ว ความคืบหน้าจะคำนวณจากรายการงานอัตโนมัติ
+    </div>
+
     <label>รายละเอียด / หมายเหตุ</label>
 
     <textarea
@@ -841,7 +930,7 @@ input[type="range"]{
 </div>
 
 
-<!-- DETAIL -->
+<!-- ================= DETAIL ================= -->
 
 <div id="detailModal" class="modal">
 
@@ -859,7 +948,7 @@ input[type="range"]{
 </div>
 
 
-<!-- TASK -->
+<!-- ================= TASK FORM ================= -->
 
 <div id="taskModal" class="modal">
 
@@ -867,7 +956,9 @@ input[type="range"]{
 
     <div class="modal-head">
 
-      <h2>เพิ่มรายการงาน</h2>
+      <h2 id="taskModalTitle">
+        เพิ่มรายการงาน
+      </h2>
 
       <button class="close" onclick="closeTaskModal()">×</button>
 
@@ -880,6 +971,28 @@ input[type="range"]{
       type="text"
       placeholder="เช่น ติดตั้ง Duct"
     >
+
+    <label>สถานะงาน</label>
+
+    <select id="taskStatus" onchange="taskStatusChanged()">
+
+      <option value="active">
+        กำลังดำเนินการ
+      </option>
+
+      <option value="wait">
+        ยังไม่เริ่ม
+      </option>
+
+      <option value="done">
+        เสร็จแล้ว
+      </option>
+
+      <option value="delay">
+        ล่าช้า
+      </option>
+
+    </select>
 
     <label>ความคืบหน้า</label>
 
@@ -900,6 +1013,13 @@ input[type="range"]{
 
     </div>
 
+    <label>หมายเหตุ</label>
+
+    <textarea
+      id="taskNote"
+      placeholder="รายละเอียด ปัญหา หรือสิ่งที่ต้องติดตาม"
+    ></textarea>
+
     <div class="modal-buttons">
 
       <button class="btn cancel" onclick="closeTaskModal()">
@@ -907,7 +1027,7 @@ input[type="range"]{
       </button>
 
       <button class="btn save" onclick="saveTask()">
-        เพิ่มงาน
+        บันทึกงาน
       </button>
 
     </div>
@@ -920,41 +1040,87 @@ input[type="range"]{
 <script>
 
 /*
-  สำคัญ:
-  ใช้ KEY เดิม
-  Project ที่บันทึกไว้แล้วจึงยังอยู่
+==================================================
+  STORAGE
+
+  ห้ามเปลี่ยน KEY นี้
+  เพื่อรักษาข้อมูลโครงการเดิม
+==================================================
 */
 
 const STORAGE_KEY = "personal-project-dashboard-v1";
 
 let projects = [];
+
 let editingProjectId = null;
+
 let selectedProjectId = null;
+
+let editingTaskId = null;
 
 
 /* ================= LOAD ================= */
 
 function loadData(){
 
-  const saved = localStorage.getItem(STORAGE_KEY);
+  const saved =
+    localStorage.getItem(STORAGE_KEY);
 
   if(saved){
 
     try{
 
-      projects = JSON.parse(saved);
+      projects =
+        JSON.parse(saved);
 
       if(!Array.isArray(projects)){
         projects = [];
       }
 
-    }catch(e){
+    }
+    catch(e){
 
       projects = [];
 
     }
 
   }
+
+
+  /*
+    รองรับข้อมูล Version เดิม
+
+    ถ้าโครงการเก่ายังไม่มี tasks
+    ให้สร้าง array เปล่า
+
+    ถ้า Task เก่าไม่มี status/note
+    ให้เติมค่าให้
+  */
+
+  projects.forEach(project => {
+
+    if(!Array.isArray(project.tasks)){
+      project.tasks = [];
+    }
+
+    project.tasks.forEach(task => {
+
+      if(!task.status){
+
+        task.status =
+          Number(task.progress || 0) >= 100
+            ? "done"
+            : "active";
+
+      }
+
+      if(typeof task.note !== "string"){
+        task.note = "";
+      }
+
+    });
+
+  });
 
 }
 
@@ -990,11 +1156,36 @@ function escapeHTML(value){
 function statusText(status){
 
   const map = {
+
     active:"กำลังดำเนินการ",
+
     wait:"ยังไม่เริ่ม",
+
     done:"เสร็จแล้ว",
+
     delay:"ล่าช้า",
+
     pause:"พักงาน"
+
+  };
+
+  return map[status] || status;
+
+}
+
+
+function taskStatusText(status){
+
+  const map = {
+
+    active:"กำลังดำเนินการ",
+
+    wait:"ยังไม่เริ่ม",
+
+    done:"เสร็จแล้ว",
+
+    delay:"ล่าช้า"
+
   };
 
   return map[status] || status;
@@ -1010,7 +1201,8 @@ function formatDate(value){
     return "-";
   }
 
-  const p = value.split("-");
+  const p =
+    value.split("-");
 
   if(p.length !== 3){
     return value;
@@ -1021,7 +1213,9 @@ function formatDate(value){
     "/" +
     Number(p[1]) +
     "/" +
-    String(Number(p[0]) + 543).slice(-2)
+    String(
+      Number(p[0]) + 543
+    ).slice(-2)
   );
 
 }
@@ -1036,13 +1230,9 @@ function money(value){
 
   return "฿" +
     number.toLocaleString("th-TH");
+
 }
 
-
-/*
-  หน้า Dashboard
-  ถ้าตัวเลขใหญ่จะย่อเป็น M
-*/
 
 function compactMoney(value){
 
@@ -1083,6 +1273,122 @@ function compactMoney(value){
 }
 
 
+/* ==================================================
+   PROJECT PROGRESS FROM TASKS
+================================================== */
+
+function calculateProjectProgress(project){
+
+  const tasks =
+    Array.isArray(project.tasks)
+      ? project.tasks
+      : [];
+
+
+  /*
+    ถ้ายังไม่มี Task
+    ใช้ % โครงการเดิม
+
+    เช่นโครงการปัจจุบัน 73%
+    จะไม่ถูกเปลี่ยน
+  */
+
+  if(tasks.length === 0){
+
+    return Number(
+      project.progress || 0
+    );
+
+  }
+
+
+  /*
+    ถ้ามี Task แล้ว
+    ใช้ค่าเฉลี่ยของ Task ทั้งหมด
+  */
+
+  const total =
+    tasks.reduce(
+      (sum,task) =>
+        sum + Number(task.progress || 0),
+      0
+    );
+
+
+  return Math.round(
+    total / tasks.length
+  );
+
+}
+
+
+/* ================= UPDATE PROJECT ================= */
+
+function recalculateProject(project){
+
+  if(!project){
+    return;
+  }
+
+  const tasks =
+    Array.isArray(project.tasks)
+      ? project.tasks
+      : [];
+
+
+  /*
+    ไม่มี Task:
+    ไม่แก้ progress เดิม
+  */
+
+  if(tasks.length === 0){
+    return;
+  }
+
+
+  project.progress =
+    calculateProjectProgress(project);
+
+
+  /*
+    ถ้าทุก Task 100%
+    ให้โครงการเสร็จอัตโนมัติ
+  */
+
+  const allDone =
+    tasks.every(
+      task =>
+        Number(task.progress || 0) >= 100
+    );
+
+
+  if(allDone){
+
+    project.progress = 100;
+
+    project.status = "done";
+
+  }
+
+  else{
+
+    /*
+      ถ้าเดิมเป็น done
+      แต่มี Task ที่ยังไม่เสร็จ
+      กลับมา active
+    */
+
+    if(project.status === "done"){
+
+      project.status = "active";
+
+    }
+
+  }
+
+}
+
+
 /* ================= RENDER ================= */
 
 function render(){
@@ -1093,13 +1399,34 @@ function render(){
   list.innerHTML = "";
 
 
-  /* จำนวนทั้งหมด */
+  /*
+    อัปเดต progress
+    ของโครงการที่มี Task
+  */
 
-  document.getElementById("totalProjects").textContent =
-    projects.length;
+  projects.forEach(project => {
+
+    if(
+      Array.isArray(project.tasks) &&
+      project.tasks.length > 0
+    ){
+
+      recalculateProject(project);
+
+    }
+
+  });
 
 
-  /* มูลค่ารวม */
+  /* PROJECT COUNT */
+
+  document
+    .getElementById("totalProjects")
+    .textContent =
+      projects.length;
+
+
+  /* TOTAL VALUE */
 
   const totalValue =
     projects.reduce(
@@ -1108,27 +1435,26 @@ function render(){
       0
     );
 
-  document.getElementById("totalValue").textContent =
-    compactMoney(totalValue);
+  document
+    .getElementById("totalValue")
+    .textContent =
+      compactMoney(totalValue);
 
 
-  /* สำเร็จ */
+  /* COMPLETED */
 
   const completed =
     projects.filter(
       p => p.status === "done"
     ).length;
 
-  document.getElementById("completedProjects").textContent =
-    completed;
+  document
+    .getElementById("completedProjects")
+    .textContent =
+      completed;
 
 
-  /*
-    กำลังดำเนินการ
-
-    รวม active + delay
-    เพราะยังเป็นโครงการที่ยังทำอยู่
-  */
+  /* ACTIVE */
 
   const active =
     projects.filter(
@@ -1137,8 +1463,10 @@ function render(){
         p.status === "delay"
     ).length;
 
-  document.getElementById("activeProjects").textContent =
-    active;
+  document
+    .getElementById("activeProjects")
+    .textContent =
+      active;
 
 
   /* OVERALL PROGRESS */
@@ -1146,9 +1474,11 @@ function render(){
   const progressTotal =
     projects.reduce(
       (sum,p) =>
-        sum + Number(p.progress || 0),
+        sum +
+        Number(p.progress || 0),
       0
     );
+
 
   const overall =
     projects.length
@@ -1159,11 +1489,16 @@ function render(){
       : 0;
 
 
-  document.getElementById("overallPercent").textContent =
-    overall + "%";
+  document
+    .getElementById("overallPercent")
+    .textContent =
+      overall + "%";
 
-  document.getElementById("overallFill").style.width =
-    overall + "%";
+
+  document
+    .getElementById("overallFill")
+    .style.width =
+      overall + "%";
 
 
   /* EMPTY */
@@ -1171,17 +1506,26 @@ function render(){
   if(projects.length === 0){
 
     list.innerHTML = `
+
       <div class="empty">
 
-        <div class="empty-icon">📊</div>
+        <div class="empty-icon">
+          📊
+        </div>
 
-        <strong>ยังไม่มีโครงการ</strong>
+        <strong>
+          ยังไม่มีโครงการ
+        </strong>
 
-        <div style="font-size:12px;margin-top:5px;">
+        <div style="
+          font-size:12px;
+          margin-top:5px;
+        ">
           กด + เพื่อเพิ่มโครงการแรก
         </div>
 
       </div>
+
     `;
 
     return;
@@ -1196,11 +1540,17 @@ function render(){
     const card =
       document.createElement("div");
 
+
     card.className =
       "project-card";
 
+
     card.onclick =
       () => openDetail(project.id);
+
+
+    const progress =
+      Number(project.progress || 0);
 
 
     card.innerHTML = `
@@ -1210,17 +1560,27 @@ function render(){
         <div>
 
           <div class="project-name">
+
             ${escapeHTML(project.name)}
+
           </div>
 
           <div class="project-location">
-            ${escapeHTML(project.location || "ไม่ระบุสถานที่")}
+
+            ${escapeHTML(
+              project.location ||
+              "ไม่ระบุสถานที่"
+            )}
+
           </div>
 
         </div>
 
+
         <div class="status ${project.status}">
+
           ${statusText(project.status)}
+
         </div>
 
       </div>
@@ -1233,7 +1593,9 @@ function render(){
         </div>
 
         <div class="project-percent">
-          ${Number(project.progress || 0)}%
+
+          ${progress}%
+
         </div>
 
       </div>
@@ -1243,7 +1605,7 @@ function render(){
 
         <div
           class="card-fill"
-          style="width:${Number(project.progress || 0)}%"
+          style="width:${progress}%"
         ></div>
 
       </div>
@@ -1252,11 +1614,15 @@ function render(){
       <div class="card-bottom">
 
         <div class="project-value">
+
           ${money(project.value)}
+
         </div>
 
         <div class="detail-link">
+
           ดูรายละเอียด ›
+
         </div>
 
       </div>
@@ -1267,6 +1633,9 @@ function render(){
     list.appendChild(card);
 
   });
+
+
+  saveData();
 
 }
 
@@ -1279,10 +1648,12 @@ function openProjectModal(projectId = null){
     projectId;
 
 
-  document.getElementById("projectModalTitle").textContent =
-    projectId
-      ? "แก้ไขโครงการ"
-      : "เพิ่มโครงการ";
+  document
+    .getElementById("projectModalTitle")
+    .textContent =
+      projectId
+        ? "แก้ไขโครงการ"
+        : "เพิ่มโครงการ";
 
 
   if(projectId){
@@ -1292,54 +1663,135 @@ function openProjectModal(projectId = null){
         p => p.id === projectId
       );
 
+
     if(!project){
       return;
     }
 
 
-    document.getElementById("projectName").value =
-      project.name || "";
+    document
+      .getElementById("projectName")
+      .value =
+        project.name || "";
 
-    document.getElementById("projectLocation").value =
-      project.location || "";
 
-    document.getElementById("projectValue").value =
-      Number(project.value || 0);
+    document
+      .getElementById("projectLocation")
+      .value =
+        project.location || "";
 
-    document.getElementById("startDate").value =
-      project.startDate || "";
 
-    document.getElementById("endDate").value =
-      project.endDate || "";
+    document
+      .getElementById("projectValue")
+      .value =
+        Number(project.value || 0);
 
-    document.getElementById("projectStatus").value =
-      project.status || "active";
 
-    document.getElementById("projectProgress").value =
-      Number(project.progress || 0);
+    document
+      .getElementById("startDate")
+      .value =
+        project.startDate || "";
 
-    document.getElementById("projectNote").value =
-      project.note || "";
+
+    document
+      .getElementById("endDate")
+      .value =
+        project.endDate || "";
+
+
+    document
+      .getElementById("projectStatus")
+      .value =
+        project.status || "active";
+
+
+    document
+      .getElementById("projectProgress")
+      .value =
+        Number(project.progress || 0);
+
+
+    document
+      .getElementById("projectNote")
+      .value =
+        project.note || "";
+
+
+    /*
+      ถ้ามี Task แล้ว
+      Progress โครงการเป็น Auto
+    */
+
+    const hasTasks =
+      Array.isArray(project.tasks) &&
+      project.tasks.length > 0;
+
+
+    document
+      .getElementById("projectProgress")
+      .disabled =
+        hasTasks;
+
+
+    document
+      .getElementById("projectProgressHint")
+      .style.display =
+        hasTasks
+          ? "block"
+          : "none";
 
   }
 
   else{
 
-    document.getElementById("projectName").value = "";
+    document
+      .getElementById("projectName")
+      .value = "";
 
-    document.getElementById("projectLocation").value = "";
 
-    document.getElementById("projectValue").value = "";
+    document
+      .getElementById("projectLocation")
+      .value = "";
 
-    document.getElementById("startDate").value = "";
 
-    document.getElementById("endDate").value = "";
+    document
+      .getElementById("projectValue")
+      .value = "";
 
-    document.getElementById("projectStatus").value = "active";
 
-    document.getElementById("projectProgress").value = 0;
+    document
+      .getElementById("startDate")
+      .value = "";
 
-    document.getElementById("projectNote").value = "";
+
+    document
+      .getElementById("endDate")
+      .value = "";
+
+
+    document
+      .getElementById("projectStatus")
+      .value = "active";
+
+
+    document
+      .getElementById("projectProgress")
+      .value = 0;
+
+
+    document
+      .getElementById("projectProgress")
+      .disabled = false;
+
+
+    document
+      .getElementById("projectProgressHint")
+      .style.display = "none";
+
+
+    document
+      .getElementById("projectNote")
+      .value = "";
 
   }
 
@@ -1354,6 +1806,8 @@ function openProjectModal(projectId = null){
 }
 
 
+/* ================= CLOSE PROJECT ================= */
+
 function closeProjectModal(){
 
   document
@@ -1363,13 +1817,19 @@ function closeProjectModal(){
 }
 
 
-/* ================= PROGRESS ================= */
+/* ================= PROJECT PROGRESS LABEL ================= */
 
 function updateProgressLabel(){
 
-  document.getElementById("progressLabel").textContent =
-    document.getElementById("projectProgress").value +
-    "%";
+  document
+    .getElementById("progressLabel")
+    .textContent =
+
+      document
+        .getElementById("projectProgress")
+        .value +
+
+      "%";
 
 }
 
@@ -1379,18 +1839,27 @@ function updateProgressLabel(){
 function saveProject(){
 
   const name =
-    document.getElementById("projectName")
+    document
+      .getElementById("projectName")
       .value
       .trim();
 
 
   if(!name){
 
-    alert("กรุณาใส่ชื่อโครงการ");
+    alert(
+      "กรุณาใส่ชื่อโครงการ"
+    );
 
     return;
 
   }
+
+
+  const status =
+    document
+      .getElementById("projectStatus")
+      .value;
 
 
   const data = {
@@ -1398,36 +1867,40 @@ function saveProject(){
     name:name,
 
     location:
-      document.getElementById("projectLocation")
+      document
+        .getElementById("projectLocation")
         .value
         .trim(),
 
     value:
       Number(
-        document.getElementById("projectValue")
+        document
+          .getElementById("projectValue")
           .value || 0
       ),
 
     startDate:
-      document.getElementById("startDate")
+      document
+        .getElementById("startDate")
         .value,
 
     endDate:
-      document.getElementById("endDate")
+      document
+        .getElementById("endDate")
         .value,
 
-    status:
-      document.getElementById("projectStatus")
-        .value,
+    status:status,
 
     progress:
       Number(
-        document.getElementById("projectProgress")
+        document
+          .getElementById("projectProgress")
           .value
       ),
 
     note:
-      document.getElementById("projectNote")
+      document
+        .getElementById("projectNote")
         .value
         .trim()
 
@@ -1444,10 +1917,35 @@ function saveProject(){
 
     if(project){
 
+      const hasTasks =
+        Array.isArray(project.tasks) &&
+        project.tasks.length > 0;
+
+
+      /*
+        ถ้ามี Task
+        ไม่ให้ progress manual
+        ไปทับค่าที่คำนวณอัตโนมัติ
+      */
+
+      if(hasTasks){
+
+        delete data.progress;
+
+      }
+
+
       Object.assign(
         project,
         data
       );
+
+
+      if(hasTasks){
+
+        recalculateProject(project);
+
+      }
 
     }
 
@@ -1499,12 +1997,26 @@ function openDetail(id){
   }
 
 
+  if(!Array.isArray(project.tasks)){
+    project.tasks = [];
+  }
+
+
+  if(project.tasks.length > 0){
+
+    recalculateProject(project);
+
+  }
+
+
   const tasks =
-    project.tasks || [];
+    project.tasks;
 
 
   const progress =
-    Number(project.progress || 0);
+    Number(
+      project.progress || 0
+    );
 
 
   const circle =
@@ -1528,7 +2040,9 @@ function openDetail(id){
         padding:18px 0;
         font-size:11px;
       ">
+
         ยังไม่มีรายการงาน
+
       </div>
 
     `;
@@ -1539,6 +2053,21 @@ function openDetail(id){
 
     tasks.forEach(task => {
 
+      const taskProgress =
+        Number(
+          task.progress || 0
+        );
+
+
+      const taskStatus =
+        task.status ||
+        (
+          taskProgress >= 100
+            ? "done"
+            : "active"
+        );
+
+
       taskHTML += `
 
         <div class="task">
@@ -1546,29 +2075,77 @@ function openDetail(id){
           <div class="task-row">
 
             <div class="task-name">
+
               ${escapeHTML(task.name)}
+
             </div>
 
             <div class="task-pct">
-              ${Number(task.progress || 0)}%
+
+              ${taskProgress}%
+
             </div>
 
           </div>
+
+
+          <div class="task-meta">
+
+            <span
+              class="task-status ${taskStatus}"
+            >
+
+              ${taskStatusText(taskStatus)}
+
+            </span>
+
+          </div>
+
 
           <div class="task-bar">
 
             <div
-              style="width:${Number(task.progress || 0)}%"
+              style="width:${taskProgress}%"
             ></div>
 
           </div>
 
-          <span
-            class="task-delete"
-            onclick="deleteTask(event,${task.id})"
-          >
-            ลบรายการ
-          </span>
+
+          ${
+            task.note
+              ? `
+                <div class="task-note">
+
+                  ${escapeHTML(task.note)}
+
+                </div>
+              `
+              : ""
+          }
+
+
+          <div class="task-actions">
+
+            <span
+              class="task-edit"
+              onclick="editTask(event,${task.id})"
+            >
+
+              แก้ไข
+
+            </span>
+
+
+            <span
+              class="task-delete"
+              onclick="deleteTask(event,${task.id})"
+            >
+
+              ลบรายการ
+
+            </span>
+
+          </div>
 
         </div>
 
@@ -1581,24 +2158,39 @@ function openDetail(id){
 
   const completedTasks =
     tasks.filter(
-      t => Number(t.progress || 0) >= 100
+      t =>
+        Number(t.progress || 0) >= 100
     ).length;
 
 
-  document.getElementById("detailContent").innerHTML = `
+  document
+    .getElementById("detailContent")
+    .innerHTML = `
 
-    <div class="status ${project.status} detail-status">
+
+    <div
+      class="status ${project.status} detail-status"
+    >
+
       ${statusText(project.status)}
+
     </div>
 
 
     <div class="detail-title">
+
       ${escapeHTML(project.name)}
+
     </div>
 
 
     <div class="detail-location">
-      ${escapeHTML(project.location || "ไม่ระบุสถานที่")}
+
+      ${escapeHTML(
+        project.location ||
+        "ไม่ระบุสถานที่"
+      )}
+
     </div>
 
 
@@ -1610,19 +2202,41 @@ function openDetail(id){
       >
 
         <span>
+
           ${progress}%
+
         </span>
 
       </div>
 
+
+      ${
+        tasks.length > 0
+          ? `
+            <div class="auto-progress-info">
+
+              คำนวณความคืบหน้าจาก
+              ${tasks.length}
+              รายการงานอัตโนมัติ
+
+            </div>
+          `
+          : ""
+      }
+
+
       <div style="margin-top:17px;">
 
         <div class="detail-value-label">
+
           มูลค่าโครงการ
+
         </div>
 
         <div class="detail-value">
+
           ${money(project.value)}
+
         </div>
 
       </div>
@@ -1634,10 +2248,14 @@ function openDetail(id){
 
       <div class="info">
 
-        <small>วันที่เริ่ม</small>
+        <small>
+          วันที่เริ่ม
+        </small>
 
         <strong>
+
           ${formatDate(project.startDate)}
+
         </strong>
 
       </div>
@@ -1645,10 +2263,14 @@ function openDetail(id){
 
       <div class="info">
 
-        <small>กำหนดเสร็จ</small>
+        <small>
+          กำหนดเสร็จ
+        </small>
 
         <strong>
+
           ${formatDate(project.endDate)}
+
         </strong>
 
       </div>
@@ -1656,10 +2278,14 @@ function openDetail(id){
 
       <div class="info">
 
-        <small>รายการงาน</small>
+        <small>
+          รายการงาน
+        </small>
 
         <strong>
+
           ${tasks.length} งาน
+
         </strong>
 
       </div>
@@ -1667,10 +2293,14 @@ function openDetail(id){
 
       <div class="info">
 
-        <small>งานเสร็จ</small>
+        <small>
+          งานเสร็จ
+        </small>
 
         <strong>
+
           ${completedTasks} งาน
+
         </strong>
 
       </div>
@@ -1680,22 +2310,40 @@ function openDetail(id){
 
     ${
       project.note
-      ?
-      `
-        <div class="note">
-          ${escapeHTML(project.note)}
-        </div>
-      `
-      :
-      ""
+        ? `
+          <div class="note">
+
+            ${escapeHTML(project.note)}
+
+          </div>
+        `
+        : ""
     }
 
 
     <div class="task-section">
 
       <div class="task-title">
-        รายการงาน
+
+        <span>
+          รายการงาน
+        </span>
+
+        ${
+          tasks.length > 0
+            ? `
+              <span class="task-summary">
+
+                เสร็จ
+                ${completedTasks}/${tasks.length}
+
+              </span>
+            `
+            : ""
+        }
+
       </div>
+
 
       ${taskHTML}
 
@@ -1708,26 +2356,37 @@ function openDetail(id){
         class="btn delete-btn"
         onclick="deleteProject()"
       >
+
         ลบ
+
       </button>
+
 
       <button
         class="btn edit-btn"
         onclick="editCurrentProject()"
       >
+
         แก้ไข
+
       </button>
+
 
       <button
         class="btn task-btn"
         onclick="openTaskModal()"
       >
+
         + เพิ่มงาน
+
       </button>
 
     </div>
 
   `;
+
+
+  saveData();
 
 
   document
@@ -1736,6 +2395,8 @@ function openDetail(id){
 
 }
 
+
+/* ================= CLOSE DETAIL ================= */
 
 function closeDetail(){
 
@@ -1746,12 +2407,13 @@ function closeDetail(){
 }
 
 
-/* ================= EDIT ================= */
+/* ================= EDIT PROJECT ================= */
 
 function editCurrentProject(){
 
   const id =
     selectedProjectId;
+
 
   closeDetail();
 
@@ -1790,7 +2452,8 @@ function deleteProject(){
 
   projects =
     projects.filter(
-      p => p.id !== selectedProjectId
+      p =>
+        p.id !== selectedProjectId
     );
 
 
@@ -1803,15 +2466,44 @@ function deleteProject(){
 }
 
 
-/* ================= TASK ================= */
+/* ==================================================
+   TASK MODAL
+================================================== */
 
 function openTaskModal(){
 
-  document.getElementById("taskName").value =
-    "";
+  editingTaskId = null;
 
-  document.getElementById("taskProgress").value =
-    0;
+
+  document
+    .getElementById("taskModalTitle")
+    .textContent =
+      "เพิ่มรายการงาน";
+
+
+  document
+    .getElementById("taskName")
+    .value =
+      "";
+
+
+  document
+    .getElementById("taskStatus")
+    .value =
+      "active";
+
+
+  document
+    .getElementById("taskProgress")
+    .value =
+      0;
+
+
+  document
+    .getElementById("taskNote")
+    .value =
+      "";
+
 
   updateTaskLabel();
 
@@ -1823,7 +2515,12 @@ function openTaskModal(){
 }
 
 
+/* ================= CLOSE TASK ================= */
+
 function closeTaskModal(){
+
+  editingTaskId = null;
+
 
   document
     .getElementById("taskModal")
@@ -1832,12 +2529,63 @@ function closeTaskModal(){
 }
 
 
+/* ================= TASK LABEL ================= */
+
 function updateTaskLabel(){
 
-  document.getElementById("taskProgressLabel").textContent =
+  document
+    .getElementById("taskProgressLabel")
+    .textContent =
 
-    document.getElementById("taskProgress").value +
-    "%";
+      document
+        .getElementById("taskProgress")
+        .value +
+
+      "%";
+
+}
+
+
+/* ================= TASK STATUS CHANGE ================= */
+
+function taskStatusChanged(){
+
+  const status =
+    document
+      .getElementById("taskStatus")
+      .value;
+
+
+  const progressInput =
+    document
+      .getElementById("taskProgress");
+
+
+  /*
+    เสร็จแล้ว = 100%
+  */
+
+  if(status === "done"){
+
+    progressInput.value =
+      100;
+
+  }
+
+
+  /*
+    ยังไม่เริ่ม = 0%
+  */
+
+  if(status === "wait"){
+
+    progressInput.value =
+      0;
+
+  }
+
+
+  updateTaskLabel();
 
 }
 
@@ -1847,14 +2595,17 @@ function updateTaskLabel(){
 function saveTask(){
 
   const name =
-    document.getElementById("taskName")
+    document
+      .getElementById("taskName")
       .value
       .trim();
 
 
   if(!name){
 
-    alert("กรุณาใส่ชื่อรายการงาน");
+    alert(
+      "กรุณาใส่ชื่อรายการงาน"
+    );
 
     return;
 
@@ -1863,7 +2614,8 @@ function saveTask(){
 
   const project =
     projects.find(
-      p => p.id === selectedProjectId
+      p =>
+        p.id === selectedProjectId
     );
 
 
@@ -1872,35 +2624,218 @@ function saveTask(){
   }
 
 
-  if(!project.tasks){
+  if(!Array.isArray(project.tasks)){
 
     project.tasks = [];
 
   }
 
 
-  project.tasks.push({
+  let progress =
+    Number(
+      document
+        .getElementById("taskProgress")
+        .value
+    );
 
-    id:Date.now(),
+
+  let status =
+    document
+      .getElementById("taskStatus")
+      .value;
+
+
+  /*
+    ถ้าสถานะเสร็จ
+    บังคับเป็น 100
+  */
+
+  if(status === "done"){
+
+    progress = 100;
+
+  }
+
+
+  /*
+    ถ้า progress 100
+    ให้สถานะเป็น done
+  */
+
+  if(progress >= 100){
+
+    progress = 100;
+
+    status = "done";
+
+  }
+
+
+  /*
+    ถ้ายังไม่เริ่ม
+    บังคับ 0
+  */
+
+  if(status === "wait"){
+
+    progress = 0;
+
+  }
+
+
+  const taskData = {
 
     name:name,
 
-    progress:
-      Number(
-        document.getElementById("taskProgress")
-          .value
-      )
+    status:status,
 
-  });
+    progress:progress,
+
+    note:
+      document
+        .getElementById("taskNote")
+        .value
+        .trim()
+
+  };
+
+
+  /*
+    EDIT TASK
+  */
+
+  if(editingTaskId){
+
+    const task =
+      project.tasks.find(
+        t =>
+          t.id === editingTaskId
+      );
+
+
+    if(task){
+
+      Object.assign(
+        task,
+        taskData
+      );
+
+    }
+
+  }
+
+  /*
+    NEW TASK
+  */
+
+  else{
+
+    project.tasks.push({
+
+      id:Date.now(),
+
+      ...taskData
+
+    });
+
+  }
+
+
+  /*
+    คำนวณ % โครงการใหม่
+  */
+
+  recalculateProject(project);
 
 
   saveData();
 
   closeTaskModal();
 
+  render();
+
   openDetail(selectedProjectId);
 
-  render();
+}
+
+
+/* ================= EDIT TASK ================= */
+
+function editTask(event,taskId){
+
+  event.stopPropagation();
+
+
+  const project =
+    projects.find(
+      p =>
+        p.id === selectedProjectId
+    );
+
+
+  if(!project){
+    return;
+  }
+
+
+  const task =
+    (project.tasks || [])
+      .find(
+        t =>
+          t.id === taskId
+      );
+
+
+  if(!task){
+    return;
+  }
+
+
+  editingTaskId =
+    taskId;
+
+
+  document
+    .getElementById("taskModalTitle")
+    .textContent =
+      "แก้ไขรายการงาน";
+
+
+  document
+    .getElementById("taskName")
+    .value =
+      task.name || "";
+
+
+  document
+    .getElementById("taskStatus")
+    .value =
+      task.status ||
+      (
+        Number(task.progress || 0) >= 100
+          ? "done"
+          : "active"
+      );
+
+
+  document
+    .getElementById("taskProgress")
+    .value =
+      Number(task.progress || 0);
+
+
+  document
+    .getElementById("taskNote")
+    .value =
+      task.note || "";
+
+
+  updateTaskLabel();
+
+
+  document
+    .getElementById("taskModal")
+    .classList.add("show");
 
 }
 
@@ -1914,7 +2849,8 @@ function deleteTask(event,taskId){
 
   const project =
     projects.find(
-      p => p.id === selectedProjectId
+      p =>
+        p.id === selectedProjectId
     );
 
 
@@ -1923,18 +2859,63 @@ function deleteTask(event,taskId){
   }
 
 
-  project.tasks =
+  const task =
     (project.tasks || [])
-      .filter(
-        task => task.id !== taskId
+      .find(
+        t =>
+          t.id === taskId
       );
+
+
+  if(!task){
+    return;
+  }
+
+
+  if(
+    !confirm(
+      "ลบรายการงาน \"" +
+      task.name +
+      "\" ใช่หรือไม่?"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  project.tasks =
+    project.tasks.filter(
+      task =>
+        task.id !== taskId
+    );
+
+
+  /*
+    ถ้ายังมี Task
+    คำนวณใหม่
+  */
+
+  if(project.tasks.length > 0){
+
+    recalculateProject(project);
+
+  }
+
+
+  /*
+    ถ้าลบ Task จนหมด
+    จะเก็บ % ล่าสุดไว้
+    ไม่บังคับกลับเป็น 0
+  */
 
 
   saveData();
 
-  openDetail(selectedProjectId);
-
   render();
+
+  openDetail(selectedProjectId);
 
 }
 
@@ -1943,16 +2924,19 @@ function deleteTask(event,taskId){
 
 function showToday(){
 
-  document.getElementById("todayText").textContent =
+  document
+    .getElementById("todayText")
+    .textContent =
 
-    new Date().toLocaleDateString(
-      "th-TH",
-      {
-        day:"numeric",
-        month:"short",
-        year:"2-digit"
-      }
-    );
+      new Date()
+        .toLocaleDateString(
+          "th-TH",
+          {
+            day:"numeric",
+            month:"short",
+            year:"2-digit"
+          }
+        );
 
 }
 
@@ -1969,7 +2953,9 @@ document
 
         if(event.target === modal){
 
-          modal.classList.remove("show");
+          modal
+            .classList
+            .remove("show");
 
         }
 
