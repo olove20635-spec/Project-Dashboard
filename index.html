@@ -48,15 +48,12 @@ body{
   padding-bottom:calc(90px + env(safe-area-inset-bottom));
 }
 
-/* ================= HEADER ================= */
+/* HEADER */
 
 .header{
   background:linear-gradient(145deg,var(--navy),var(--navy2));
   color:white;
-  padding:
-    calc(17px + env(safe-area-inset-top))
-    18px
-    23px;
+  padding:calc(17px + env(safe-area-inset-top)) 18px 23px;
   border-radius:0 0 28px 28px;
 }
 
@@ -87,7 +84,7 @@ body{
   font-size:27px;
 }
 
-/* ================= KPI ================= */
+/* KPI */
 
 .kpi-grid{
   display:grid;
@@ -118,7 +115,7 @@ body{
   font-size:19px;
 }
 
-/* ================= OVERALL ================= */
+/* OVERALL */
 
 .overall{
   margin-top:18px;
@@ -156,7 +153,7 @@ body{
   transition:.3s;
 }
 
-/* ================= CONTENT ================= */
+/* CONTENT */
 
 .content{
   max-width:720px;
@@ -186,14 +183,57 @@ body{
   gap:12px;
 }
 
-/* ================= PROJECT CARD ================= */
+/* PROJECT CARD */
 
 .project-card{
+  position:relative;
+  overflow:hidden;
   background:white;
   border-radius:21px;
   padding:16px;
   box-shadow:0 4px 18px rgba(25,35,55,.055);
   cursor:pointer;
+}
+
+.project-card.has-bg{
+  background-position:center;
+  background-size:cover;
+  color:white;
+}
+
+.project-card.has-bg::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    135deg,
+    rgba(15,23,39,.82),
+    rgba(15,23,39,.48)
+  );
+  z-index:0;
+}
+
+.project-card.has-bg > *{
+  position:relative;
+  z-index:1;
+}
+
+.project-card.has-bg .project-location,
+.project-card.has-bg .progress-label,
+.project-card.has-bg .detail-link{
+  color:rgba(255,255,255,.78);
+}
+
+.project-card.has-bg .card-bottom{
+  border-color:rgba(255,255,255,.22);
+}
+
+.project-card.has-bg .card-bar{
+  background:rgba(255,255,255,.25);
+}
+
+.project-card.has-bg .card-fill{
+  background:white;
 }
 
 .card-head{
@@ -279,6 +319,48 @@ body{
   border-radius:20px;
 }
 
+/* DAYS */
+
+.time-left{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:12px;
+  padding:9px 11px;
+  border-radius:12px;
+  background:#f6f7f9;
+  color:#697181;
+  font-size:10px;
+}
+
+.time-left strong{
+  font-size:12px;
+  color:var(--text);
+}
+
+.time-left.overdue{
+  background:var(--redBg);
+  color:var(--red);
+}
+
+.time-left.overdue strong{
+  color:var(--red);
+}
+
+.time-left.done{
+  background:var(--greenBg);
+  color:var(--green);
+}
+
+.time-left.done strong{
+  color:var(--green);
+}
+
+.project-card.has-bg .time-left{
+  background:rgba(255,255,255,.9);
+  color:#697181;
+}
+
 .card-bottom{
   display:flex;
   justify-content:space-between;
@@ -298,7 +380,7 @@ body{
   color:var(--muted);
 }
 
-/* ================= EMPTY ================= */
+/* EMPTY */
 
 .empty{
   text-align:center;
@@ -311,7 +393,7 @@ body{
   margin-bottom:10px;
 }
 
-/* ================= FAB ================= */
+/* FAB */
 
 .fab{
   position:fixed;
@@ -328,7 +410,7 @@ body{
   z-index:20;
 }
 
-/* ================= MODAL ================= */
+/* MODAL */
 
 .modal{
   display:none;
@@ -461,7 +543,48 @@ input[type="range"]{
   color:white;
 }
 
-/* ================= DETAIL ================= */
+/* DETAIL HERO */
+
+.detail-hero{
+  position:relative;
+  overflow:hidden;
+  border-radius:19px;
+  padding:18px;
+  margin-bottom:16px;
+  background:#f5f7fa;
+}
+
+.detail-hero.has-bg{
+  min-height:180px;
+  background-position:center;
+  background-size:cover;
+  color:white;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+}
+
+.detail-hero.has-bg::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    180deg,
+    rgba(10,17,30,.12),
+    rgba(10,17,30,.80)
+  );
+}
+
+.detail-hero > *{
+  position:relative;
+  z-index:1;
+}
+
+.detail-hero.has-bg .detail-location{
+  color:rgba(255,255,255,.78);
+}
+
+/* DETAIL */
 
 .detail-status{
   display:inline-block;
@@ -547,6 +670,16 @@ input[type="range"]{
   font-size:12px;
 }
 
+.info.overdue{
+  background:var(--redBg);
+  color:var(--red);
+}
+
+.info.done{
+  background:var(--greenBg);
+  color:var(--green);
+}
+
 .note{
   margin-top:12px;
   padding:13px;
@@ -557,7 +690,7 @@ input[type="range"]{
   white-space:pre-wrap;
 }
 
-/* ================= TASK ================= */
+/* TASK */
 
 .task-section{
   margin-top:20px;
@@ -715,6 +848,53 @@ input[type="range"]{
   color:white;
 }
 
+.background-btn{
+  width:100%;
+  margin-top:9px;
+  background:#eef3fb;
+  color:#315e9e;
+}
+
+.export-btn{
+  width:100%;
+  margin-top:9px;
+  background:#2d6cdf;
+  color:white;
+}
+
+/* BACKGROUND */
+
+.bg-preview{
+  height:180px;
+  border-radius:17px;
+  background:#f3f5f8 center/cover no-repeat;
+  border:1px dashed #d8dde5;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.bg-note{
+  font-size:10px;
+  color:var(--muted);
+  line-height:1.5;
+  margin-top:8px;
+}
+
+.bg-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-top:14px;
+}
+
+.remove-bg{
+  background:var(--redBg);
+  color:var(--red);
+}
+
 @media(max-width:380px){
 
   .header{
@@ -734,7 +914,6 @@ input[type="range"]{
   .kpi-value.money{
     font-size:17px;
   }
-
 }
 </style>
 </head>
@@ -817,7 +996,7 @@ input[type="range"]{
 <button class="fab" onclick="openProjectModal()">+</button>
 
 
-<!-- ================= PROJECT FORM ================= -->
+<!-- PROJECT FORM -->
 
 <div id="projectModal" class="modal">
 
@@ -930,7 +1109,7 @@ input[type="range"]{
 </div>
 
 
-<!-- ================= DETAIL ================= -->
+<!-- DETAIL -->
 
 <div id="detailModal" class="modal">
 
@@ -948,7 +1127,7 @@ input[type="range"]{
 </div>
 
 
-<!-- ================= TASK FORM ================= -->
+<!-- TASK -->
 
 <div id="taskModal" class="modal">
 
@@ -976,21 +1155,10 @@ input[type="range"]{
 
     <select id="taskStatus" onchange="taskStatusChanged()">
 
-      <option value="active">
-        กำลังดำเนินการ
-      </option>
-
-      <option value="wait">
-        ยังไม่เริ่ม
-      </option>
-
-      <option value="done">
-        เสร็จแล้ว
-      </option>
-
-      <option value="delay">
-        ล่าช้า
-      </option>
+      <option value="active">กำลังดำเนินการ</option>
+      <option value="wait">ยังไม่เริ่ม</option>
+      <option value="done">เสร็จแล้ว</option>
+      <option value="delay">ล่าช้า</option>
 
     </select>
 
@@ -1037,18 +1205,84 @@ input[type="range"]{
 </div>
 
 
+<!-- PROJECT BACKGROUND -->
+
+<div id="backgroundModal" class="modal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <h2>ภาพพื้นหลังโครงการ</h2>
+
+      <button class="close" onclick="closeBackgroundModal()">
+        ×
+      </button>
+
+    </div>
+
+    <div id="bgPreview" class="bg-preview">
+      ยังไม่ได้เลือกภาพพื้นหลัง
+    </div>
+
+    <label>เลือก / เปลี่ยนภาพ</label>
+
+    <input
+      id="backgroundFile"
+      type="file"
+      accept="image/*"
+      onchange="changeProjectBackground(event)"
+    >
+
+    <div class="bg-note">
+      ภาพจะถูกย่อก่อนบันทึก และใช้เฉพาะโครงการนี้
+      สามารถเปลี่ยนหรือลบภาพได้ตลอด
+    </div>
+
+    <div class="bg-buttons">
+
+      <button
+        class="btn remove-bg"
+        onclick="removeProjectBackground()"
+      >
+        ลบภาพ
+      </button>
+
+      <button
+        class="btn save"
+        onclick="closeBackgroundModal()"
+      >
+        เสร็จ
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
 <script>
 
 /*
 ==================================================
-  STORAGE
-
-  ห้ามเปลี่ยน KEY นี้
-  เพื่อรักษาข้อมูลโครงการเดิม
+ STORAGE
+ ห้ามเปลี่ยน KEY นี้
 ==================================================
 */
 
-const STORAGE_KEY = "personal-project-dashboard-v1";
+const STORAGE_KEY =
+  "personal-project-dashboard-v1";
+
+
+/*
+  Background เก็บแยกจากข้อมูล Project
+  เพื่อไม่กระทบข้อมูลเดิม
+*/
+
+const PROJECT_BG_KEY =
+  "personal-project-dashboard-project-bg-v1";
+
 
 let projects = [];
 
@@ -1059,12 +1293,15 @@ let selectedProjectId = null;
 let editingTaskId = null;
 
 
-/* ================= LOAD ================= */
+/* LOAD */
 
 function loadData(){
 
   const saved =
-    localStorage.getItem(STORAGE_KEY);
+    localStorage.getItem(
+      STORAGE_KEY
+    );
+
 
   if(saved){
 
@@ -1087,21 +1324,12 @@ function loadData(){
   }
 
 
-  /*
-    รองรับข้อมูล Version เดิม
-
-    ถ้าโครงการเก่ายังไม่มี tasks
-    ให้สร้าง array เปล่า
-
-    ถ้า Task เก่าไม่มี status/note
-    ให้เติมค่าให้
-  */
-
   projects.forEach(project => {
 
     if(!Array.isArray(project.tasks)){
       project.tasks = [];
     }
+
 
     project.tasks.forEach(task => {
 
@@ -1114,8 +1342,11 @@ function loadData(){
 
       }
 
+
       if(typeof task.note !== "string"){
+
         task.note = "";
+
       }
 
     });
@@ -1125,7 +1356,7 @@ function loadData(){
 }
 
 
-/* ================= SAVE ================= */
+/* SAVE */
 
 function saveData(){
 
@@ -1137,7 +1368,7 @@ function saveData(){
 }
 
 
-/* ================= ESCAPE ================= */
+/* ESCAPE */
 
 function escapeHTML(value){
 
@@ -1151,20 +1382,16 @@ function escapeHTML(value){
 }
 
 
-/* ================= STATUS ================= */
+/* STATUS */
 
 function statusText(status){
 
   const map = {
 
     active:"กำลังดำเนินการ",
-
     wait:"ยังไม่เริ่ม",
-
     done:"เสร็จแล้ว",
-
     delay:"ล่าช้า",
-
     pause:"พักงาน"
 
   };
@@ -1179,11 +1406,8 @@ function taskStatusText(status){
   const map = {
 
     active:"กำลังดำเนินการ",
-
     wait:"ยังไม่เริ่ม",
-
     done:"เสร็จแล้ว",
-
     delay:"ล่าช้า"
 
   };
@@ -1193,7 +1417,7 @@ function taskStatusText(status){
 }
 
 
-/* ================= DATE ================= */
+/* DATE */
 
 function formatDate(value){
 
@@ -1201,12 +1425,15 @@ function formatDate(value){
     return "-";
   }
 
+
   const p =
     value.split("-");
+
 
   if(p.length !== 3){
     return value;
   }
+
 
   return (
     Number(p[2]) +
@@ -1221,15 +1448,119 @@ function formatDate(value){
 }
 
 
-/* ================= MONEY ================= */
+/* DAYS REMAINING */
+
+function daysInfo(project){
+
+  if(project.status === "done"){
+
+    return {
+
+      text:"เสร็จแล้ว",
+      short:"เสร็จแล้ว",
+      cls:"done"
+
+    };
+
+  }
+
+
+  if(!project.endDate){
+
+    return {
+
+      text:"ไม่ระบุกำหนดเสร็จ",
+      short:"ไม่ระบุกำหนด",
+      cls:""
+
+    };
+
+  }
+
+
+  const today =
+    new Date();
+
+
+  today.setHours(
+    0,0,0,0
+  );
+
+
+  const end =
+    new Date(
+      project.endDate +
+      "T00:00:00"
+    );
+
+
+  const days =
+    Math.round(
+      (end - today) /
+      86400000
+    );
+
+
+  if(days > 0){
+
+    return {
+
+      text:
+        "เหลืออีก " +
+        days +
+        " วัน",
+
+      short:
+        "เหลือ " +
+        days +
+        " วัน",
+
+      cls:""
+
+    };
+
+  }
+
+
+  if(days === 0){
+
+    return {
+
+      text:"ครบกำหนดวันนี้",
+      short:"ครบกำหนดวันนี้",
+      cls:""
+
+    };
+
+  }
+
+
+  return {
+
+    text:
+      "เกินกำหนด " +
+      Math.abs(days) +
+      " วัน",
+
+    short:
+      "เกิน " +
+      Math.abs(days) +
+      " วัน",
+
+    cls:"overdue"
+
+  };
+
+}
+
+
+/* MONEY */
 
 function money(value){
 
-  const number =
-    Number(value || 0);
-
   return "฿" +
-    number.toLocaleString("th-TH");
+    Number(value || 0)
+      .toLocaleString("th-TH");
 
 }
 
@@ -1238,6 +1569,7 @@ function compactMoney(value){
 
   const n =
     Number(value || 0);
+
 
   if(n >= 1000000){
 
@@ -1253,6 +1585,7 @@ function compactMoney(value){
 
   }
 
+
   if(n >= 1000){
 
     return "฿" +
@@ -1267,15 +1600,90 @@ function compactMoney(value){
 
   }
 
+
   return "฿" +
     n.toLocaleString("th-TH");
 
 }
 
 
-/* ==================================================
-   PROJECT PROGRESS FROM TASKS
-================================================== */
+/* BACKGROUND STORAGE */
+
+function getBackgrounds(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        PROJECT_BG_KEY
+      ) || "{}"
+    );
+
+  }
+  catch(e){
+
+    return {};
+
+  }
+
+}
+
+
+function getProjectBackground(id){
+
+  const backgrounds =
+    getBackgrounds();
+
+
+  return (
+    backgrounds[String(id)] ||
+    ""
+  );
+
+}
+
+
+function setProjectBackground(
+  id,
+  image
+){
+
+  const backgrounds =
+    getBackgrounds();
+
+
+  backgrounds[String(id)] =
+    image;
+
+
+  localStorage.setItem(
+    PROJECT_BG_KEY,
+    JSON.stringify(backgrounds)
+  );
+
+}
+
+
+function deleteProjectBackground(id){
+
+  const backgrounds =
+    getBackgrounds();
+
+
+  delete backgrounds[
+    String(id)
+  ];
+
+
+  localStorage.setItem(
+    PROJECT_BG_KEY,
+    JSON.stringify(backgrounds)
+  );
+
+}
+
+
+/* PROJECT PROGRESS */
 
 function calculateProjectProgress(project){
 
@@ -1284,14 +1692,6 @@ function calculateProjectProgress(project){
       ? project.tasks
       : [];
 
-
-  /*
-    ถ้ายังไม่มี Task
-    ใช้ % โครงการเดิม
-
-    เช่นโครงการปัจจุบัน 73%
-    จะไม่ถูกเปลี่ยน
-  */
 
   if(tasks.length === 0){
 
@@ -1302,27 +1702,22 @@ function calculateProjectProgress(project){
   }
 
 
-  /*
-    ถ้ามี Task แล้ว
-    ใช้ค่าเฉลี่ยของ Task ทั้งหมด
-  */
-
   const total =
     tasks.reduce(
       (sum,task) =>
-        sum + Number(task.progress || 0),
+        sum +
+        Number(task.progress || 0),
       0
     );
 
 
   return Math.round(
-    total / tasks.length
+    total /
+    tasks.length
   );
 
 }
 
-
-/* ================= UPDATE PROJECT ================= */
 
 function recalculateProject(project){
 
@@ -1330,16 +1725,12 @@ function recalculateProject(project){
     return;
   }
 
+
   const tasks =
     Array.isArray(project.tasks)
       ? project.tasks
       : [];
 
-
-  /*
-    ไม่มี Task:
-    ไม่แก้ progress เดิม
-  */
 
   if(tasks.length === 0){
     return;
@@ -1347,13 +1738,10 @@ function recalculateProject(project){
 
 
   project.progress =
-    calculateProjectProgress(project);
+    calculateProjectProgress(
+      project
+    );
 
-
-  /*
-    ถ้าทุก Task 100%
-    ให้โครงการเสร็จอัตโนมัติ
-  */
 
   const allDone =
     tasks.every(
@@ -1365,44 +1753,34 @@ function recalculateProject(project){
   if(allDone){
 
     project.progress = 100;
-
     project.status = "done";
 
   }
 
-  else{
+  else if(
+    project.status === "done"
+  ){
 
-    /*
-      ถ้าเดิมเป็น done
-      แต่มี Task ที่ยังไม่เสร็จ
-      กลับมา active
-    */
-
-    if(project.status === "done"){
-
-      project.status = "active";
-
-    }
+    project.status =
+      "active";
 
   }
 
 }
 
 
-/* ================= RENDER ================= */
+/* RENDER */
 
 function render(){
 
   const list =
-    document.getElementById("projectList");
+    document.getElementById(
+      "projectList"
+    );
+
 
   list.innerHTML = "";
 
-
-  /*
-    อัปเดต progress
-    ของโครงการที่มี Task
-  */
 
   projects.forEach(project => {
 
@@ -1411,65 +1789,62 @@ function render(){
       project.tasks.length > 0
     ){
 
-      recalculateProject(project);
+      recalculateProject(
+        project
+      );
 
     }
 
   });
 
 
-  /* PROJECT COUNT */
-
   document
-    .getElementById("totalProjects")
+    .getElementById(
+      "totalProjects"
+    )
     .textContent =
       projects.length;
 
 
-  /* TOTAL VALUE */
-
   const totalValue =
     projects.reduce(
       (sum,p) =>
-        sum + Number(p.value || 0),
+        sum +
+        Number(p.value || 0),
       0
     );
 
+
   document
-    .getElementById("totalValue")
+    .getElementById(
+      "totalValue"
+    )
     .textContent =
       compactMoney(totalValue);
 
 
-  /* COMPLETED */
+  document
+    .getElementById(
+      "completedProjects"
+    )
+    .textContent =
+      projects.filter(
+        p =>
+          p.status === "done"
+      ).length;
 
-  const completed =
-    projects.filter(
-      p => p.status === "done"
-    ).length;
 
   document
-    .getElementById("completedProjects")
+    .getElementById(
+      "activeProjects"
+    )
     .textContent =
-      completed;
+      projects.filter(
+        p =>
+          p.status === "active" ||
+          p.status === "delay"
+      ).length;
 
-
-  /* ACTIVE */
-
-  const active =
-    projects.filter(
-      p =>
-        p.status === "active" ||
-        p.status === "delay"
-    ).length;
-
-  document
-    .getElementById("activeProjects")
-    .textContent =
-      active;
-
-
-  /* OVERALL PROGRESS */
 
   const progressTotal =
     projects.reduce(
@@ -1490,18 +1865,20 @@ function render(){
 
 
   document
-    .getElementById("overallPercent")
+    .getElementById(
+      "overallPercent"
+    )
     .textContent =
       overall + "%";
 
 
   document
-    .getElementById("overallFill")
+    .getElementById(
+      "overallFill"
+    )
     .style.width =
       overall + "%";
 
-
-  /* EMPTY */
 
   if(projects.length === 0){
 
@@ -1533,24 +1910,52 @@ function render(){
   }
 
 
-  /* PROJECT CARDS */
-
   projects.forEach(project => {
 
     const card =
-      document.createElement("div");
-
-
-    card.className =
-      "project-card";
-
-
-    card.onclick =
-      () => openDetail(project.id);
+      document.createElement(
+        "div"
+      );
 
 
     const progress =
-      Number(project.progress || 0);
+      Number(
+        project.progress || 0
+      );
+
+
+    const days =
+      daysInfo(project);
+
+
+    const background =
+      getProjectBackground(
+        project.id
+      );
+
+
+    card.className =
+      "project-card" +
+      (
+        background
+          ? " has-bg"
+          : ""
+      );
+
+
+    if(background){
+
+      card.style.backgroundImage =
+        `url("${background}")`;
+
+    }
+
+
+    card.onclick =
+      () =>
+        openDetail(
+          project.id
+        );
 
 
     card.innerHTML = `
@@ -1560,9 +1965,7 @@ function render(){
         <div>
 
           <div class="project-name">
-
             ${escapeHTML(project.name)}
-
           </div>
 
           <div class="project-location">
@@ -1593,9 +1996,7 @@ function render(){
         </div>
 
         <div class="project-percent">
-
           ${progress}%
-
         </div>
 
       </div>
@@ -1611,18 +2012,30 @@ function render(){
       </div>
 
 
+      <div class="time-left ${days.cls}">
+
+        <span>
+
+          กำหนดเสร็จ
+          ${formatDate(project.endDate)}
+
+        </span>
+
+        <strong>
+          ${days.short}
+        </strong>
+
+      </div>
+
+
       <div class="card-bottom">
 
         <div class="project-value">
-
           ${money(project.value)}
-
         </div>
 
         <div class="detail-link">
-
           ดูรายละเอียด ›
-
         </div>
 
       </div>
@@ -1640,193 +2053,174 @@ function render(){
 }
 
 
-/* ================= PROJECT MODAL ================= */
+/* PROJECT MODAL */
 
-function openProjectModal(projectId = null){
+function openProjectModal(
+  projectId = null
+){
 
   editingProjectId =
     projectId;
 
 
   document
-    .getElementById("projectModalTitle")
+    .getElementById(
+      "projectModalTitle"
+    )
     .textContent =
       projectId
         ? "แก้ไขโครงการ"
         : "เพิ่มโครงการ";
 
 
-  if(projectId){
-
-    const project =
-      projects.find(
-        p => p.id === projectId
-      );
-
-
-    if(!project){
-      return;
-    }
+  const project =
+    projectId
+      ? projects.find(
+          p =>
+            p.id === projectId
+        )
+      : null;
 
 
-    document
-      .getElementById("projectName")
-      .value =
-        project.name || "";
-
-
-    document
-      .getElementById("projectLocation")
-      .value =
-        project.location || "";
-
-
-    document
-      .getElementById("projectValue")
-      .value =
-        Number(project.value || 0);
-
-
-    document
-      .getElementById("startDate")
-      .value =
-        project.startDate || "";
-
-
-    document
-      .getElementById("endDate")
-      .value =
-        project.endDate || "";
-
-
-    document
-      .getElementById("projectStatus")
-      .value =
-        project.status || "active";
-
-
-    document
-      .getElementById("projectProgress")
-      .value =
-        Number(project.progress || 0);
-
-
-    document
-      .getElementById("projectNote")
-      .value =
-        project.note || "";
-
-
-    /*
-      ถ้ามี Task แล้ว
-      Progress โครงการเป็น Auto
-    */
-
-    const hasTasks =
-      Array.isArray(project.tasks) &&
-      project.tasks.length > 0;
-
-
-    document
-      .getElementById("projectProgress")
-      .disabled =
-        hasTasks;
-
-
-    document
-      .getElementById("projectProgressHint")
-      .style.display =
-        hasTasks
-          ? "block"
-          : "none";
-
+  if(projectId && !project){
+    return;
   }
 
-  else{
 
-    document
-      .getElementById("projectName")
-      .value = "";
-
-
-    document
-      .getElementById("projectLocation")
-      .value = "";
+  document
+    .getElementById(
+      "projectName"
+    )
+    .value =
+      project?.name || "";
 
 
-    document
-      .getElementById("projectValue")
-      .value = "";
+  document
+    .getElementById(
+      "projectLocation"
+    )
+    .value =
+      project?.location || "";
 
 
-    document
-      .getElementById("startDate")
-      .value = "";
+  document
+    .getElementById(
+      "projectValue"
+    )
+    .value =
+      project
+        ? Number(
+            project.value || 0
+          )
+        : "";
 
 
-    document
-      .getElementById("endDate")
-      .value = "";
+  document
+    .getElementById(
+      "startDate"
+    )
+    .value =
+      project?.startDate || "";
 
 
-    document
-      .getElementById("projectStatus")
-      .value = "active";
+  document
+    .getElementById(
+      "endDate"
+    )
+    .value =
+      project?.endDate || "";
 
 
-    document
-      .getElementById("projectProgress")
-      .value = 0;
+  document
+    .getElementById(
+      "projectStatus"
+    )
+    .value =
+      project?.status ||
+      "active";
 
 
-    document
-      .getElementById("projectProgress")
-      .disabled = false;
+  document
+    .getElementById(
+      "projectProgress"
+    )
+    .value =
+      project
+        ? Number(
+            project.progress || 0
+          )
+        : 0;
 
 
-    document
-      .getElementById("projectProgressHint")
-      .style.display = "none";
+  document
+    .getElementById(
+      "projectNote"
+    )
+    .value =
+      project?.note || "";
 
 
-    document
-      .getElementById("projectNote")
-      .value = "";
+  const hasTasks =
+    !!project?.tasks?.length;
 
-  }
+
+  document
+    .getElementById(
+      "projectProgress"
+    )
+    .disabled =
+      hasTasks;
+
+
+  document
+    .getElementById(
+      "projectProgressHint"
+    )
+    .style.display =
+      hasTasks
+        ? "block"
+        : "none";
 
 
   updateProgressLabel();
 
 
   document
-    .getElementById("projectModal")
-    .classList.add("show");
+    .getElementById(
+      "projectModal"
+    )
+    .classList.add(
+      "show"
+    );
 
 }
 
-
-/* ================= CLOSE PROJECT ================= */
 
 function closeProjectModal(){
 
   document
-    .getElementById("projectModal")
-    .classList.remove("show");
+    .getElementById(
+      "projectModal"
+    )
+    .classList.remove(
+      "show"
+    );
 
 }
 
 
-/* ================= PROJECT PROGRESS LABEL ================= */
-
 function updateProgressLabel(){
 
   document
-    .getElementById("progressLabel")
+    .getElementById(
+      "progressLabel"
+    )
     .textContent =
 
       document
-        .getElementById("projectProgress")
+        .getElementById(
+          "projectProgress"
+        )
         .value +
 
       "%";
@@ -1834,13 +2228,13 @@ function updateProgressLabel(){
 }
 
 
-/* ================= SAVE PROJECT ================= */
-
 function saveProject(){
 
   const name =
     document
-      .getElementById("projectName")
+      .getElementById(
+        "projectName"
+      )
       .value
       .trim();
 
@@ -1856,51 +2250,62 @@ function saveProject(){
   }
 
 
-  const status =
-    document
-      .getElementById("projectStatus")
-      .value;
-
-
   const data = {
 
     name:name,
 
     location:
       document
-        .getElementById("projectLocation")
+        .getElementById(
+          "projectLocation"
+        )
         .value
         .trim(),
 
     value:
       Number(
         document
-          .getElementById("projectValue")
+          .getElementById(
+            "projectValue"
+          )
           .value || 0
       ),
 
     startDate:
       document
-        .getElementById("startDate")
+        .getElementById(
+          "startDate"
+        )
         .value,
 
     endDate:
       document
-        .getElementById("endDate")
+        .getElementById(
+          "endDate"
+        )
         .value,
 
-    status:status,
+    status:
+      document
+        .getElementById(
+          "projectStatus"
+        )
+        .value,
 
     progress:
       Number(
         document
-          .getElementById("projectProgress")
+          .getElementById(
+            "projectProgress"
+          )
           .value
       ),
 
     note:
       document
-        .getElementById("projectNote")
+        .getElementById(
+          "projectNote"
+        )
         .value
         .trim()
 
@@ -1911,22 +2316,17 @@ function saveProject(){
 
     const project =
       projects.find(
-        p => p.id === editingProjectId
+        p =>
+          p.id ===
+          editingProjectId
       );
 
 
     if(project){
 
       const hasTasks =
-        Array.isArray(project.tasks) &&
-        project.tasks.length > 0;
+        !!project.tasks?.length;
 
-
-      /*
-        ถ้ามี Task
-        ไม่ให้ progress manual
-        ไปทับค่าที่คำนวณอัตโนมัติ
-      */
 
       if(hasTasks){
 
@@ -1943,7 +2343,9 @@ function saveProject(){
 
       if(hasTasks){
 
-        recalculateProject(project);
+        recalculateProject(
+          project
+        );
 
       }
 
@@ -1962,7 +2364,8 @@ function saveProject(){
       tasks:[],
 
       createdAt:
-        new Date().toISOString()
+        new Date()
+          .toISOString()
 
     });
 
@@ -1978,7 +2381,7 @@ function saveProject(){
 }
 
 
-/* ================= DETAIL ================= */
+/* DETAIL */
 
 function openDetail(id){
 
@@ -1988,7 +2391,8 @@ function openDetail(id){
 
   const project =
     projects.find(
-      p => p.id === id
+      p =>
+        p.id === id
     );
 
 
@@ -1997,14 +2401,24 @@ function openDetail(id){
   }
 
 
-  if(!Array.isArray(project.tasks)){
+  if(
+    !Array.isArray(
+      project.tasks
+    )
+  ){
+
     project.tasks = [];
+
   }
 
 
-  if(project.tasks.length > 0){
+  if(
+    project.tasks.length > 0
+  ){
 
-    recalculateProject(project);
+    recalculateProject(
+      project
+    );
 
   }
 
@@ -2016,6 +2430,16 @@ function openDetail(id){
   const progress =
     Number(
       project.progress || 0
+    );
+
+
+  const days =
+    daysInfo(project);
+
+
+  const background =
+    getProjectBackground(
+      project.id
     );
 
 
@@ -2040,9 +2464,7 @@ function openDetail(id){
         padding:18px 0;
         font-size:11px;
       ">
-
         ยังไม่มีรายการงาน
-
       </div>
 
     `;
@@ -2075,15 +2497,11 @@ function openDetail(id){
           <div class="task-row">
 
             <div class="task-name">
-
               ${escapeHTML(task.name)}
-
             </div>
 
             <div class="task-pct">
-
               ${taskProgress}%
-
             </div>
 
           </div>
@@ -2094,9 +2512,7 @@ function openDetail(id){
             <span
               class="task-status ${taskStatus}"
             >
-
               ${taskStatusText(taskStatus)}
-
             </span>
 
           </div>
@@ -2115,9 +2531,7 @@ function openDetail(id){
             task.note
               ? `
                 <div class="task-note">
-
                   ${escapeHTML(task.note)}
-
                 </div>
               `
               : ""
@@ -2130,9 +2544,7 @@ function openDetail(id){
               class="task-edit"
               onclick="editTask(event,${task.id})"
             >
-
               แก้ไข
-
             </span>
 
 
@@ -2140,9 +2552,7 @@ function openDetail(id){
               class="task-delete"
               onclick="deleteTask(event,${task.id})"
             >
-
               ลบรายการ
-
             </span>
 
           </div>
@@ -2158,38 +2568,50 @@ function openDetail(id){
 
   const completedTasks =
     tasks.filter(
-      t =>
-        Number(t.progress || 0) >= 100
+      task =>
+        Number(
+          task.progress || 0
+        ) >= 100
     ).length;
 
 
-  document
-    .getElementById("detailContent")
-    .innerHTML = `
+  const detail =
+    document.getElementById(
+      "detailContent"
+    );
 
+
+  detail.innerHTML = `
 
     <div
-      class="status ${project.status} detail-status"
+      id="detailHero"
+      class="detail-hero ${
+        background
+          ? "has-bg"
+          : ""
+      }"
     >
 
-      ${statusText(project.status)}
-
-    </div>
-
-
-    <div class="detail-title">
-
-      ${escapeHTML(project.name)}
-
-    </div>
+      <div
+        class="status ${project.status} detail-status"
+      >
+        ${statusText(project.status)}
+      </div>
 
 
-    <div class="detail-location">
+      <div class="detail-title">
+        ${escapeHTML(project.name)}
+      </div>
 
-      ${escapeHTML(
-        project.location ||
-        "ไม่ระบุสถานที่"
-      )}
+
+      <div class="detail-location">
+
+        ${escapeHTML(
+          project.location ||
+          "ไม่ระบุสถานที่"
+        )}
+
+      </div>
 
     </div>
 
@@ -2202,9 +2624,7 @@ function openDetail(id){
       >
 
         <span>
-
           ${progress}%
-
         </span>
 
       </div>
@@ -2228,15 +2648,11 @@ function openDetail(id){
       <div style="margin-top:17px;">
 
         <div class="detail-value-label">
-
           มูลค่าโครงการ
-
         </div>
 
         <div class="detail-value">
-
           ${money(project.value)}
-
         </div>
 
       </div>
@@ -2253,9 +2669,7 @@ function openDetail(id){
         </small>
 
         <strong>
-
           ${formatDate(project.startDate)}
-
         </strong>
 
       </div>
@@ -2268,24 +2682,20 @@ function openDetail(id){
         </small>
 
         <strong>
-
           ${formatDate(project.endDate)}
-
         </strong>
 
       </div>
 
 
-      <div class="info">
+      <div class="info ${days.cls}">
 
         <small>
-          รายการงาน
+          ระยะเวลาคงเหลือ
         </small>
 
         <strong>
-
-          ${tasks.length} งาน
-
+          ${days.text}
         </strong>
 
       </div>
@@ -2298,9 +2708,7 @@ function openDetail(id){
         </small>
 
         <strong>
-
-          ${completedTasks} งาน
-
+          ${completedTasks}/${tasks.length} งาน
         </strong>
 
       </div>
@@ -2312,9 +2720,7 @@ function openDetail(id){
       project.note
         ? `
           <div class="note">
-
             ${escapeHTML(project.note)}
-
           </div>
         `
         : ""
@@ -2333,10 +2739,8 @@ function openDetail(id){
           tasks.length > 0
             ? `
               <span class="task-summary">
-
                 เสร็จ
                 ${completedTasks}/${tasks.length}
-
               </span>
             `
             : ""
@@ -2356,9 +2760,7 @@ function openDetail(id){
         class="btn delete-btn"
         onclick="deleteProject()"
       >
-
         ลบ
-
       </button>
 
 
@@ -2366,9 +2768,7 @@ function openDetail(id){
         class="btn edit-btn"
         onclick="editCurrentProject()"
       >
-
         แก้ไข
-
       </button>
 
 
@@ -2376,38 +2776,73 @@ function openDetail(id){
         class="btn task-btn"
         onclick="openTaskModal()"
       >
-
         + เพิ่มงาน
-
       </button>
 
     </div>
 
+
+    <button
+      class="btn background-btn"
+      onclick="openBackgroundModal()"
+    >
+      🖼️ ${
+        background
+          ? "เปลี่ยนภาพพื้นหลัง"
+          : "เพิ่มภาพพื้นหลัง"
+      }
+    </button>
+
+
+    <button
+      class="btn export-btn"
+      onclick="exportProjectImage()"
+    >
+      📸 ดึงภาพสรุป 16:9
+    </button>
+
   `;
+
+
+  if(background){
+
+    document
+      .getElementById(
+        "detailHero"
+      )
+      .style
+      .backgroundImage =
+        `url("${background}")`;
+
+  }
 
 
   saveData();
 
 
   document
-    .getElementById("detailModal")
-    .classList.add("show");
+    .getElementById(
+      "detailModal"
+    )
+    .classList.add(
+      "show"
+    );
 
 }
 
-
-/* ================= CLOSE DETAIL ================= */
 
 function closeDetail(){
 
   document
-    .getElementById("detailModal")
-    .classList.remove("show");
+    .getElementById(
+      "detailModal"
+    )
+    .classList.remove(
+      "show"
+    );
 
 }
 
-
-/* ================= EDIT PROJECT ================= */
 
 function editCurrentProject(){
 
@@ -2422,13 +2857,15 @@ function editCurrentProject(){
 }
 
 
-/* ================= DELETE PROJECT ================= */
+/* DELETE PROJECT */
 
 function deleteProject(){
 
   const project =
     projects.find(
-      p => p.id === selectedProjectId
+      p =>
+        p.id ===
+        selectedProjectId
     );
 
 
@@ -2439,21 +2876,25 @@ function deleteProject(){
 
   if(
     !confirm(
-      "ลบโครงการ \"" +
+      'ลบโครงการ "' +
       project.name +
-      "\" ใช่หรือไม่?"
+      '" ใช่หรือไม่?'
     )
   ){
-
     return;
-
   }
+
+
+  deleteProjectBackground(
+    project.id
+  );
 
 
   projects =
     projects.filter(
       p =>
-        p.id !== selectedProjectId
+        p.id !==
+        selectedProjectId
     );
 
 
@@ -2466,79 +2907,350 @@ function deleteProject(){
 }
 
 
-/* ==================================================
-   TASK MODAL
-================================================== */
+/* BACKGROUND */
 
-function openTaskModal(){
+function openBackgroundModal(){
 
-  editingTaskId = null;
+  if(!selectedProjectId){
+    return;
+  }
+
+
+  const background =
+    getProjectBackground(
+      selectedProjectId
+    );
+
+
+  const preview =
+    document.getElementById(
+      "bgPreview"
+    );
+
+
+  preview.style.backgroundImage =
+    background
+      ? `url("${background}")`
+      : "none";
+
+
+  preview.textContent =
+    background
+      ? ""
+      : "ยังไม่ได้เลือกภาพพื้นหลัง";
 
 
   document
-    .getElementById("taskModalTitle")
+    .getElementById(
+      "backgroundFile"
+    )
+    .value = "";
+
+
+  document
+    .getElementById(
+      "backgroundModal"
+    )
+    .classList.add(
+      "show"
+    );
+
+}
+
+
+function closeBackgroundModal(){
+
+  document
+    .getElementById(
+      "backgroundModal"
+    )
+    .classList.remove(
+      "show"
+    );
+
+}
+
+
+function changeProjectBackground(event){
+
+  const file =
+    event.target.files?.[0];
+
+
+  if(
+    !file ||
+    !selectedProjectId
+  ){
+    return;
+  }
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload =
+    function(readerEvent){
+
+      const image =
+        new Image();
+
+
+      image.onload =
+        function(){
+
+          /*
+            ย่อภาพก่อนเก็บ
+            ป้องกัน LocalStorage เต็มเร็ว
+          */
+
+          const maxSize =
+            1200;
+
+
+          const scale =
+            Math.min(
+              1,
+              maxSize /
+              Math.max(
+                image.width,
+                image.height
+              )
+            );
+
+
+          const canvas =
+            document.createElement(
+              "canvas"
+            );
+
+
+          canvas.width =
+            Math.max(
+              1,
+              Math.round(
+                image.width *
+                scale
+              )
+            );
+
+
+          canvas.height =
+            Math.max(
+              1,
+              Math.round(
+                image.height *
+                scale
+              )
+            );
+
+
+          const ctx =
+            canvas.getContext(
+              "2d"
+            );
+
+
+          ctx.drawImage(
+            image,
+            0,
+            0,
+            canvas.width,
+            canvas.height
+          );
+
+
+          const data =
+            canvas.toDataURL(
+              "image/jpeg",
+              .65
+            );
+
+
+          try{
+
+            setProjectBackground(
+              selectedProjectId,
+              data
+            );
+
+
+            const preview =
+              document.getElementById(
+                "bgPreview"
+              );
+
+
+            preview.style.backgroundImage =
+              `url("${data}")`;
+
+
+            preview.textContent =
+              "";
+
+
+            render();
+
+            openDetail(
+              selectedProjectId
+            );
+
+          }
+          catch(error){
+
+            alert(
+              "พื้นที่จัดเก็บภาพไม่เพียงพอ กรุณาเลือกรูปที่มีขนาดเล็กลง"
+            );
+
+          }
+
+        };
+
+
+      image.src =
+        readerEvent.target.result;
+
+    };
+
+
+  reader.readAsDataURL(
+    file
+  );
+
+}
+
+
+function removeProjectBackground(){
+
+  if(!selectedProjectId){
+    return;
+  }
+
+
+  deleteProjectBackground(
+    selectedProjectId
+  );
+
+
+  document
+    .getElementById(
+      "backgroundFile"
+    )
+    .value = "";
+
+
+  const preview =
+    document.getElementById(
+      "bgPreview"
+    );
+
+
+  preview.style.backgroundImage =
+    "none";
+
+
+  preview.textContent =
+    "ยังไม่ได้เลือกภาพพื้นหลัง";
+
+
+  render();
+
+  openDetail(
+    selectedProjectId
+  );
+
+}
+
+
+/* TASK MODAL */
+
+function openTaskModal(){
+
+  editingTaskId =
+    null;
+
+
+  document
+    .getElementById(
+      "taskModalTitle"
+    )
     .textContent =
       "เพิ่มรายการงาน";
 
 
   document
-    .getElementById("taskName")
-    .value =
-      "";
+    .getElementById(
+      "taskName"
+    )
+    .value = "";
 
 
   document
-    .getElementById("taskStatus")
+    .getElementById(
+      "taskStatus"
+    )
     .value =
       "active";
 
 
   document
-    .getElementById("taskProgress")
+    .getElementById(
+      "taskProgress"
+    )
     .value =
       0;
 
 
   document
-    .getElementById("taskNote")
-    .value =
-      "";
+    .getElementById(
+      "taskNote"
+    )
+    .value = "";
 
 
   updateTaskLabel();
 
 
   document
-    .getElementById("taskModal")
-    .classList.add("show");
+    .getElementById(
+      "taskModal"
+    )
+    .classList.add(
+      "show"
+    );
 
 }
 
-
-/* ================= CLOSE TASK ================= */
 
 function closeTaskModal(){
 
-  editingTaskId = null;
+  editingTaskId =
+    null;
 
 
   document
-    .getElementById("taskModal")
-    .classList.remove("show");
+    .getElementById(
+      "taskModal"
+    )
+    .classList.remove(
+      "show"
+    );
 
 }
 
-
-/* ================= TASK LABEL ================= */
 
 function updateTaskLabel(){
 
   document
-    .getElementById("taskProgressLabel")
+    .getElementById(
+      "taskProgressLabel"
+    )
     .textContent =
 
       document
-        .getElementById("taskProgress")
+        .getElementById(
+          "taskProgress"
+        )
         .value +
 
       "%";
@@ -2546,40 +3258,34 @@ function updateTaskLabel(){
 }
 
 
-/* ================= TASK STATUS CHANGE ================= */
-
 function taskStatusChanged(){
 
   const status =
     document
-      .getElementById("taskStatus")
+      .getElementById(
+        "taskStatus"
+      )
       .value;
 
 
-  const progressInput =
+  const input =
     document
-      .getElementById("taskProgress");
+      .getElementById(
+        "taskProgress"
+      );
 
-
-  /*
-    เสร็จแล้ว = 100%
-  */
 
   if(status === "done"){
 
-    progressInput.value =
+    input.value =
       100;
 
   }
 
 
-  /*
-    ยังไม่เริ่ม = 0%
-  */
-
   if(status === "wait"){
 
-    progressInput.value =
+    input.value =
       0;
 
   }
@@ -2590,13 +3296,13 @@ function taskStatusChanged(){
 }
 
 
-/* ================= SAVE TASK ================= */
-
 function saveTask(){
 
   const name =
     document
-      .getElementById("taskName")
+      .getElementById(
+        "taskName"
+      )
       .value
       .trim();
 
@@ -2615,7 +3321,8 @@ function saveTask(){
   const project =
     projects.find(
       p =>
-        p.id === selectedProjectId
+        p.id ===
+        selectedProjectId
     );
 
 
@@ -2624,7 +3331,11 @@ function saveTask(){
   }
 
 
-  if(!Array.isArray(project.tasks)){
+  if(
+    !Array.isArray(
+      project.tasks
+    )
+  ){
 
     project.tasks = [];
 
@@ -2634,21 +3345,20 @@ function saveTask(){
   let progress =
     Number(
       document
-        .getElementById("taskProgress")
+        .getElementById(
+          "taskProgress"
+        )
         .value
     );
 
 
   let status =
     document
-      .getElementById("taskStatus")
+      .getElementById(
+        "taskStatus"
+      )
       .value;
 
-
-  /*
-    ถ้าสถานะเสร็จ
-    บังคับเป็น 100
-  */
 
   if(status === "done"){
 
@@ -2657,24 +3367,13 @@ function saveTask(){
   }
 
 
-  /*
-    ถ้า progress 100
-    ให้สถานะเป็น done
-  */
-
   if(progress >= 100){
 
     progress = 100;
-
     status = "done";
 
   }
 
-
-  /*
-    ถ้ายังไม่เริ่ม
-    บังคับ 0
-  */
 
   if(status === "wait"){
 
@@ -2693,23 +3392,22 @@ function saveTask(){
 
     note:
       document
-        .getElementById("taskNote")
+        .getElementById(
+          "taskNote"
+        )
         .value
         .trim()
 
   };
 
 
-  /*
-    EDIT TASK
-  */
-
   if(editingTaskId){
 
     const task =
       project.tasks.find(
         t =>
-          t.id === editingTaskId
+          t.id ===
+          editingTaskId
       );
 
 
@@ -2724,10 +3422,6 @@ function saveTask(){
 
   }
 
-  /*
-    NEW TASK
-  */
-
   else{
 
     project.tasks.push({
@@ -2741,11 +3435,9 @@ function saveTask(){
   }
 
 
-  /*
-    คำนวณ % โครงการใหม่
-  */
-
-  recalculateProject(project);
+  recalculateProject(
+    project
+  );
 
 
   saveData();
@@ -2754,14 +3446,17 @@ function saveTask(){
 
   render();
 
-  openDetail(selectedProjectId);
+  openDetail(
+    selectedProjectId
+  );
 
 }
 
 
-/* ================= EDIT TASK ================= */
-
-function editTask(event,taskId){
+function editTask(
+  event,
+  taskId
+){
 
   event.stopPropagation();
 
@@ -2769,7 +3464,8 @@ function editTask(event,taskId){
   const project =
     projects.find(
       p =>
-        p.id === selectedProjectId
+        p.id ===
+        selectedProjectId
     );
 
 
@@ -2796,36 +3492,50 @@ function editTask(event,taskId){
 
 
   document
-    .getElementById("taskModalTitle")
+    .getElementById(
+      "taskModalTitle"
+    )
     .textContent =
       "แก้ไขรายการงาน";
 
 
   document
-    .getElementById("taskName")
+    .getElementById(
+      "taskName"
+    )
     .value =
       task.name || "";
 
 
   document
-    .getElementById("taskStatus")
+    .getElementById(
+      "taskStatus"
+    )
     .value =
       task.status ||
       (
-        Number(task.progress || 0) >= 100
+        Number(
+          task.progress || 0
+        ) >= 100
           ? "done"
           : "active"
       );
 
 
   document
-    .getElementById("taskProgress")
+    .getElementById(
+      "taskProgress"
+    )
     .value =
-      Number(task.progress || 0);
+      Number(
+        task.progress || 0
+      );
 
 
   document
-    .getElementById("taskNote")
+    .getElementById(
+      "taskNote"
+    )
     .value =
       task.note || "";
 
@@ -2834,15 +3544,20 @@ function editTask(event,taskId){
 
 
   document
-    .getElementById("taskModal")
-    .classList.add("show");
+    .getElementById(
+      "taskModal"
+    )
+    .classList.add(
+      "show"
+    );
 
 }
 
 
-/* ================= DELETE TASK ================= */
-
-function deleteTask(event,taskId){
+function deleteTask(
+  event,
+  taskId
+){
 
   event.stopPropagation();
 
@@ -2850,7 +3565,8 @@ function deleteTask(event,taskId){
   const project =
     projects.find(
       p =>
-        p.id === selectedProjectId
+        p.id ===
+        selectedProjectId
     );
 
 
@@ -2874,14 +3590,12 @@ function deleteTask(event,taskId){
 
   if(
     !confirm(
-      "ลบรายการงาน \"" +
+      'ลบรายการงาน "' +
       task.name +
-      "\" ใช่หรือไม่?"
+      '" ใช่หรือไม่?'
     )
   ){
-
     return;
-
   }
 
 
@@ -2892,40 +3606,958 @@ function deleteTask(event,taskId){
     );
 
 
-  /*
-    ถ้ายังมี Task
-    คำนวณใหม่
-  */
+  if(
+    project.tasks.length > 0
+  ){
 
-  if(project.tasks.length > 0){
-
-    recalculateProject(project);
+    recalculateProject(
+      project
+    );
 
   }
-
-
-  /*
-    ถ้าลบ Task จนหมด
-    จะเก็บ % ล่าสุดไว้
-    ไม่บังคับกลับเป็น 0
-  */
 
 
   saveData();
 
   render();
 
-  openDetail(selectedProjectId);
+  openDetail(
+    selectedProjectId
+  );
 
 }
 
 
-/* ================= TODAY ================= */
+/* EXPORT 16:9 */
+
+function loadImage(src){
+
+  return new Promise(
+    (resolve,reject) => {
+
+      if(!src){
+
+        resolve(null);
+
+        return;
+
+      }
+
+
+      const image =
+        new Image();
+
+
+      image.onload =
+        () =>
+          resolve(image);
+
+
+      image.onerror =
+        reject;
+
+
+      image.src =
+        src;
+
+    }
+  );
+
+}
+
+
+function drawCover(
+  ctx,
+  image,
+  x,
+  y,
+  width,
+  height
+){
+
+  const ratio =
+    Math.max(
+      width / image.width,
+      height / image.height
+    );
+
+
+  const sourceWidth =
+    width / ratio;
+
+
+  const sourceHeight =
+    height / ratio;
+
+
+  const sourceX =
+    (
+      image.width -
+      sourceWidth
+    ) / 2;
+
+
+  const sourceY =
+    (
+      image.height -
+      sourceHeight
+    ) / 2;
+
+
+  ctx.drawImage(
+    image,
+    sourceX,
+    sourceY,
+    sourceWidth,
+    sourceHeight,
+    x,
+    y,
+    width,
+    height
+  );
+
+}
+
+
+async function exportProjectImage(){
+
+  const project =
+    projects.find(
+      p =>
+        p.id ===
+        selectedProjectId
+    );
+
+
+  if(!project){
+    return;
+  }
+
+
+  const W = 1920;
+  const H = 1080;
+
+
+  const canvas =
+    document.createElement(
+      "canvas"
+    );
+
+
+  canvas.width = W;
+  canvas.height = H;
+
+
+  const ctx =
+    canvas.getContext(
+      "2d"
+    );
+
+
+  const navy =
+    "#172033";
+
+  const muted =
+    "#7d8797";
+
+  const green =
+    "#1d9b63";
+
+  const red =
+    "#df5353";
+
+  const blue =
+    "#3976d3";
+
+  const white =
+    "#ffffff";
+
+
+  function rounded(
+    x,y,w,h,r,color
+  ){
+
+    ctx.beginPath();
+
+    ctx.roundRect(
+      x,y,w,h,r
+    );
+
+    ctx.fillStyle =
+      color;
+
+    ctx.fill();
+
+  }
+
+
+  function setFont(
+    size,
+    weight = "400"
+  ){
+
+    return (
+      weight +
+      " " +
+      size +
+      "px -apple-system,BlinkMacSystemFont,'Segoe UI',Tahoma,Arial,sans-serif"
+    );
+
+  }
+
+
+  function text(
+    value,
+    x,
+    y,
+    size,
+    weight = "400",
+    color = navy,
+    align = "left"
+  ){
+
+    ctx.font =
+      setFont(
+        size,
+        weight
+      );
+
+
+    ctx.fillStyle =
+      color;
+
+
+    ctx.textAlign =
+      align;
+
+
+    ctx.textBaseline =
+      "alphabetic";
+
+
+    ctx.fillText(
+      String(value),
+      x,
+      y
+    );
+
+  }
+
+
+  ctx.fillStyle =
+    "#f4f6f9";
+
+  ctx.fillRect(
+    0,0,W,H
+  );
+
+
+  /*
+    Header
+    ใช้ Background ของ Project
+    เฉพาะในส่วน Hero
+  */
+
+  const background =
+    getProjectBackground(
+      project.id
+    );
+
+
+  if(background){
+
+    try{
+
+      const image =
+        await loadImage(
+          background
+        );
+
+
+      drawCover(
+        ctx,
+        image,
+        0,
+        0,
+        W,
+        310
+      );
+
+
+      const gradient =
+        ctx.createLinearGradient(
+          0,0,0,310
+        );
+
+
+      gradient.addColorStop(
+        0,
+        "rgba(12,20,35,.42)"
+      );
+
+
+      gradient.addColorStop(
+        1,
+        "rgba(12,20,35,.90)"
+      );
+
+
+      ctx.fillStyle =
+        gradient;
+
+
+      ctx.fillRect(
+        0,0,W,310
+      );
+
+    }
+    catch(error){
+
+      ctx.fillStyle =
+        navy;
+
+
+      ctx.fillRect(
+        0,0,W,310
+      );
+
+    }
+
+  }
+
+  else{
+
+    ctx.fillStyle =
+      navy;
+
+
+    ctx.fillRect(
+      0,0,W,310
+    );
+
+  }
+
+
+  text(
+    "EXECUTIVE PROJECT DASHBOARD",
+    90,
+    72,
+    24,
+    "700",
+    "rgba(255,255,255,.68)"
+  );
+
+
+  /*
+    ปรับขนาดชื่อ Project
+    ถ้าชื่อยาว
+  */
+
+  let titleSize = 50;
+
+
+  while(
+    titleSize > 28
+  ){
+
+    ctx.font =
+      setFont(
+        titleSize,
+        "800"
+      );
+
+
+    if(
+      ctx.measureText(
+        project.name || "-"
+      ).width <= 1300
+    ){
+      break;
+    }
+
+
+    titleSize -= 2;
+
+  }
+
+
+  text(
+    project.name || "-",
+    90,
+    150,
+    titleSize,
+    "800",
+    white
+  );
+
+
+  text(
+    project.location ||
+    "ไม่ระบุสถานที่",
+    90,
+    198,
+    25,
+    "400",
+    "rgba(255,255,255,.78)"
+  );
+
+
+  rounded(
+    1540,
+    68,
+    290,
+    125,
+    25,
+    "rgba(255,255,255,.14)"
+  );
+
+
+  text(
+    "ความคืบหน้า",
+    1685,
+    111,
+    20,
+    "500",
+    "rgba(255,255,255,.72)",
+    "center"
+  );
+
+
+  text(
+    Number(
+      project.progress || 0
+    ) + "%",
+    1685,
+    167,
+    50,
+    "800",
+    white,
+    "center"
+  );
+
+
+  const days =
+    daysInfo(project);
+
+
+  const completedTasks =
+    project.tasks?.filter(
+      task =>
+        Number(
+          task.progress || 0
+        ) >= 100
+    ).length || 0;
+
+
+  const totalTasks =
+    project.tasks?.length || 0;
+
+
+  const cards = [
+
+    [
+      "มูลค่าโครงการ",
+      money(project.value)
+    ],
+
+    [
+      "วันที่เริ่ม",
+      formatDate(
+        project.startDate
+      )
+    ],
+
+    [
+      "กำหนดเสร็จ",
+      formatDate(
+        project.endDate
+      )
+    ],
+
+    [
+      "ระยะเวลาคงเหลือ",
+      days.text
+    ]
+
+  ];
+
+
+  cards.forEach(
+    (card,index) => {
+
+      const x =
+        90 +
+        index * 445;
+
+
+      rounded(
+        x,
+        350,
+        405,
+        130,
+        22,
+        white
+      );
+
+
+      text(
+        card[0],
+        x + 28,
+        392,
+        19,
+        "500",
+        muted
+      );
+
+
+      text(
+        card[1],
+        x + 28,
+        447,
+        30,
+        "800",
+        index === 3 &&
+        days.cls === "overdue"
+          ? red
+          : navy
+      );
+
+    }
+  );
+
+
+  /* PROGRESS */
+
+  text(
+    "PROJECT PROGRESS",
+    90,
+    545,
+    22,
+    "800",
+    navy
+  );
+
+
+  rounded(
+    90,
+    575,
+    1740,
+    24,
+    12,
+    "#e2e6ec"
+  );
+
+
+  const progressWidth =
+    1740 *
+    Math.max(
+      0,
+      Math.min(
+        100,
+        Number(
+          project.progress || 0
+        )
+      )
+    ) /
+    100;
+
+
+  if(progressWidth > 0){
+
+    rounded(
+      90,
+      575,
+      progressWidth,
+      24,
+      12,
+      navy
+    );
+
+  }
+
+
+  text(
+    Number(
+      project.progress || 0
+    ) + "%",
+    1830,
+    607,
+    23,
+    "800",
+    navy,
+    "right"
+  );
+
+
+  /* STATUS */
+
+  rounded(
+    90,
+    655,
+    510,
+    300,
+    24,
+    white
+  );
+
+
+  text(
+    "สถานะโครงการ",
+    125,
+    705,
+    19,
+    "500",
+    muted
+  );
+
+
+  text(
+    statusText(
+      project.status
+    ),
+    125,
+    755,
+    34,
+    "800",
+    project.status === "done"
+      ? green
+      : project.status === "delay"
+      ? red
+      : blue
+  );
+
+
+  text(
+    "รายการงาน",
+    125,
+    835,
+    19,
+    "500",
+    muted
+  );
+
+
+  text(
+    totalTasks + " งาน",
+    125,
+    885,
+    34,
+    "800",
+    navy
+  );
+
+
+  text(
+    "งานเสร็จ",
+    335,
+    835,
+    19,
+    "500",
+    muted
+  );
+
+
+  text(
+    completedTasks +
+    " งาน",
+    335,
+    885,
+    34,
+    "800",
+    green
+  );
+
+
+  /* TASKS */
+
+  rounded(
+    635,
+    655,
+    1195,
+    300,
+    24,
+    white
+  );
+
+
+  text(
+    "รายการงานสำคัญ",
+    675,
+    705,
+    22,
+    "800",
+    navy
+  );
+
+
+  const tasks =
+    (project.tasks || [])
+      .slice(
+        0,
+        5
+      );
+
+
+  if(tasks.length === 0){
+
+    text(
+      "ยังไม่มีรายการงาน",
+      675,
+      775,
+      22,
+      "400",
+      muted
+    );
+
+  }
+
+
+  tasks.forEach(
+    (task,index) => {
+
+      const y =
+        770 +
+        index * 42;
+
+
+      let taskName =
+        task.name || "-";
+
+
+      ctx.font =
+        setFont(
+          19,
+          "600"
+        );
+
+
+      while(
+        taskName.length > 5 &&
+        ctx.measureText(
+          "• " +
+          taskName
+        ).width > 930
+      ){
+
+        taskName =
+          taskName.slice(
+            0,
+            -1
+          );
+
+      }
+
+
+      if(
+        taskName !==
+        task.name
+      ){
+
+        taskName =
+          taskName.trim() +
+          "…";
+
+      }
+
+
+      text(
+        "• " +
+        taskName,
+        675,
+        y,
+        19,
+        "600",
+        navy
+      );
+
+
+      text(
+        Number(
+          task.progress || 0
+        ) + "%",
+        1770,
+        y,
+        19,
+        "800",
+        Number(
+          task.progress || 0
+        ) >= 100
+          ? green
+          : navy,
+        "right"
+      );
+
+    }
+  );
+
+
+  text(
+    "Generated from Project Dashboard",
+    90,
+    1020,
+    18,
+    "400",
+    "#9aa2b1"
+  );
+
+
+  text(
+    new Date()
+      .toLocaleDateString(
+        "th-TH",
+        {
+          day:"numeric",
+          month:"long",
+          year:"numeric"
+        }
+      ),
+    1830,
+    1020,
+    18,
+    "400",
+    "#9aa2b1",
+    "right"
+  );
+
+
+  /* EXPORT */
+
+  canvas.toBlob(
+    async function(blob){
+
+      if(!blob){
+        return;
+      }
+
+
+      const safeName =
+        (
+          project.name ||
+          "Project"
+        )
+        .replace(
+          /[\\/:*?"<>|]/g,
+          "-"
+        )
+        .slice(
+          0,
+          60
+        );
+
+
+      const file =
+        new File(
+          [blob],
+          "Project-Summary-" +
+          safeName +
+          ".png",
+          {
+            type:"image/png"
+          }
+        );
+
+
+      /*
+        iPhone/iPad:
+        เปิด Share Sheet ก่อน
+      */
+
+      try{
+
+        if(
+          navigator.canShare &&
+          navigator.canShare(
+            {
+              files:[file]
+            }
+          )
+        ){
+
+          await navigator.share(
+            {
+              files:[file],
+              title:
+                "Project Summary"
+            }
+          );
+
+          return;
+
+        }
+
+      }
+      catch(error){
+
+        if(
+          error.name ===
+          "AbortError"
+        ){
+          return;
+        }
+
+      }
+
+
+      /*
+        Browser ปกติ:
+        Download PNG
+      */
+
+      const url =
+        URL.createObjectURL(
+          blob
+        );
+
+
+      const link =
+        document.createElement(
+          "a"
+        );
+
+
+      link.href =
+        url;
+
+
+      link.download =
+        file.name;
+
+
+      document.body
+        .appendChild(
+          link
+        );
+
+
+      link.click();
+
+      link.remove();
+
+
+      setTimeout(
+        () =>
+          URL.revokeObjectURL(
+            url
+          ),
+        3000
+      );
+
+    },
+    "image/png",
+    1
+  );
+
+}
+
+
+/* TODAY */
 
 function showToday(){
 
   document
-    .getElementById("todayText")
+    .getElementById(
+      "todayText"
+    )
     .textContent =
 
       new Date()
@@ -2941,31 +4573,40 @@ function showToday(){
 }
 
 
-/* ================= BACKGROUND CLOSE ================= */
+/* CLOSE MODAL BY BACKDROP */
 
 document
-  .querySelectorAll(".modal")
-  .forEach(modal => {
+  .querySelectorAll(
+    ".modal"
+  )
+  .forEach(
+    modal => {
 
-    modal.addEventListener(
-      "click",
-      function(event){
+      modal.addEventListener(
+        "click",
+        function(event){
 
-        if(event.target === modal){
+          if(
+            event.target ===
+            modal
+          ){
 
-          modal
-            .classList
-            .remove("show");
+            modal
+              .classList
+              .remove(
+                "show"
+              );
+
+          }
 
         }
+      );
 
-      }
-    );
-
-  });
+    }
+  );
 
 
-/* ================= START ================= */
+/* START */
 
 loadData();
 
