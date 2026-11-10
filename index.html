@@ -2125,6 +2125,47 @@ body,input,select,textarea,button{font-family:"Thonburi","Noto Sans Thai",-apple
 .inline-line-icon svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
 .payment-title{display:flex;align-items:center;color:#334155!important;font-size:12px!important;}
 @media(max-width:600px){.project-text-title:before{content:none!important}.project-note-card .project-text-title:before{content:none!important}}
+
+/* V25 — rounded Thai typography + category color icons */
+body,input,select,textarea,button{
+  font-family:"Arial Rounded MT Bold","Thonburi","Noto Sans Thai","Tahoma",sans-serif;
+}
+.detail-title,.project-name,.contractor-name,.modern-kpi-value,
+.main-progress-head strong,.hero-donut-value,.project-percent,
+.payment-detail-row strong{
+  font-weight:900;
+  letter-spacing:-.35px;
+}
+.modern-kpi-label,.contractor-label,.contractor-contact small,
+.project-text-title,.progress-label{
+  font-weight:800;
+  letter-spacing:-.1px;
+}
+
+/* value / money = green */
+.modern-kpi-grid .modern-kpi:nth-child(1) .detail-line-icon{
+  color:#078657!important;background:#e7f7ef!important;
+}
+/* duration / calendar = purple */
+.modern-kpi-grid .modern-kpi:nth-child(2) .detail-line-icon{
+  color:#6d35bd!important;background:#f1eafd!important;
+}
+/* supervisor / building = blue */
+.contractor-icon.detail-line-icon{
+  color:#1769c2!important;background:#e8f2ff!important;
+}
+/* payment = gold/orange */
+.payment-title .inline-line-icon{
+  color:#d47a00!important;background:#fff2d9!important;
+}
+/* note = orange */
+.project-note-card .project-text-title{
+  color:#a96300!important;
+}
+.project-note-card{
+  border-left:5px solid #f0a21a!important;
+}
+
 </style>
 </head>
 
