@@ -2037,6 +2037,11 @@ body{background:var(--v8-bg);}
 }
 @media(max-width:370px){#projectModal .two{grid-template-columns:1fr}.kpi-grid{grid-template-columns:1fr 1fr!important}}
 
+
+/* ===== V8.1 DETAIL ACTION TAP FIX ===== */
+.detail-buttons,.secondary-actions{position:relative;z-index:80;pointer-events:auto!important;}
+.detail-buttons .btn,.secondary-actions .btn{position:relative;z-index:81;pointer-events:auto!important;touch-action:manipulation;-webkit-tap-highlight-color:rgba(11,91,211,.12);user-select:none;-webkit-user-select:none;}
+@media(max-width:600px){.detail-buttons .btn,.secondary-actions .btn{min-height:52px;}}
 </style>
 </head>
 
@@ -4595,9 +4600,21 @@ let detailSwipeStartX=0, detailSwipeStartY=0, detailSwipeAtTop=false;
 function setupDetailSwipe(){
   const box=document.querySelector("#detailModal .detail-box");
   if(!box || box.dataset.swipeReady)return; box.dataset.swipeReady="1";
-  box.addEventListener("touchstart",e=>{const t=e.touches[0];detailSwipeStartX=t.clientX;detailSwipeStartY=t.clientY;detailSwipeAtTop=box.scrollTop<=2;box.style.transition="";},{passive:true});
-  box.addEventListener("touchmove",e=>{if(!detailSwipeAtTop)return;const t=e.touches[0],dy=t.clientY-detailSwipeStartY,dx=t.clientX-detailSwipeStartX;if(dy>0&&Math.abs(dy)>Math.abs(dx)*1.15){const move=Math.min(150,dy*.42);box.style.transform=`translateY(${move}px)`;box.style.opacity=String(Math.max(.72,1-move/520));}},{passive:true});
-  box.addEventListener("touchend",e=>{const t=e.changedTouches[0],dx=t.clientX-detailSwipeStartX,dy=t.clientY-detailSwipeStartY;box.style.transition="transform .28s cubic-bezier(.22,.8,.22,1), opacity .22s ease";if(detailSwipeAtTop&&dy>115&&Math.abs(dy)>Math.abs(dx)*1.15){closeDetail(true);return;}box.style.transform="";box.style.opacity="";if(Math.abs(dx)<65||Math.abs(dx)<Math.abs(dy)*1.35)return;const i=projects.findIndex(p=>p.id===selectedProjectId);if(i<0||!projects.length)return;const next=dx<0?(i+1)%projects.length:(i-1+projects.length)%projects.length;openDetail(projects[next].id);},{passive:true});
+  let detailTouchInteractive=false;
+  const isInteractiveTarget = target => !!target.closest("button, a, input, select, textarea, label, [role='button'], .task-edit, .task-delete");
+  box.addEventListener("touchstart",e=>{
+    detailTouchInteractive=isInteractiveTarget(e.target);
+    if(detailTouchInteractive){ detailSwipeAtTop=false; return; }
+    const t=e.touches[0];detailSwipeStartX=t.clientX;detailSwipeStartY=t.clientY;detailSwipeAtTop=box.scrollTop<=2;box.style.transition="";
+  },{passive:true});
+  box.addEventListener("touchmove",e=>{
+    if(detailTouchInteractive||!detailSwipeAtTop)return;
+    const t=e.touches[0],dy=t.clientY-detailSwipeStartY,dx=t.clientX-detailSwipeStartX;if(dy>0&&Math.abs(dy)>Math.abs(dx)*1.15){const move=Math.min(150,dy*.42);box.style.transform=`translateY(${move}px)`;box.style.opacity=String(Math.max(.72,1-move/520));}
+  },{passive:true});
+  box.addEventListener("touchend",e=>{
+    if(detailTouchInteractive){ detailTouchInteractive=false; return; }
+    const t=e.changedTouches[0],dx=t.clientX-detailSwipeStartX,dy=t.clientY-detailSwipeStartY;box.style.transition="transform .28s cubic-bezier(.22,.8,.22,1), opacity .22s ease";if(detailSwipeAtTop&&dy>115&&Math.abs(dy)>Math.abs(dx)*1.15){closeDetail(true);return;}box.style.transform="";box.style.opacity="";if(Math.abs(dx)<65||Math.abs(dx)<Math.abs(dy)*1.35)return;const i=projects.findIndex(p=>p.id===selectedProjectId);if(i<0||!projects.length)return;const next=dx<0?(i+1)%projects.length:(i-1+projects.length)%projects.length;openDetail(projects[next].id);
+  },{passive:true});
 }
 
 /* ==================================================
