@@ -2228,11 +2228,26 @@ html,body,button,input,select,textarea{
 @keyframes ptrHomeSpin{to{transform:rotate(360deg)}}
 
 
-/* V29 */
+/* V30 — Mitr + stable collapsible installment list */
 @import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&display=swap');
-html,body,button,input,select,textarea{font-family:"Mitr","Thonburi","Noto Sans Thai",sans-serif!important}
-.contractor-name{font-size:17px!important;font-weight:500!important}.contractor-label,.contractor-contact small{font-size:12px!important;font-weight:400!important}.contractor-contact strong{font-size:16px!important;font-weight:500!important}
-.payment-installments-toggle{width:100%;border:0;background:#f4f7fb;color:#173d72;min-height:52px;border-radius:16px;padding:0 16px;margin:14px 0 0;display:flex;align-items:center;justify-content:space-between;font-family:"Mitr",sans-serif!important;font-size:15px;font-weight:500;cursor:pointer}.payment-installments-toggle .toggle-chevron{font-size:20px;transition:transform .2s}.payment-installments-toggle.open .toggle-chevron{transform:rotate(180deg)}.payment-installments-collapsible{display:none}.payment-installments-collapsible.open{display:block}
+html,body,button,input,select,textarea{
+  font-family:"Mitr","Thonburi","Noto Sans Thai",sans-serif!important;
+}
+.contractor-name{font-size:17px!important;font-weight:500!important}
+.contractor-label,.contractor-contact small{font-size:12px!important;font-weight:400!important}
+.contractor-contact strong{font-size:16px!important;font-weight:500!important}
+
+.payment-installments-details{margin-top:14px}
+.payment-installments-details>summary{
+  list-style:none;cursor:pointer;min-height:52px;padding:0 16px;border-radius:16px;
+  background:#f4f7fb;color:#173d72;display:flex;align-items:center;justify-content:space-between;
+  font-size:15px;font-weight:500;-webkit-tap-highlight-color:transparent;
+}
+.payment-installments-details>summary::-webkit-details-marker{display:none}
+.payment-installments-details>summary::after{content:"⌄";font-size:21px;transition:transform .18s ease}
+.payment-installments-details[open]>summary::after{transform:rotate(180deg)}
+.payment-installments-details .payment-detail-list{margin-top:10px}
+
 </style>
 </head>
 
@@ -6134,7 +6149,7 @@ function openDetail(id){
         </div>
         <div class="progress-track" style="margin-top:12px;"><div class="progress-fill" style="width:${pay.percent}%"></div></div>
         <div style="text-align:right;margin-top:6px;font-weight:800;color:#1767d5;">เบิกแล้ว ${pay.percent}%</div>
-        ${pay.items?.length?`<div class="payment-detail-list">${pay.items.map((x,i)=>`<div class="payment-detail-row"><strong>งวด ${i+1}</strong><div><strong>${escapeHTML(x.description||`งวดที่ ${i+1}`)}</strong><br><small>${money(x.amount)} บาท</small></div><span class="payment-pill ${x.status}">${paymentStatusLabel(x.status)}</span></div>`).join("")}</div>`:""}
+        ${pay.items?.length?`<details class="payment-installments-details"><summary>ดูรายละเอียดงวดงาน (${pay.items.length} งวด)</summary><div class="payment-detail-list">${pay.items.map((x,i)=>`<div class="payment-detail-row"><strong>งวด ${i+1}</strong><div><strong>${escapeHTML(x.description||`งวดที่ ${i+1}`)}</strong><br><small>${money(x.amount)} บาท</small></div><span class="payment-pill ${x.status}">${paymentStatusLabel(x.status)}</span></div>`).join("")}</div></details>`:""}
       </div>` : ""; })()}
 
       <div class="task-overview">
@@ -6320,7 +6335,7 @@ function openDetail(id){
 
 function closeDetail(animated=false){
   const modal=document.getElementById("detailModal"),box=modal?.querySelector(".detail-box");if(!modal||!box)return;
-  const finish=()=>{modal.classList.remove("show","closing");box.style.transform="";box.style.opacity="";box.style.transition="";requestAnimationFrame(()=>{const c=document.getElementById("detailContent");if(c&&!modal.classList.contains("show"))c.innerHTML="";});};
+  const finish=()=>{modal.classList.remove("show","closing");box.style.transform="";box.style.opacity="";box.style.transition="";selectedProjectId=null;requestAnimationFrame(()=>{const c=document.getElementById("detailContent");if(c&&!modal.classList.contains("show"))c.innerHTML="";});};
   if(animated){modal.classList.add("closing");box.style.transition="transform .32s cubic-bezier(.32,.72,0,1), opacity .24s ease";box.style.transform="translateY(105%)";box.style.opacity=".35";setTimeout(finish,320);}else finish();
 }
 
@@ -8015,26 +8030,13 @@ else{
   const threshold=72;
 
   function projectDetailOpen(){
-    /* selectedProjectId is used by this dashboard while a project detail is open.
-       Also check common visible modal states as a safety net. */
-    try{
-      if(typeof selectedProjectId!=="undefined" && selectedProjectId) return true;
-    }catch(_){}
-    const candidates=[
-      document.getElementById("projectDetailModal"),
-      document.querySelector(".project-detail-modal.show"),
-      document.querySelector(".detail-modal.show"),
-      document.querySelector("[data-project-detail].show")
-    ].filter(Boolean);
-    return candidates.some(el=>{
-      const s=getComputedStyle(el);
-      return s.display!=="none" && s.visibility!=="hidden";
-    });
+    const modal=document.getElementById("detailModal");
+    return !!(modal && modal.classList.contains("show"));
   }
 
   function homeAtTop(){
-    return !projectDetailOpen() && window.scrollY<=1 &&
-      (document.scrollingElement ? document.scrollingElement.scrollTop<=1 : true);
+    const root=document.scrollingElement || document.documentElement;
+    return !projectDetailOpen() && (window.scrollY<=12) && (!root || root.scrollTop<=12);
   }
 
   function hide(){
@@ -8093,7 +8095,5 @@ else{
 })();
 
 </script>
-<script>
-(function(){function setup(){const rows=[...document.querySelectorAll(".payment-detail-row")];if(!rows.length)return;const p=rows[0].parentElement;if(!p||p.querySelector(":scope > .payment-installments-toggle"))return;const w=document.createElement("div");w.className="payment-installments-collapsible";p.insertBefore(w,rows[0]);rows.forEach(r=>w.appendChild(r));const b=document.createElement("button");b.type="button";b.className="payment-installments-toggle";b.innerHTML='<span>ดูรายละเอียดงวดงาน ('+rows.length+' งวด)</span><span class="toggle-chevron">⌄</span>';p.insertBefore(b,w);b.onclick=function(){const o=w.classList.toggle("open");b.classList.toggle("open",o);b.firstElementChild.textContent=(o?"ซ่อนรายละเอียดงวดงาน":"ดูรายละเอียดงวดงาน")+" ("+rows.length+" งวด)"}}const mo=new MutationObserver(setup);mo.observe(document.body,{childList:true,subtree:true});document.addEventListener("DOMContentLoaded",setup);setTimeout(setup,300)})();
-</script></body>
+</body>
 </html>
