@@ -2361,6 +2361,36 @@ strong,b{font-weight:500!important}
 }
 .contractor-extra strong{font-size:15px!important;font-weight:500!important;}
 
+
+/* V38 — contractor/contact typography + swapped coordinator/phone */
+.contractor-contact small,
+.contractor-extra span{
+  font-family:"Mitr","Thonburi","Noto Sans Thai",sans-serif!important;
+  font-size:14px!important;
+  line-height:1.35!important;
+  font-weight:300!important;
+  letter-spacing:0!important;
+}
+.contractor-contact>strong,
+.contractor-extra strong{
+  font-family:"Mitr","Thonburi","Noto Sans Thai",sans-serif!important;
+  font-size:16px!important;
+  line-height:1.45!important;
+  font-weight:400!important;
+  letter-spacing:0!important;
+}
+.contractor-company-value{
+  white-space:nowrap!important;
+  font-size:15px!important;
+}
+.contractor-extra{
+  margin-top:8px!important;
+}
+.contractor-extra span,
+.contractor-extra strong{
+  display:block!important;
+}
+
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -6247,24 +6277,15 @@ function openDetail(id){
                 <div class="contractor-contact">
 
                   <small>บริษัทรับเหมา</small>
-                  <strong>${escapeHTML(project.contractorCompany || "-")}</strong>
-                  <div class="contractor-extra"><span>ผู้ประสานงาน</span><strong>${escapeHTML(project.contractorContact || "-")}</strong></div>
+                  <strong class="contractor-company-value">${escapeHTML(project.contractorCompany || "-")}</strong>
+                  <div class="contractor-extra contractor-phone-row"><span>เบอร์โทรศัพท์</span><strong>${escapeHTML(project.contractorPhone || "-")}</strong></div>
 
                 </div>
 
-                <div class="contractor-contact">
+                <div class="contractor-contact contractor-coordinator">
 
-                  <small>
-                    เบอร์โทรศัพท์
-                  </small>
-
-                  <strong>
-                    ${escapeHTML(
-                      project.contractorPhone ||
-                      "-"
-                    )}
-                  </strong>
-
+                  <small>ผู้ประสานงาน</small>
+                  <strong>${escapeHTML(project.contractorContact || "-")}</strong>
 
                 </div>
 
