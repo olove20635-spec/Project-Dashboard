@@ -2229,7 +2229,7 @@ html,body,button,input,select,textarea{
 
 
 /* V30 — Mitr + stable collapsible installment list */
-400;500;600;700&display=swap');
+
 html,body,button,input,select,textarea{
   font-family:"Mitr","Thonburi","Noto Sans Thai",sans-serif!important;
 }
@@ -2250,16 +2250,6 @@ html,body,button,input,select,textarea{
 
 
 /* V31 — reliable Mitr loading on iOS/PWA + note line fix */
-@font-face{
-  font-family:"MitrLocal";
-  src:url("https://fonts.gstatic.com/s/mitr/v11/pxiEypw5ucZF8YcdFJDUc1NECPY.woff2") format("woff2");
-  font-style:normal;font-weight:400;font-display:swap;
-}
-@font-face{
-  font-family:"MitrLocal";
-  src:url("https://fonts.gstatic.com/s/mitr/v11/pxiBypw5ucZF8YcdLEj5Z1xlFQ.woff2") format("woff2");
-  font-style:normal;font-weight:500 700;font-display:swap;
-}
 html,body,button,input,select,textarea,
 .detail-title,.project-name,.contractor-name,.modern-kpi-value,
 .main-progress-head strong,.hero-donut-value,.project-percent,.kpi-value,
@@ -2284,9 +2274,35 @@ html,body,button,input,select,textarea,
 .project-ref{margin-top:4px;font-size:13px;font-weight:400;opacity:.86}
 .detail-project-ref{margin-top:5px;font-size:14px;font-weight:400;opacity:.9}
 
+
+/* V33 — final font override: Mitr */
+html,body,body *,button,input,select,textarea{
+  font-family:"Mitr","Thonburi","Noto Sans Thai",sans-serif!important;
+}
+body{font-weight:400}
+input,select,textarea,button{font-weight:400}
+.detail-title,.project-name,.main-progress-head strong,.hero-donut-value,
+.project-percent,.kpi-value,.modern-kpi-value,.contractor-name,
+.payment-detail-row strong,.payment-installments-details>summary{
+  font-weight:500!important;
+  letter-spacing:0!important;
+}
+
+
+/* V33 — note alignment */
+.project-note-card .project-text-content{
+  white-space:pre-line!important;
+  text-align:left!important;
+  line-height:1.7!important;
+  margin-top:8px!important;
+  padding:0!important;
+  text-indent:0!important;
+}
+
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="dns-prefetch" href="//fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -2793,6 +2809,14 @@ function clamp(value,min,max){
 
 }
 
+
+function cleanMultilineText(value){
+  return String(value ?? "")
+    .split(/\r?\n/)
+    .map(line => line.trim())
+    .join("\n")
+    .trim();
+}
 
 function escapeHTML(value){
 
@@ -6200,7 +6224,7 @@ function openDetail(id){
               </div>
 
               <div class="project-text-content">
-                ${escapeHTML(project.remark)}
+                ${escapeHTML(cleanMultilineText(project.remark))}
               </div>
 
             </div>
