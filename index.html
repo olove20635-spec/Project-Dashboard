@@ -2229,7 +2229,7 @@ html,body,button,input,select,textarea{
 
 
 /* V30 — Mitr + stable collapsible installment list */
-@import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&display=swap');
+400;500;600;700&display=swap');
 html,body,button,input,select,textarea{
   font-family:"Mitr","Thonburi","Noto Sans Thai",sans-serif!important;
 }
@@ -2248,7 +2248,45 @@ html,body,button,input,select,textarea{
 .payment-installments-details[open]>summary::after{transform:rotate(180deg)}
 .payment-installments-details .payment-detail-list{margin-top:10px}
 
+
+/* V31 — reliable Mitr loading on iOS/PWA + note line fix */
+@font-face{
+  font-family:"MitrLocal";
+  src:url("https://fonts.gstatic.com/s/mitr/v11/pxiEypw5ucZF8YcdFJDUc1NECPY.woff2") format("woff2");
+  font-style:normal;font-weight:400;font-display:swap;
+}
+@font-face{
+  font-family:"MitrLocal";
+  src:url("https://fonts.gstatic.com/s/mitr/v11/pxiBypw5ucZF8YcdLEj5Z1xlFQ.woff2") format("woff2");
+  font-style:normal;font-weight:500 700;font-display:swap;
+}
+html,body,button,input,select,textarea,
+.detail-title,.project-name,.contractor-name,.modern-kpi-value,
+.main-progress-head strong,.hero-donut-value,.project-percent,.kpi-value,
+.payment-detail-row strong,.project-note-card,.project-note-card *{
+  font-family:"MitrLocal","Thonburi","Noto Sans Thai",sans-serif!important;
+}
+
+/* Keep user-entered note line breaks exactly; don't re-center or collapse them */
+.project-note-card .project-text-content,
+.project-note-card .note-text,
+.project-note-card p{
+  white-space:pre-wrap!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+  text-align:left!important;
+  line-height:1.65!important;
+  margin-top:10px!important;
+}
+
+
+/* V32 — Contract / PO / Project reference */
+.project-ref{margin-top:4px;font-size:13px;font-weight:400;opacity:.86}
+.detail-project-ref{margin-top:5px;font-size:14px;font-weight:400;opacity:.9}
+
 </style>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="//fonts.gstatic.com">
 </head>
 
 <body>
@@ -2336,6 +2374,13 @@ html,body,button,input,select,textarea{
       id="projectName"
       type="text"
       placeholder="เช่น งานติดตั้งระบบไฟฟ้าโรงคัดไข่"
+    >
+
+    <label>เลขที่สัญญา / เลขที่ PO / เลข Project</label>
+    <input
+      id="projectRef"
+      type="text"
+      placeholder="เช่น CT-001 / PO-12345 / PJ-2026-01"
     >
 
     <label>สถานที่ / ลูกค้า</label>
@@ -4381,6 +4426,11 @@ function render(){
               "ไม่ระบุสถานที่"
             )}
           </div>
+          ${project.projectRef ? `
+            <div class="project-ref">
+              ${escapeHTML(project.projectRef)}
+            </div>
+          ` : ""}
 
           ${
             project.contractorCompany
@@ -4534,6 +4584,14 @@ function openProjectModal(
     )
     .value =
       project?.name || "";
+
+
+  document
+    .getElementById(
+      "projectRef"
+    )
+    .value =
+      project?.projectRef || "";
 
 
   document
@@ -4785,6 +4843,14 @@ function saveProject(){
   const data = {
 
     name,
+
+    projectRef:
+      document
+        .getElementById(
+          "projectRef"
+        )
+        .value
+        .trim(),
 
     location:
       document
@@ -5934,6 +6000,11 @@ function openDetail(id){
               "ไม่ระบุสถานที่"
             )}
           </div>
+          ${project.projectRef ? `
+            <div class="detail-project-ref">
+              ${escapeHTML(project.projectRef)}
+            </div>
+          ` : ""}
 
           ${
             project.contractorCompany
