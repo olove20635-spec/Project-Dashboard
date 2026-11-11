@@ -2227,6 +2227,12 @@ html,body,button,input,select,textarea{
 #homePullRefreshIndicator.refreshing .ptr-spinner{animation:ptrHomeSpin .65s linear infinite}
 @keyframes ptrHomeSpin{to{transform:rotate(360deg)}}
 
+
+/* V29 */
+@import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&display=swap');
+html,body,button,input,select,textarea{font-family:"Mitr","Thonburi","Noto Sans Thai",sans-serif!important}
+.contractor-name{font-size:17px!important;font-weight:500!important}.contractor-label,.contractor-contact small{font-size:12px!important;font-weight:400!important}.contractor-contact strong{font-size:16px!important;font-weight:500!important}
+.payment-installments-toggle{width:100%;border:0;background:#f4f7fb;color:#173d72;min-height:52px;border-radius:16px;padding:0 16px;margin:14px 0 0;display:flex;align-items:center;justify-content:space-between;font-family:"Mitr",sans-serif!important;font-size:15px;font-weight:500;cursor:pointer}.payment-installments-toggle .toggle-chevron{font-size:20px;transition:transform .2s}.payment-installments-toggle.open .toggle-chevron{transform:rotate(180deg)}.payment-installments-collapsible{display:none}.payment-installments-collapsible.open{display:block}
 </style>
 </head>
 
@@ -8087,5 +8093,7 @@ else{
 })();
 
 </script>
-</body>
+<script>
+(function(){function setup(){const rows=[...document.querySelectorAll(".payment-detail-row")];if(!rows.length)return;const p=rows[0].parentElement;if(!p||p.querySelector(":scope > .payment-installments-toggle"))return;const w=document.createElement("div");w.className="payment-installments-collapsible";p.insertBefore(w,rows[0]);rows.forEach(r=>w.appendChild(r));const b=document.createElement("button");b.type="button";b.className="payment-installments-toggle";b.innerHTML='<span>ดูรายละเอียดงวดงาน ('+rows.length+' งวด)</span><span class="toggle-chevron">⌄</span>';p.insertBefore(b,w);b.onclick=function(){const o=w.classList.toggle("open");b.classList.toggle("open",o);b.firstElementChild.textContent=(o?"ซ่อนรายละเอียดงวดงาน":"ดูรายละเอียดงวดงาน")+" ("+rows.length+" งวด)"}}const mo=new MutationObserver(setup);mo.observe(document.body,{childList:true,subtree:true});document.addEventListener("DOMContentLoaded",setup);setTimeout(setup,300)})();
+</script></body>
 </html>
