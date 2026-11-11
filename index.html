@@ -2299,6 +2299,51 @@ input,select,textarea,button{font-weight:400}
   text-indent:0!important;
 }
 
+
+/* V34 — Mitr lighter / cleaner */
+html,body,body *,button,input,select,textarea{
+  font-family:"Mitr","Thonburi","Noto Sans Thai",sans-serif!important;
+}
+body{font-weight:300!important}
+input,select,textarea{font-weight:300!important}
+button{font-weight:400!important}
+
+/* normal text */
+.contractor-label,.contractor-contact small,.modern-kpi-label,
+.project-text-content,.project-note-card,.project-note-card *,
+.detail-location,.detail-project-ref{
+  font-weight:300!important;
+}
+
+/* headings: medium, not bold */
+.detail-title,.project-name,.contractor-name,.main-progress-head strong,
+.payment-title,.payment-installments-details>summary,
+.project-text-title{
+  font-weight:400!important;
+}
+
+/* important values: medium only */
+.hero-donut-value,.project-percent,.kpi-value,.modern-kpi-value,
+.payment-detail-row strong,.contractor-contact strong{
+  font-weight:500!important;
+}
+
+/* prevent older rules from forcing heavy text */
+strong,b{font-weight:500!important}
+
+
+/* V35 — consistent numerals + phone field */
+.hero-donut-value,.project-percent,.kpi-value,.modern-kpi-value,
+.payment-detail-row strong,.contractor-contact strong,
+.main-progress-head strong,.project-duration-card,
+.payment-summary,.payment-summary *{
+  font-family:"Mitr","Thonburi","Noto Sans Thai",sans-serif!important;
+  font-weight:400!important;
+  font-variant-numeric:normal!important;
+  font-feature-settings:normal!important;
+  letter-spacing:0!important;
+}
+
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -4664,8 +4709,7 @@ function openProjectModal(
       "contractorPhone"
     )
     .value =
-      project?.contractorPhone ||
-      "";
+      formatThaiPhone(project?.contractorPhone || "");
 
 
   const controllerInput = document.getElementById("projectController");
@@ -4842,6 +4886,28 @@ function updateProgressLabel(){
 }
 
 
+function formatThaiPhone(value){
+  const digits=String(value||"").replace(/\D/g,"").slice(0,10);
+  if(digits.length<=3) return digits;
+  if(digits.length<=6) return digits.slice(0,3)+"-"+digits.slice(3);
+  return digits.slice(0,3)+"-"+digits.slice(3,6)+"-"+digits.slice(6);
+}
+
+(function(){
+  const bindPhoneFormat=()=>{
+    const el=document.getElementById("contractorPhone");
+    if(!el || el.dataset.phoneFormatBound) return;
+    el.dataset.phoneFormatBound="1";
+    el.addEventListener("input",()=>{
+      const formatted=formatThaiPhone(el.value);
+      if(el.value!==formatted) el.value=formatted;
+    });
+    el.addEventListener("blur",()=>{ el.value=formatThaiPhone(el.value); });
+  };
+  document.addEventListener("DOMContentLoaded",bindPhoneFormat);
+  new MutationObserver(bindPhoneFormat).observe(document.body,{childList:true,subtree:true});
+})();
+
 function saveProject(){
 
   const projectIdBeingEdited = editingProjectId;
@@ -4920,7 +4986,9 @@ function saveProject(){
           "contractorPhone"
         )
         .value
-        .trim(),
+        .trim()
+        ? formatThaiPhone(document.getElementById("contractorPhone").value)
+        : "",
 
     controller: (document.getElementById("projectController")?.value || "").trim(),
 
