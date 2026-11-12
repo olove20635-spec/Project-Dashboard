@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V100 • Final Export Polish</div>
+      <h1>Project Dashboard</h1><div class="build-version">V101 • Installment Cards Reference Match</div>
     </div>
 
 
@@ -7654,32 +7654,36 @@ async function exportProjectImage(){
       {label:"คงเหลือ",value:pay.remaining+" งวด",icon:"hourglass"}
     ];
     statBoxes.forEach((b,i)=>{
-      // V89: master-reference layout — equal cards, icon left, text block immediately to the right.
+      // V101: match the supplied reference — soft mint card, larger icon, balanced two-line text.
       const bw=258,bh=84,by=682;
       const bx=68+i*288;
       const sg=ctx.createLinearGradient(bx,by,bx+bw,by+bh);
-      sg.addColorStop(0,"#E9FAF6");sg.addColorStop(1,"#DDF4F1");
-      fillRoundRect(ctx,bx,by,bw,bh,15,sg);
+      sg.addColorStop(0,"#E3F8F4");
+      sg.addColorStop(.52,"#EAFBF8");
+      sg.addColorStop(1,"#D9F3EF");
+      fillRoundRect(ctx,bx,by,bw,bh,16,sg);
 
-      ctx.save();ctx.strokeStyle="#078E83";ctx.fillStyle="#078E83";ctx.lineWidth=3.2;
-      const ix=bx+50,iy=by+42;
+      const ix=bx+53,iy=by+42;
+      ctx.save();
+      ctx.strokeStyle="#079B84";ctx.fillStyle="#079B84";
+      ctx.lineWidth=4;ctx.lineCap="round";ctx.lineJoin="round";
       if(b.icon==="check"){
-        ctx.beginPath();ctx.arc(ix,iy,17,0,Math.PI*2);ctx.stroke();
-        ctx.beginPath();ctx.moveTo(ix-8,iy);ctx.lineTo(ix-2,iy+7);ctx.lineTo(ix+10,iy-8);ctx.stroke();
+        ctx.beginPath();ctx.arc(ix,iy,21,0,Math.PI*2);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(ix-10,iy);ctx.lineTo(ix-3,iy+8);ctx.lineTo(ix+12,iy-10);ctx.stroke();
       }else if(b.icon==="hourglass"){
-        ctx.beginPath();ctx.moveTo(ix-12,iy-17);ctx.lineTo(ix+12,iy-17);ctx.moveTo(ix-12,iy+17);ctx.lineTo(ix+12,iy+17);ctx.stroke();
-        ctx.beginPath();ctx.moveTo(ix-10,iy-15);ctx.bezierCurveTo(ix-9,iy-6,ix-3,iy-4,ix,iy);ctx.bezierCurveTo(ix+3,iy+4,ix+9,iy+6,ix+10,iy+15);ctx.stroke();
-        ctx.beginPath();ctx.moveTo(ix+10,iy-15);ctx.bezierCurveTo(ix+9,iy-6,ix+3,iy-4,ix,iy);ctx.bezierCurveTo(ix-3,iy+4,ix-9,iy+6,ix-10,iy+15);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(ix-15,iy-22);ctx.lineTo(ix+15,iy-22);ctx.moveTo(ix-15,iy+22);ctx.lineTo(ix+15,iy+22);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(ix-13,iy-19);ctx.bezierCurveTo(ix-12,iy-8,ix-5,iy-5,ix,iy);ctx.bezierCurveTo(ix+5,iy+5,ix+12,iy+8,ix+13,iy+19);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(ix+13,iy-19);ctx.bezierCurveTo(ix+12,iy-8,ix+5,iy-5,ix,iy);ctx.bezierCurveTo(ix-5,iy+5,ix-12,iy+8,ix-13,iy+19);ctx.stroke();
       }else{
-        const layer=(oy)=>{ctx.beginPath();ctx.moveTo(ix-16,iy+oy);ctx.lineTo(ix,iy+oy-8);ctx.lineTo(ix+16,iy+oy);ctx.lineTo(ix,iy+oy+8);ctx.closePath();ctx.stroke();};
-        layer(-8);layer(0);layer(8);
+        const layer=(oy)=>{ctx.beginPath();ctx.moveTo(ix-20,iy+oy);ctx.lineTo(ix,iy+oy-10);ctx.lineTo(ix+20,iy+oy);ctx.lineTo(ix,iy+oy+10);ctx.closePath();ctx.stroke();};
+        layer(-10);layer(0);layer(10);
       }
       ctx.restore();
 
-      // Keep label/value as one compact group, like the supplied reference.
-      const tx=bx+94;
-      drawText(ctx,b.label,tx,by+12,19,ink,500,"left");
-      drawText(ctx,b.value,tx,by+40,29,"#087E68",500,"left");
+      // Reference balance: text block starts close to icon and is vertically centered as a pair.
+      const tx=bx+103;
+      drawText(ctx,b.label,tx,by+10,21,"#173650",600,"left");
+      drawText(ctx,b.value,tx,by+39,31,"#087E68",600,"left");
     });
 
     // ===== PROJECT INFO =====
@@ -7748,7 +7752,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V100",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V101",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
