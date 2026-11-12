@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261112-v59-bg-preview-matches-export">
+<meta name="dashboard-build" content="20261112-v74-export-master-reference">
 <title>Project Dashboard V19</title>
-<link rel="manifest" href="./manifest.json?build=20261112-v59-bg-preview-matches-export">
+<link rel="manifest" href="./manifest.json?build=20261112-v74-export-master-reference">
 
 
 <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
@@ -21,7 +21,7 @@
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261112-v59-bg-preview-matches-export";
+  var BUILD = "20261112-v74-export-master-reference";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -2988,8 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V73 • Export Master Reference</div>
-      <div class="build-label" id="buildLabel">CURRENT BUILD • V72</div>
+      <h1>Project Dashboard</h1><div class="build-version">V74 • Export Master Reference</div>
     </div>
 
 
@@ -7276,7 +7275,7 @@ function drawColorKpiIcon(ctx,type,cx,cy,size){
   }else drawIcon(ctx,type,cx,cy,size,"#0A315D");
   ctx.restore();
 }
-/* V73: MASTER REFERENCE export rebuild - geometry, icon scale, typography and spacing matched to approved reference */
+/* V74: MASTER REFERENCE export rebuild - geometry, icon scale, typography and spacing matched to approved reference */
 async function exportProjectImage(){
   try{ if(document.fonts && document.fonts.ready) await document.fonts.ready; }catch(e){}
 
