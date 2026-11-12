@@ -3164,7 +3164,7 @@ strong,b,
 }
 
 /* =========================================================
-   V123 — PROJECT NOTE: FIX EXCESSIVE TITLE/BODY GAP
+   V124 — PROJECT NOTE: FIX EXCESSIVE TITLE/BODY GAP
    Exact fix: keep the card/layout unchanged, only tighten the
    vertical spacing between "หมายเหตุ" and the note body.
    ========================================================= */
@@ -3177,6 +3177,34 @@ strong,b,
 .project-note-card .project-text-content{
   margin:0!important;
   transform:none!important;
+}
+
+
+/* =========================================================
+   V124 — PROJECT NOTE: EXACT STACKED LAYOUT FIX
+   Remove inherited grid/flex spacing and place title + body as one compact block.
+   ========================================================= */
+.project-note-card{
+  display:block!important;
+  min-height:0!important;
+  height:auto!important;
+  padding:18px 16px 20px!important;
+  box-sizing:border-box!important;
+}
+.project-note-card > .project-text-title{
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+  line-height:1.35!important;
+  transform:none!important;
+}
+.project-note-card > .project-text-content{
+  display:block!important;
+  margin:10px 0 0 0!important;
+  padding:0!important;
+  line-height:1.55!important;
+  transform:none!important;
+  min-height:0!important;
 }
 
 </style>
@@ -3192,7 +3220,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V123 • Note Spacing Fix</div>
+      <h1>Project Dashboard</h1><div class="build-version">V124 • Note Layout Fix</div>
     </div>
 
 
@@ -8010,7 +8038,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V123",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V124",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
