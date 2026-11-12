@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V104 • KPI Text Size & Layout</div>
+      <h1>Project Dashboard</h1><div class="build-version">V105 • Progress KPI Text Adjust</div>
     </div>
 
 
@@ -7537,8 +7537,8 @@ async function exportProjectImage(){
       const valueY=topY+69;
       drawText(ctx,c.title,textCx,titleY,31,navy,650);
       if(i===0){
-        // Progress percentage is intentionally the largest KPI value.
-        drawText(ctx,c.value,textCx,valueY,66,c.color,700);
+        // V105: progress value slightly lighter and raised for better visual balance.
+        drawText(ctx,c.value,textCx,valueY-10,58,c.color,600);
       }else if(i===1){
         // Keep the full amount + บาท on one line while making it as large as the card allows.
         const moneyMaxW=cardW-(textCx-x)-18;
@@ -7785,7 +7785,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V104",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V105",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
