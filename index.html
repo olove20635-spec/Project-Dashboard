@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V99 • Section Icons + Restore Brand Logo</div>
+      <h1>Project Dashboard</h1><div class="build-version">V100 • Final Export Polish</div>
     </div>
 
 
@@ -7497,10 +7497,10 @@ async function exportProjectImage(){
     ctx.beginPath();ctx.moveTo(photoTL-18,photoY-10);ctx.lineTo(photoBL-18,photoY+photoH+8);ctx.stroke();
 
     // RIGHT: mirror the same gold / blue diagonal motif.
-    ctx.strokeStyle="#F1C52D";ctx.lineWidth=10;
-    ctx.beginPath();ctx.moveTo(photoTR+18,photoY-10);ctx.lineTo(photoBR+18,photoY+photoH+8);ctx.stroke();
-    ctx.strokeStyle="#1777A8";ctx.lineWidth=12;
-    ctx.beginPath();ctx.moveTo(photoTR+42,photoY-10);ctx.lineTo(photoBR+42,photoY+photoH+8);ctx.stroke();
+    ctx.strokeStyle="#F1C52D";ctx.lineWidth=8;
+    ctx.beginPath();ctx.moveTo(photoTR+12,photoY-10);ctx.lineTo(photoBR+12,photoY+photoH+8);ctx.stroke();
+    ctx.strokeStyle="#1777A8";ctx.lineWidth=9;
+    ctx.beginPath();ctx.moveTo(photoTR+31,photoY-10);ctx.lineTo(photoBR+31,photoY+photoH+8);ctx.stroke();
     ctx.restore();
 
     // ===== KPI CARDS =====
@@ -7611,8 +7611,9 @@ async function exportProjectImage(){
         ctx.fillText("!",iconCx,cy+1);
         ctx.restore();
       }else{
-        const sectionIconSize=(iconType==="payment"||iconType==="info")?46:40;
-        drawIcon(ctx,iconType,iconCx,cy,sectionIconSize,gold);
+        const sectionIconSize=iconType==="payment"?50:iconType==="info"?46:40;
+        const sectionIconY=iconType==="payment"?cy+1:cy;
+        drawIcon(ctx,iconType,iconCx,sectionIconY,sectionIconSize,gold);
       }
       ctx.save();
       ctx.fillStyle="#FFFFFF";
@@ -7631,11 +7632,11 @@ async function exportProjectImage(){
 
     drawText(ctx,"เบิกแล้ว",82,576,26,navy,500);
     // V86: fixed columns so the word "บาท" is vertically aligned on both rows.
-    drawText(ctx,money(pay.paidAmount),430,572,33,green,500,"right");
-    drawText(ctx,"บาท",446,572,33,green,500,"left");
+    drawText(ctx,money(pay.paidAmount),432,572,33,green,500,"right");
+    drawText(ctx,"บาท",450,572,33,green,500,"left");
     drawText(ctx,"คงเหลือ",82,626,26,navy,500);
-    drawText(ctx,money(pay.balance),430,622,33,green,500,"right");
-    drawText(ctx,"บาท",446,622,33,green,500,"left");
+    drawText(ctx,money(pay.balance),432,622,33,green,500,"right");
+    drawText(ctx,"บาท",450,622,33,green,500,"left");
 
     fillRoundRect(ctx,582,586,332,34,17,"#D8E3EC");
     const payBarX=582,payBarW=332,payBarY=586;
@@ -7699,7 +7700,7 @@ async function exportProjectImage(){
 
     // V90: vertically center icon, label, divider and value inside every project-info row.
     // icon | label | gold divider | value
-    const rowX=1012,rowW=846,rowH=31,rowStartY=555,rowGap=36;
+    const rowX=1012,rowW=846,rowH=33,rowStartY=552,rowGap=36;
     const iconX=1038,labelX=1078,dividerX=1260,valueX=1290;
     const drawInfoRowText=(text,x,cy,size,color,weight=500)=>{
       ctx.save();
@@ -7714,7 +7715,7 @@ async function exportProjectImage(){
       const rowTop=rowStartY+i*rowGap;
       const cy=rowTop+rowH/2;
       fillRoundRect(ctx,rowX,rowTop,rowW,rowH,5,i%2===0?"#E6EFF6":"#F8FBFD");
-      if(r[2]) drawIcon(ctx,r[2],iconX,cy,28,navy);
+      if(r[2]) drawIcon(ctx,r[2],iconX,cy,30,navy);
       drawInfoRowText(r[0],labelX,cy,20,navy,500);
       ctx.fillStyle=gold;ctx.fillRect(dividerX,cy-11.5,3,23);
       drawInfoRowText(r[1],valueX,cy,20,"#263D58",400);
@@ -7747,7 +7748,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V99",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V100",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
