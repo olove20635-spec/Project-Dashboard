@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261112-v54-task-tap-edit-fix">
+<meta name="dashboard-build" content="20261112-v55-installment-real-fix">
 <title>Project Dashboard V19</title>
-<link rel="manifest" href="./manifest.json?build=20261112-v54-task-tap-edit-fix">
+<link rel="manifest" href="./manifest.json?build=20261112-v55-installment-real-fix">
 
 
 <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
@@ -21,7 +21,7 @@
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261112-v54-task-tap-edit-fix";
+  var BUILD = "20261112-v55-installment-real-fix";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -8899,57 +8899,100 @@ document.addEventListener("click",e=>{
 },true);
 
 
-/* ===== V50: edit an installment directly from expanded payment details ===== */
+/* ===== V55 REAL INSTALLMENT EDIT FIX =====
+   IMPORTANT: payment rows are stored in project.payments (not project.installments).
+*/
 let quickInstallmentIndex=-1;
+
+function getEditablePayments(project){
+  if(!project) return [];
+  if(!Array.isArray(project.payments)) project.payments=[];
+  return project.payments;
+}
+
 function openInstallmentQuickEdit(index){
-  const p=quickEditProject(); if(!p || !Array.isArray(p.installments) || !p.installments[index]) return;
-  const x=p.installments[index];
+  const p=quickEditProject();
+  const payments=getEditablePayments(p);
+  if(!p || !payments[index]) return;
+
+  const x=payments[index];
   quickInstallmentIndex=index;
   quickEditType="installment";
+
   const modal=document.getElementById("quickEditModal");
   const title=document.getElementById("quickEditTitle");
   const fields=document.getElementById("quickEditFields");
+  if(!modal||!title||!fields) return;
+
   title.textContent=`แก้ไขงวด ${index+1}`;
   fields.innerHTML=
     quickField("ชื่องวด",`<input id="qeInstTitle" type="text" value="${escapeHTML(x.description||`งวดที่ ${index+1}`)}">`)+
     quickField("รายละเอียดงานงวดนี้",`<textarea id="qeInstWork">${escapeHTML(x.workDetail||"")}</textarea>`)+
-    `<div class="installment-qe-grid"><div>${quickField("มูลค่า (บาท)",`<input id="qeInstAmount" type="number" inputmode="decimal" min="0" value="${Number(x.amount||0)}">`)}</div><div>${quickField("สถานะ",`<select id="qeInstStatus"><option value="wait"${x.status==="wait"?" selected":""}>ยังไม่เบิก</option><option value="active"${x.status==="active"?" selected":""}>กำลังดำเนินการ</option><option value="paid"${x.status==="paid"?" selected":""}>เบิกแล้ว</option><option value="done"${x.status==="done"?" selected":""}>เบิกแล้ว</option></select>`)}</div></div>`;
+    `<div class="installment-qe-grid">
+      <div>${quickField("มูลค่า (บาท)",`<input id="qeInstAmount" type="number" inputmode="decimal" min="0" value="${Number(x.amount||0)}">`)}</div>
+      <div>${quickField("สถานะ",`<select id="qeInstStatus">
+        <option value="not_due"${x.status==="not_due"?" selected":""}>ยังไม่ถึงงวด</option>
+        <option value="preparing"${x.status==="preparing"?" selected":""}>เตรียมเบิก</option>
+        <option value="waiting"${x.status==="waiting"?" selected":""}>รอเบิก</option>
+        <option value="paid"${x.status==="paid"?" selected":""}>เบิกแล้ว</option>
+      </select>`)}</div>
+    </div>`;
+
   modal.classList.add("show");
+  modal.style.display="flex";
   document.body.style.overflow="hidden";
 }
-const _saveQuickEditV49=saveQuickEdit;
+
+const _saveQuickEditBeforeInstallment=saveQuickEdit;
 saveQuickEdit=function(){
-  if(quickEditType!=="installment") return _saveQuickEditV49();
-  const p=quickEditProject(), x=p?.installments?.[quickInstallmentIndex];
-  if(!x)return;
+  if(quickEditType!=="installment") return _saveQuickEditBeforeInstallment();
+
+  const p=quickEditProject();
+  const payments=getEditablePayments(p);
+  const x=payments[quickInstallmentIndex];
+  if(!p || !x) return;
+
   x.description=(document.getElementById("qeInstTitle")?.value||`งวดที่ ${quickInstallmentIndex+1}`).trim();
   x.workDetail=(document.getElementById("qeInstWork")?.value||"").trim();
   x.amount=Math.max(0,Number(document.getElementById("qeInstAmount")?.value||0));
-  x.status=document.getElementById("qeInstStatus")?.value||"wait";
+  x.status=document.getElementById("qeInstStatus")?.value||"not_due";
+
   saveData();
   const id=p.id;
   closeQuickEdit();
+  render();
   openDetail(id);
-  setTimeout(()=>{
+
+  requestAnimationFrame(()=>{
     const d=document.querySelector(".payment-installments-details");
-    if(d)d.open=true;
-  },0);
+    if(d) d.open=true;
+  });
 };
 
-
-/* ===== V52: reliable tap-to-edit for expanded installment rows ===== */
 function openInstallmentQuickEditByData(description,amount,fallbackIndex){
   const p=quickEditProject();
-  if(!p || !Array.isArray(p.installments)) return;
-  let idx=p.installments.findIndex((it,j)=>{
-    const d=(it.description||`งวดที่ ${j+1}`);
-    return d===description && Number(it.amount||0)===Number(amount||0);
-  });
-  if(idx<0) idx=p.installments.findIndex((it,j)=>(it.description||`งวดที่ ${j+1}`)===description);
-  if(idx<0 && fallbackIndex>=0 && fallbackIndex<p.installments.length) idx=fallbackIndex;
+  const payments=getEditablePayments(p);
+  if(!payments.length) return;
+
+  let idx=payments.findIndex((it,j)=>
+    (it.description||`งวดที่ ${j+1}`)===description &&
+    Number(it.amount||0)===Number(amount||0)
+  );
+  if(idx<0) idx=payments.findIndex((it,j)=>(it.description||`งวดที่ ${j+1}`)===description);
+  if(idx<0 && fallbackIndex>=0 && fallbackIndex<payments.length) idx=fallbackIndex;
   if(idx>=0) openInstallmentQuickEdit(idx);
 }
 
+/* Direct delegated tap — works after every detail re-render */
+document.addEventListener("click",function(e){
+  const row=e.target.closest(".payment-detail-row.payment-inline-edit");
+  if(!row || !row.closest(".payment-installments-details")) return;
+  e.preventDefault();
+  e.stopPropagation();
+  const rows=[...row.closest(".payment-detail-list").querySelectorAll(".payment-detail-row.payment-inline-edit")];
+  const idx=rows.indexOf(row);
+  if(idx>=0) openInstallmentQuickEdit(idx);
+},true);
 
 /* V53-1: close export preview when tapping outside the card */
 (function(){
@@ -8962,17 +9005,6 @@ function openInstallmentQuickEditByData(description,amount,fallbackIndex){
   m.addEventListener("click",outsideClose);
   m.addEventListener("touchend",outsideClose,{passive:false});
 })();
-
-/* V53-2: reliable installment card tap edit via delegation */
-document.addEventListener("click",function(e){
-  const row=e.target.closest(".payment-detail-row");
-  if(!row || !row.closest(".payment-installments-details")) return;
-  e.preventDefault(); e.stopPropagation();
-  const rows=[...row.parentElement.querySelectorAll(".payment-detail-row")];
-  const idx=rows.indexOf(row);
-  if(idx>=0) openInstallmentQuickEdit(idx);
-},true);
-
 
 /* ===== V54: reliable direct task editing ===== */
 (function(){
