@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V106 • Remaining Time Text Adjust</div>
+      <h1>Project Dashboard</h1><div class="build-version">V107 • Money Text Adjust</div>
     </div>
 
 
@@ -7526,9 +7526,9 @@ async function exportProjectImage(){
       ctx.restore();
 
       // V95: KPI alignment. Money card content is centered inside its frame and keeps "บาท" on the same line.
-      const iconCx = i===1 ? x+112 : x+98;
-      const dividerCx = i===1 ? x+205 : x+190;
-      const textCx = i===1 ? x+236 : x+222;
+      const iconCx = i===1 ? x+122 : x+98;
+      const dividerCx = i===1 ? x+220 : x+190;
+      const textCx = i===1 ? x+254 : x+222;
       drawColorKpiIcon(ctx,c.type,iconCx,topY+90,(i===2?138:172));
       ctx.fillStyle=gold;ctx.fillRect(dividerCx,topY+25,4,106);
       // V104: text-only/layout refinement to match the supplied reference.
@@ -7540,17 +7540,18 @@ async function exportProjectImage(){
         // V105: progress value slightly lighter and raised for better visual balance.
         drawText(ctx,c.value,textCx,valueY-10,58,c.color,600);
       }else if(i===1){
+        // V107: money value lighter, slightly raised, and the whole money KPI group centered more evenly.
         // Keep the full amount + บาท on one line while making it as large as the card allows.
-        const moneyMaxW=cardW-(textCx-x)-18;
+        const moneyMaxW=cardW-(textCx-x)-14;
         let moneySize=50;
         ctx.save();
         while(moneySize>36){
-          ctx.font=`650 ${moneySize}px "Mitr","Thonburi","Noto Sans Thai",sans-serif`;
+          ctx.font=`600 ${moneySize}px "Mitr","Thonburi","Noto Sans Thai",sans-serif`;
           if(ctx.measureText(c.value).width<=moneyMaxW) break;
           moneySize-=1;
         }
         ctx.restore();
-        drawText(ctx,c.value,textCx,valueY,moneySize,c.color,650);
+        drawText(ctx,c.value,textCx,valueY-10,moneySize,c.color,600);
       }else{
         // V106: remaining-time value lighter and raised to match the progress KPI balance.
         drawWrappedText(ctx,c.value,textCx,valueY-10,cardW-(textCx-x)-18,62,50,c.color,600,1);
@@ -7785,7 +7786,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V106",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V107",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
