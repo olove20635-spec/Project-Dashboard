@@ -2432,6 +2432,79 @@ strong,b{font-weight:500!important}
   white-space:nowrap!important;
 }
 
+
+/* V40 — REAL FIX: target the classes that actually exist in the rendered card.
+   V39 used ".contractor-info ..." but the real wrapper is ".contractor-card",
+   so those rules never applied. */
+
+/* Information-card headings: exactly the same */
+.contractor-card .contractor-label,
+.contractor-card .contractor-contact > small,
+.contractor-card .contractor-extra > span{
+  font-family:"Mitr","Thonburi","Noto Sans Thai",sans-serif!important;
+  font-size:14px!important;
+  line-height:1.45!important;
+  font-weight:300!important;
+  color:#8f98aa!important;
+  letter-spacing:0!important;
+  font-style:normal!important;
+}
+
+/* Information-card values: exactly the same */
+.contractor-card .contractor-name,
+.contractor-card .contractor-contact > strong,
+.contractor-card .contractor-extra > strong,
+.contractor-card .contractor-company-value,
+.contractor-card .contractor-coordinator > strong,
+.contractor-card .contractor-phone-row > strong{
+  font-family:"Mitr","Thonburi","Noto Sans Thai",sans-serif!important;
+  font-size:16px!important;
+  line-height:1.5!important;
+  font-weight:400!important;
+  color:#111827!important;
+  letter-spacing:0!important;
+  font-style:normal!important;
+}
+.contractor-card .contractor-company-value{
+  white-space:nowrap!important;
+}
+
+/* Dates and timeline text: remove old 750/850 weight */
+.timeline-dates,
+.timeline-dates *{
+  font-family:"Mitr","Thonburi","Noto Sans Thai",sans-serif!important;
+  font-weight:400!important;
+  letter-spacing:0!important;
+}
+.timeline-meta,
+.timeline-meta *{
+  font-family:"Mitr","Thonburi","Noto Sans Thai",sans-serif!important;
+  font-weight:300!important;
+  letter-spacing:0!important;
+}
+
+/* Project value and payment numbers: same regular weight, including old inline weight:900 */
+.modern-kpi-value,
+.payment-summary > div > div:not(.project-text-title),
+.payment-summary > div > div[style],
+.payment-card [style*="font-weight:900"]{
+  font-family:"Mitr","Thonburi","Noto Sans Thai",sans-serif!important;
+  font-weight:400!important;
+  letter-spacing:0!important;
+  font-variant-numeric:normal!important;
+  font-feature-settings:normal!important;
+}
+
+/* Payment headings use one identical style */
+.payment-summary .project-text-title{
+  font-family:"Mitr","Thonburi","Noto Sans Thai",sans-serif!important;
+  font-size:12px!important;
+  line-height:1.45!important;
+  font-weight:300!important;
+  color:#7b8798!important;
+  letter-spacing:0!important;
+}
+
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
