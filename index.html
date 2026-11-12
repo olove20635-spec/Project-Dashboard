@@ -2987,7 +2987,7 @@ strong,b,
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
       <h1>Project Dashboard</h1>
-      <div class="build-label" id="buildLabel">CURRENT BUILD • V62</div>
+      <div class="build-label" id="buildLabel">CURRENT BUILD • V63</div>
     </div>
 
 
@@ -6248,7 +6248,7 @@ function moveBackgroundDrag(event){
     pendingBackgroundZoom=Math.max(1,Math.min(5,bgPinchStartZoom*bgPointerDistance()/Math.max(1,bgPinchStartDistance)));
   }else if(bgDragging){
     const w=preview.clientWidth||600,h=preview.clientHeight||150;
-    pendingBackgroundX=clamp(bgStartX+(event.clientX-bgDragStartX)/w*100,0,100);
+    pendingBackgroundX=clamp(bgStartX-(event.clientX-bgDragStartX)/w*100,0,100);
     pendingBackgroundY=clamp(bgStartY-(event.clientY-bgDragStartY)/h*100,0,100);
   }
   updateBackgroundPreview();
@@ -6283,7 +6283,7 @@ function installBackgroundTouchGestures(){
     if(now.length>=2&&startTouches.length>=2){
       pendingBackgroundZoom=Math.max(1,Math.min(5,startZoom*dist(now[0],now[1])/startDist));
     }else if(now.length===1&&startTouches.length===1){
-      pendingBackgroundX=clamp(startX+(now[0].x-startTouches[0].x)/w*100,0,100);
+      pendingBackgroundX=clamp(startX-(now[0].x-startTouches[0].x)/w*100,0,100);
       pendingBackgroundY=clamp(startY-(now[0].y-startTouches[0].y)/h*100,0,100);
     }
     updateBackgroundPreview();
