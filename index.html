@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261112-v48-quick-edit">
+<meta name="dashboard-build" content="20261112-v49-quick-edit-centered">
 <title>Project Dashboard V19</title>
-<link rel="manifest" href="./manifest.json?build=20261112-v48-quick-edit">
+<link rel="manifest" href="./manifest.json?build=20261112-v49-quick-edit-centered">
 
 
 <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
@@ -21,7 +21,7 @@
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261112-v48-quick-edit";
+  var BUILD = "20261112-v49-quick-edit-centered";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -2854,6 +2854,23 @@ strong,b,
 .quick-edit-actions{display:grid;grid-template-columns:1fr 1.45fr;gap:9px;padding:12px 18px calc(16px + env(safe-area-inset-bottom));border-top:1px solid #e2e8f0;background:#fff}
 .quick-edit-hint{margin:-5px 0 13px;color:#8792a2;font-size:10px;line-height:1.45}
 @media(max-width:600px){.quick-edit-modal{align-items:flex-end!important;padding:0!important}.quick-edit-box{width:100%;max-width:none;border-radius:24px 24px 0 0}.quick-edit-head{padding:18px}.quick-edit-actions{padding-bottom:calc(14px + env(safe-area-inset-bottom))}}
+
+
+/* ===== V49 QUICK EDIT — CENTER SCREEN ===== */
+@media(max-width:600px){
+  .quick-edit-modal{
+    align-items:center!important;
+    justify-content:center!important;
+    padding:calc(14px + env(safe-area-inset-top)) 14px calc(14px + env(safe-area-inset-bottom))!important;
+  }
+  .quick-edit-box{
+    width:min(92vw,470px)!important;
+    max-width:470px!important;
+    max-height:calc(100dvh - 56px - env(safe-area-inset-top) - env(safe-area-inset-bottom))!important;
+    overflow-y:auto!important;
+    border-radius:24px!important;
+  }
+}
 
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
