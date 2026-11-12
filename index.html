@@ -2969,7 +2969,7 @@ strong,b,
 
 /* V60: free pan + pinch zoom background editor */
 #backgroundModal .bg-position-panel{display:none!important}
-#backgroundModal .bg-preview{touch-action:none!important;cursor:grab}
+#backgroundModal .bg-preview{touch-action:none!important;cursor:grab;-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important;overscroll-behavior:contain}
 #backgroundModal .bg-preview.dragging{cursor:grabbing}
 #backgroundModal .bg-gesture-note{text-align:center;font-weight:700;color:#7d8798;padding:14px 4px 4px}
 
@@ -2987,7 +2987,7 @@ strong,b,
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
       <h1>Project Dashboard</h1>
-      <div class="build-label" id="buildLabel">CURRENT BUILD • V60</div>
+      <div class="build-label" id="buildLabel">CURRENT BUILD • V61</div>
     </div>
 
 
@@ -6196,6 +6196,7 @@ function openBackgroundEditor(){
     .value = "";
 
   updateBackgroundPreview();
+  installBackgroundTouchGestures();
 
   const backgroundModal = document.getElementById("backgroundModal");
   if(!backgroundModal){ alert("ไม่พบหน้าต่างภาพพื้นหลัง"); return; }
@@ -6233,7 +6234,7 @@ function startBackgroundDrag(event){
     bgDragging=true; bgDragStartX=event.clientX; bgDragStartY=event.clientY;
     bgStartX=pendingBackgroundX; bgStartY=pendingBackgroundY;
   }else if(bgPointers.size===2){
-    bgPinchStartDistance=bgPointerDistance();
+    bgDragging=false; bgPinchStartDistance=Math.max(1,bgPointerDistance());
     bgPinchStartZoom=pendingBackgroundZoom;
   }
   event.currentTarget.classList.add("dragging");
@@ -6244,25 +6245,49 @@ function moveBackgroundDrag(event){
   bgPointers.set(event.pointerId,{x:event.clientX,y:event.clientY});
   const preview=document.getElementById("bgPreview");
   if(bgPointers.size>=2){
-    const d=bgPointerDistance();
-    if(bgPinchStartDistance>0) pendingBackgroundZoom=Math.max(1,Math.min(4,bgPinchStartZoom*d/bgPinchStartDistance));
+    pendingBackgroundZoom=Math.max(1,Math.min(5,bgPinchStartZoom*bgPointerDistance()/Math.max(1,bgPinchStartDistance)));
   }else if(bgDragging){
     const w=preview.clientWidth||600,h=preview.clientHeight||150;
     pendingBackgroundX=clamp(bgStartX+(event.clientX-bgDragStartX)/w*100,0,100);
-    pendingBackgroundY=clamp(bgStartY+(event.clientY-bgDragStartY)/h*100,0,100);
+    pendingBackgroundY=clamp(bgStartY-(event.clientY-bgDragStartY)/h*100,0,100);
   }
   updateBackgroundPreview();
 }
 function endBackgroundDrag(event){
   bgPointers.delete(event.pointerId);
   try{event.currentTarget.releasePointerCapture(event.pointerId);}catch(error){}
-  if(bgPointers.size===0){
-    bgDragging=false; event.currentTarget.classList.remove("dragging");
-  }else if(bgPointers.size===1){
+  if(bgPointers.size===0){bgDragging=false;event.currentTarget.classList.remove("dragging");}
+  else if(bgPointers.size===1){
     const p=[...bgPointers.values()][0];
-    bgDragging=true; bgDragStartX=p.x; bgDragStartY=p.y;
-    bgStartX=pendingBackgroundX; bgStartY=pendingBackgroundY;
+    bgDragging=true;bgDragStartX=p.x;bgDragStartY=p.y;bgStartX=pendingBackgroundX;bgStartY=pendingBackgroundY;
   }
+}
+function installBackgroundTouchGestures(){
+  const el=document.getElementById("bgPreview");
+  if(!el||el.dataset.touchGestures==="1") return;
+  el.dataset.touchGestures="1";
+  let startTouches=[],startX=50,startY=50,startZoom=1,startDist=1;
+  const point=v=>({x:v.clientX,y:v.clientY});
+  const dist=(a,b)=>Math.hypot(b.x-a.x,b.y-a.y);
+  el.addEventListener("touchstart",event=>{
+    if(!pendingBackgroundImage||pendingBackgroundRemove)return;
+    event.preventDefault();
+    startTouches=Array.from(event.touches,point);
+    startX=pendingBackgroundX;startY=pendingBackgroundY;startZoom=pendingBackgroundZoom;
+    if(startTouches.length>=2)startDist=Math.max(1,dist(startTouches[0],startTouches[1]));
+  },{passive:false});
+  el.addEventListener("touchmove",event=>{
+    if(!pendingBackgroundImage||pendingBackgroundRemove)return;
+    event.preventDefault();
+    const now=Array.from(event.touches,point),w=el.clientWidth||600,h=el.clientHeight||150;
+    if(now.length>=2&&startTouches.length>=2){
+      pendingBackgroundZoom=Math.max(1,Math.min(5,startZoom*dist(now[0],now[1])/startDist));
+    }else if(now.length===1&&startTouches.length===1){
+      pendingBackgroundX=clamp(startX+(now[0].x-startTouches[0].x)/w*100,0,100);
+      pendingBackgroundY=clamp(startY-(now[0].y-startTouches[0].y)/h*100,0,100);
+    }
+    updateBackgroundPreview();
+  },{passive:false});
 }
 function saveBackgroundEditor(){
 
