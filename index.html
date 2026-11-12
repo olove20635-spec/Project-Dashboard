@@ -2975,6 +2975,67 @@ strong,b,
 
 
 .build-version{margin-top:4px;font-size:11px;font-weight:400;letter-spacing:.25px;color:rgba(255,255,255,.68)}
+
+
+/* =========================================================
+   V114 — NOTE TEXT UP
+   Match the lower "รายการงาน" section with the typography
+   and color system used in the project information above.
+   ========================================================= */
+.task-section,
+.task-section *{
+  font-family:var(--app-font)!important;
+  letter-spacing:0!important;
+  font-synthesis:none!important;
+}
+.task-title{
+  font-size:15px!important;
+  line-height:1.4!important;
+  font-weight:500!important;
+  color:#172033!important;
+}
+.task-summary{
+  font-size:11px!important;
+  line-height:1.4!important;
+  font-weight:300!important;
+  color:#8a94a6!important;
+}
+.task-name{
+  font-size:14px!important;
+  line-height:1.45!important;
+  font-weight:500!important;
+  color:#172033!important;
+}
+.task-pct{
+  font-size:15px!important;
+  line-height:1.45!important;
+  font-weight:500!important;
+  color:#172033!important;
+}
+.task-status{
+  font-size:10px!important;
+  line-height:1.35!important;
+  font-weight:400!important;
+  padding:5px 9px!important;
+}
+.task-note{
+  font-size:11px!important;
+  line-height:1.5!important;
+  font-weight:300!important;
+  color:#64748b!important;
+}
+.task-edit,
+.task-delete{
+  font-size:10px!important;
+  line-height:1.4!important;
+  font-weight:500!important;
+}
+
+/* V114 — move note content upward without changing other cards */
+.project-note-card .project-text-content{
+  margin-top:2px!important;
+  transform:translateY(-4px);
+}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2988,7 +3049,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V110 • Money Group Balanced</div>
+      <h1>Project Dashboard</h1><div class="build-version">V114 • Note Text Up</div>
     </div>
 
 
@@ -3425,7 +3486,7 @@ strong,b,
   <div class="export-ready-card export-preview-card">
     <div class="export-ready-head"><div><h3>ตัวอย่างภาพก่อนส่งออก</h3><p>ตรวจสอบภาพ แล้วเลือกแชร์หรือบันทึกภาพ</p></div><button type="button" class="export-preview-close" onclick="closeExportReady()">×</button></div>
     <div class="export-preview-wrap"><img id="exportPreviewImage" alt="ตัวอย่างภาพ Export"></div>
-    <div class="export-ready-actions"><button class="btn export-download" onclick="closeExportReady()">กลับไปแก้ไข</button><button class="btn export-share" id="exportShareBtn" onclick="sharePreparedExport()">แชร์ / บันทึกภาพ</button></div>
+    <div class="export-ready-actions"><button class="btn export-download" id="exportSaveBtn" onclick="savePreparedExport()">บันทึกภาพ</button><button class="btn export-share" id="exportShareBtn" onclick="sharePreparedExport()">แชร์</button></div>
   </div>
 </div>
 <script>
@@ -7033,6 +7094,13 @@ function openDetail(id){
 
         <button
           class="btn task-btn"
+          data-detail-action="add-task" onclick="event.stopPropagation(); openTaskModal()"
+        >
+          + เพิ่มรายการงาน
+        </button>
+
+        <button
+          class="btn task-btn"
           data-detail-action="background" onclick="event.stopPropagation(); openBackgroundEditor()"
         >
           + เพิ่มรูปภาพ
@@ -7103,6 +7171,19 @@ function closeDetail(animated=false){
 
 let preparedExportBlob=null, preparedExportName="", preparedExportTitle="";
 function closeExportReady(){ const m=document.getElementById("exportReadyModal"),img=document.getElementById("exportPreviewImage"); if(m){m.classList.remove("show");m.style.display="none";} if(img?.dataset.url){URL.revokeObjectURL(img.dataset.url);delete img.dataset.url;img.removeAttribute("src");} }
+function savePreparedExport(){
+  if(!preparedExportBlob) return;
+  const u=URL.createObjectURL(preparedExportBlob);
+  const a=document.createElement("a");
+  a.href=u;
+  a.download=preparedExportName||"project-dashboard.png";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  closeExportReady();
+  setTimeout(()=>URL.revokeObjectURL(u),30000);
+}
+
 async function sharePreparedExport(){
   if(!preparedExportBlob) return;
   const file=new File([preparedExportBlob],preparedExportName||"project-dashboard.png",{type:"image/png"});
@@ -7114,9 +7195,11 @@ async function sharePreparedExport(){
     }catch(e){
       if(e?.name==="AbortError") return;
       console.warn(e);
+      showToast("ไม่สามารถแชร์ภาพได้","error");
+      return;
     }
   }
-  const u=URL.createObjectURL(preparedExportBlob),a=document.createElement("a");a.href=u;a.download=preparedExportName||"project-dashboard.png";document.body.appendChild(a);a.click();a.remove();closeExportReady();setTimeout(()=>URL.revokeObjectURL(u),30000);
+  showToast("อุปกรณ์นี้ไม่รองรับการแชร์ไฟล์โดยตรง","error");
 }
 
 
@@ -7788,7 +7871,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V110",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V114",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
