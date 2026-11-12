@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V80 • Project Info Fixed Columns</div>
+      <h1>Project Dashboard</h1><div class="build-version">V81 • Export Alignment Fix</div>
     </div>
 
 
@@ -7388,7 +7388,7 @@ async function exportProjectImage(){
     drawWrappedText(ctx,project.location||"-",132,211,800,29,23,"#294765",500,1);
 
     // photo: large 16:9 viewport, integrated into header
-    const photoX=1278, photoY=12, photoW=586, photoH=232;
+    const photoX=1296, photoY=12, photoW=586, photoH=232;
     ctx.save();
     roundRectPath(ctx,photoX,photoY,photoW,photoH,24);ctx.clip();
     if(image){
@@ -7458,11 +7458,7 @@ async function exportProjectImage(){
       fillRoundRect(ctx,x,y,w,62,20,hg);
       ctx.fillStyle=hg;ctx.fillRect(x,y+38,w,24);
 
-      ctx.save();roundRectPath(ctx,x,y,w,62,20);ctx.clip();
-      ctx.globalAlpha=.22;ctx.fillStyle="#26A4C0";
-      ctx.beginPath();ctx.moveTo(x+w-260,y);ctx.lineTo(x+w-170,y);ctx.lineTo(x+w-220,y+62);ctx.lineTo(x+w-310,y+62);ctx.closePath();ctx.fill();
-      ctx.beginPath();ctx.moveTo(x+w-160,y);ctx.lineTo(x+w-85,y);ctx.lineTo(x+w-135,y+62);ctx.lineTo(x+w-210,y+62);ctx.closePath();ctx.fill();
-      ctx.restore();
+      // V81: clean section header — no diagonal overlay strips inside the bar.
 
       drawIcon(ctx,iconType,x+48,y+31,42,gold);
       drawText(ctx,title,x+84,y+12,30,"#FFFFFF",600);
@@ -7568,7 +7564,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V80",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V81",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
