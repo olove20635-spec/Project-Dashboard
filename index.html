@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V95 • Money Card Centered</div>
+      <h1>Project Dashboard</h1><div class="build-version">V96 • Export Bar Labels</div>
     </div>
 
 
@@ -7531,7 +7531,12 @@ async function exportProjectImage(){
         const bx=x+70,bw=cardW-102,by=topY+154;
         fillRoundRect(ctx,bx,by,bw,34,17,"#D8E3EC");
         if(progress>0){const pg=ctx.createLinearGradient(bx,0,bx+bw,0);pg.addColorStop(0,"#12C58E");pg.addColorStop(1,"#059E76");fillRoundRect(ctx,bx,by,bw*progress/100,34,17,pg);}
-        drawText(ctx,progress+"%",bx+bw/2,by+4,21,progress>10?"#FFFFFF":ink,600,"center");
+        // V96: percentage labels sit at the right side of each segment.
+        // Green segment uses white text; remaining light segment uses dark navy for contrast.
+        const progressW=bw*progress/100;
+        const progressRemain=Math.max(0,100-progress);
+        if(progressW>44) drawText(ctx,progress+"%",bx+progressW-12,by+4,19,"#FFFFFF",700,"right");
+        if((bw-progressW)>44) drawText(ctx,Math.round(progressRemain)+"%",bx+bw-12,by+4,19,"#102A43",700,"right");
       }
 
       if(i===2 && schedule.valid){
@@ -7552,14 +7557,13 @@ async function exportProjectImage(){
         const elapsedCenter=bx+(elapsedW/2);
         const remainingCenter=bx+elapsedW+(remainingW/2);
 
-        // V93: show only percentages inside each timeline segment.
-        // Green segment = elapsed percentage, light segment = remaining percentage.
-        // Both labels are black and vertically/horizontally centered.
+        // V96: labels are right-aligned inside their own segments.
+        // White on green; dark navy on the light remaining segment.
         if(elapsedW>42){
-          drawText(ctx,Math.round(elapsedPct)+"%",elapsedCenter,by+4,18,"#111827",700,"center");
+          drawText(ctx,Math.round(elapsedPct)+"%",bx+elapsedW-10,by+4,18,"#FFFFFF",700,"right");
         }
         if(remainingW>42){
-          drawText(ctx,Math.round(remainingPct)+"%",remainingCenter,by+4,18,"#111827",700,"center");
+          drawText(ctx,Math.round(remainingPct)+"%",bx+bw-10,by+4,18,"#102A43",700,"right");
         }
         // Remaining days are already displayed as the KPI value above; no duplicate caption below.
       }
@@ -7603,8 +7607,14 @@ async function exportProjectImage(){
     drawText(ctx,"บาท",446,622,33,green,500,"left");
 
     fillRoundRect(ctx,582,586,332,34,17,"#D8E3EC");
-    if(pay.percent>0){const pg=ctx.createLinearGradient(582,0,914,0);pg.addColorStop(0,"#13C68E");pg.addColorStop(1,"#079C7B");fillRoundRect(ctx,582,586,332*pay.percent/100,34,17,pg);}
-    drawText(ctx,pay.percent.toFixed(pay.percent%1?2:0)+"%",748,589,19,pay.percent>20?"#FFFFFF":ink,500,"center");
+    const payBarX=582,payBarW=332,payBarY=586;
+    const payPct=Math.max(0,Math.min(100,pay.percent));
+    const payFillW=payBarW*payPct/100;
+    const payRemainPct=Math.max(0,100-payPct);
+    if(payPct>0){const pg=ctx.createLinearGradient(payBarX,0,payBarX+payBarW,0);pg.addColorStop(0,"#13C68E");pg.addColorStop(1,"#079C7B");fillRoundRect(ctx,payBarX,payBarY,payFillW,34,17,pg);}
+    // V96: claimed % at right edge of green; remaining % at right edge of light segment.
+    if(payFillW>50) drawText(ctx,pay.percent.toFixed(pay.percent%1?2:0)+"%",payBarX+payFillW-10,payBarY+3,18,"#FFFFFF",700,"right");
+    if((payBarW-payFillW)>50) drawText(ctx,payRemainPct.toFixed(payRemainPct%1?2:0)+"%",payBarX+payBarW-10,payBarY+3,18,"#102A43",700,"right");
 
     const statBoxes=[
       {label:"ทั้งหมด",value:pay.total+" งวด",icon:"layers"},
@@ -7706,7 +7716,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V95",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V96",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
