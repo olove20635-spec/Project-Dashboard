@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V88 • Export Alignment Fixes</div>
+      <h1>Project Dashboard</h1><div class="build-version">V89 • Export Visual Polish</div>
     </div>
 
 
@@ -7499,10 +7499,10 @@ async function exportProjectImage(){
       ctx.beginPath();ctx.moveTo(x+cardW-150,topY+cardH);ctx.lineTo(x+cardW,topY+cardH-105);ctx.lineTo(x+cardW,topY+cardH);ctx.closePath();ctx.fill();
       ctx.restore();
 
-      // V88: KPI content alignment. Middle (money) card is centered as one balanced group.
-      const iconCx = i===1 ? x+112 : x+98;
-      const dividerCx = i===1 ? x+205 : x+190;
-      const textCx = i===1 ? x+236 : x+222;
+      // V89: KPI content alignment. Middle (money) card is centered as one balanced group.
+      const iconCx = i===1 ? x+124 : x+98;
+      const dividerCx = i===1 ? x+217 : x+190;
+      const textCx = i===1 ? x+248 : x+222;
       drawColorKpiIcon(ctx,c.type,iconCx,topY+90,(i===2?138:172));
       ctx.fillStyle=gold;ctx.fillRect(dividerCx,topY+25,4,106);
       drawText(ctx,c.title,textCx,topY+24,27,navy,600);
@@ -7531,8 +7531,12 @@ async function exportProjectImage(){
         }
         const remainingW=Math.max(0,bw-elapsedW);
         const remainingCenter=bx+elapsedW+(remainingW/2);
-        // V85: remove the white remaining-percent label from the timeline bar
-        // ไม่แสดงข้อความจำนวนวันซ้ำใต้แถบ
+        // V89: match master reference — remaining percentage centered in grey segment
+        if(remainingW>54){
+          drawText(ctx,Math.round(remainingPct)+"% เหลือ",remainingCenter,by+4,18,"#FFFFFF",600,"center");
+        }
+        // V89: show remaining days once below the timeline, aligned to the left edge
+        drawText(ctx,days.short,bx,by+43,17,"#52677D",400,"left");
       }
     });
 
@@ -7551,12 +7555,12 @@ async function exportProjectImage(){
         ctx.fillStyle="#E53935";
         ctx.font=`700 34px "Mitr","Thonburi","Noto Sans Thai",sans-serif`;
         ctx.textAlign="center";ctx.textBaseline="middle";
-        ctx.fillText("!",x+48,y+31);
+        ctx.fillText("!",x+56,y+31);
         ctx.restore();
       }else{
         drawIcon(ctx,iconType,x+48,y+31,42,gold);
       }
-      drawText(ctx,title,x+84,y+12,30,"#FFFFFF",600);
+      drawText(ctx,title,x+(iconType==="note"?88:84),y+12,30,"#FFFFFF",600);
     }
 
     // ===== PAYMENT =====
@@ -7583,37 +7587,32 @@ async function exportProjectImage(){
       {label:"คงเหลือ",value:pay.remaining+" งวด",icon:"hourglass"}
     ];
     statBoxes.forEach((b,i)=>{
-      // V88: reference alignment — three equal cards, equal gaps, centered across payment panel.
+      // V89: master-reference layout — equal cards, icon left, text block immediately to the right.
       const bw=258,bh=84,by=682;
       const bx=68+i*288;
       const sg=ctx.createLinearGradient(bx,by,bx+bw,by+bh);
       sg.addColorStop(0,"#E9FAF6");sg.addColorStop(1,"#DDF4F1");
       fillRoundRect(ctx,bx,by,bw,bh,15,sg);
 
-      // simple colored mini icon
-      ctx.save();ctx.strokeStyle="#078E83";ctx.fillStyle="#078E83";ctx.lineWidth=3;
-      const ix=bx+42,iy=by+38;
+      ctx.save();ctx.strokeStyle="#078E83";ctx.fillStyle="#078E83";ctx.lineWidth=3.2;
+      const ix=bx+50,iy=by+42;
       if(b.icon==="check"){
-        // V85: reference-style circled check
-        ctx.lineWidth=3.2;
         ctx.beginPath();ctx.arc(ix,iy,17,0,Math.PI*2);ctx.stroke();
         ctx.beginPath();ctx.moveTo(ix-8,iy);ctx.lineTo(ix-2,iy+7);ctx.lineTo(ix+10,iy-8);ctx.stroke();
       }else if(b.icon==="hourglass"){
-        // V85: clean standalone hourglass (no square box)
-        ctx.lineWidth=3.2;
         ctx.beginPath();ctx.moveTo(ix-12,iy-17);ctx.lineTo(ix+12,iy-17);ctx.moveTo(ix-12,iy+17);ctx.lineTo(ix+12,iy+17);ctx.stroke();
         ctx.beginPath();ctx.moveTo(ix-10,iy-15);ctx.bezierCurveTo(ix-9,iy-6,ix-3,iy-4,ix,iy);ctx.bezierCurveTo(ix+3,iy+4,ix+9,iy+6,ix+10,iy+15);ctx.stroke();
         ctx.beginPath();ctx.moveTo(ix+10,iy-15);ctx.bezierCurveTo(ix+9,iy-6,ix+3,iy-4,ix,iy);ctx.bezierCurveTo(ix-3,iy+4,ix-9,iy+6,ix-10,iy+15);ctx.stroke();
       }else{
-        // V85: reference-style stacked layers
-        ctx.lineWidth=3.2;
         const layer=(oy)=>{ctx.beginPath();ctx.moveTo(ix-16,iy+oy);ctx.lineTo(ix,iy+oy-8);ctx.lineTo(ix+16,iy+oy);ctx.lineTo(ix,iy+oy+8);ctx.closePath();ctx.stroke();};
         layer(-8);layer(0);layer(8);
       }
       ctx.restore();
 
-      drawText(ctx,b.label,bx+145,by+10,20,ink,500,"center");
-      drawText(ctx,b.value,bx+145,by+38,30,"#087E68",500,"center");
+      // Keep label/value as one compact group, like the supplied reference.
+      const tx=bx+94;
+      drawText(ctx,b.label,tx,by+12,19,ink,500,"left");
+      drawText(ctx,b.value,tx,by+40,29,"#087E68",500,"left");
     });
 
     // ===== PROJECT INFO =====
@@ -7635,11 +7634,11 @@ async function exportProjectImage(){
     // V80: icon is fixed at the far-left of every row.
     // icon | label | gold divider | value
     const rowX=1012,rowW=846,rowH=31,rowStartY=558,rowGap=36;
-    const iconX=1034,labelX=1062,dividerX=1260,valueX=1290;
+    const iconX=1037,labelX=1068,dividerX=1260,valueX=1290;
     info.forEach((r,i)=>{
       const yy=rowStartY+i*rowGap;
       fillRoundRect(ctx,rowX,yy-3,rowW,rowH,5,i%2===0?"#E6EFF6":"#F8FBFD");
-      if(r[2]) drawIcon(ctx,r[2],iconX,yy+10,20,navy);
+      if(r[2]) drawIcon(ctx,r[2],iconX,yy+10,24,navy);
       drawText(ctx,r[0],labelX,yy,20,navy,500);
       ctx.fillStyle=gold;ctx.fillRect(dividerX,yy-1,3,23);
       drawWrappedText(ctx,r[1],valueX,yy,1850-valueX,27,20,"#263D58",400,1);
@@ -7672,7 +7671,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V88",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V89",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
