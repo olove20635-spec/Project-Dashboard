@@ -3275,7 +3275,7 @@ strong,b,
 }
 
 /* =========================================================
-   V129 — TRUE TASK NOTE LEFT FIX
+   V130 — TRUE TASK NOTE LEFT FIX
    Root cause: white-space:pre-wrap preserved template indentation,
    making the text appear centered even when text-align:left.
    ========================================================= */
@@ -3285,6 +3285,10 @@ strong,b,
   padding-left:14px!important;
   padding-right:14px!important;
 }
+
+/* V130: Export preview uses one action because iOS opens the same native share sheet for saving/sharing */
+.export-ready-actions.export-ready-actions-single{grid-template-columns:1fr !important;}
+.export-ready-actions-single .export-save-share{width:100% !important;grid-column:1 / -1 !important;}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3298,7 +3302,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V129 • Task Note True Left Fix</div>
+      <h1>Project Dashboard</h1><div class="build-version">V130 • Task Note True Left Fix</div>
     </div>
 
 
@@ -3733,9 +3737,9 @@ strong,b,
 
 <div id="exportReadyModal" class="modal">
   <div class="export-ready-card export-preview-card">
-    <div class="export-ready-head"><div><h3>ตัวอย่างภาพก่อนส่งออก</h3><p>ตรวจสอบภาพ แล้วเลือกแชร์หรือบันทึกภาพ</p></div><button type="button" class="export-preview-close" onclick="closeExportReady()">×</button></div>
+    <div class="export-ready-head"><div><h3>ตัวอย่างภาพก่อนส่งออก</h3><p>ตรวจสอบภาพ แล้วเลือกบันทึกภาพหรือแชร์</p></div><button type="button" class="export-preview-close" onclick="closeExportReady()">×</button></div>
     <div class="export-preview-wrap"><img id="exportPreviewImage" alt="ตัวอย่างภาพ Export"></div>
-    <div class="export-ready-actions"><button class="btn export-download" id="exportSaveBtn" onclick="savePreparedExport()">บันทึกภาพ</button><button class="btn export-share" id="exportShareBtn" onclick="sharePreparedExport()">แชร์</button></div>
+    <div class="export-ready-actions export-ready-actions-single"><button class="btn export-share export-save-share" id="exportShareBtn" onclick="sharePreparedExport()">บันทึกภาพ / แชร์</button></div>
   </div>
 </div>
 <script>
@@ -7414,7 +7418,7 @@ function closeExportReady(){ const m=document.getElementById("exportReadyModal")
 async function savePreparedExport(){
   if(!preparedExportBlob) return;
 
-  // V129: iPhone/iPad — do not open the generated PNG in a second Safari page.
+  // V130: iPhone/iPad — do not open the generated PNG in a second Safari page.
   // iOS browsers do not allow a web page to write directly into Photos without
   // a native user confirmation. Use the native iOS share sheet instead, where
   // the user can choose “บันทึกรูปภาพ / Save Image”.
