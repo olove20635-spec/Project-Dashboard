@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V104 • Enhanced 3D Export Visual</div>
+      <h1>Project Dashboard</h1><div class="build-version">V104 • KPI Text Size & Layout</div>
     </div>
 
 
@@ -7376,19 +7376,10 @@ async function exportProjectImage(){
     const gold="#E2B72F";
     const ink="#173650";
     const muted="#61758D";
-    const page="#EEF8FD";
+    const page="#F4F8FC";
     const line="#D6E2EC";
 
     ctx.fillStyle=page; ctx.fillRect(0,0,W,H);
-
-    // V104: richer presentation background inspired by the reference — soft cyan waves only.
-    ctx.save();
-    ctx.globalAlpha=.42;
-    let wave=ctx.createLinearGradient(0,0,W,0);
-    wave.addColorStop(0,"#D8F4FF"); wave.addColorStop(.5,"#F7FCFF"); wave.addColorStop(1,"#BFEFF2");
-    ctx.fillStyle=wave;
-    ctx.beginPath(); ctx.moveTo(0,120); ctx.bezierCurveTo(420,10,720,190,1120,72); ctx.bezierCurveTo(1450,-20,1660,82,1920,20); ctx.lineTo(1920,250); ctx.lineTo(0,250); ctx.closePath(); ctx.fill();
-    ctx.restore();
 
     // ===== HEADER =====
     ctx.fillStyle="#FFFFFF"; ctx.fillRect(0,0,W,252);
@@ -7524,9 +7515,9 @@ async function exportProjectImage(){
       const x=left+i*(cardW+gap);
 
       // shadow
-      ctx.save();ctx.shadowColor="rgba(0,112,170,.22)";ctx.shadowBlur=22;ctx.shadowOffsetY=9;
+      ctx.save();ctx.shadowColor="rgba(20,65,100,.12)";ctx.shadowBlur=18;ctx.shadowOffsetY=8;
       fillRoundRect(ctx,x,topY,cardW,cardH,24,"#FFFFFF");ctx.restore();
-      ctx.strokeStyle="#B9D9E8";ctx.lineWidth=2.5;roundRectPath(ctx,x,topY,cardW,cardH,24);ctx.stroke();
+      ctx.strokeStyle=line;ctx.lineWidth=2;roundRectPath(ctx,x,topY,cardW,cardH,24);ctx.stroke();
 
       // very soft decorative corner
       ctx.save();roundRectPath(ctx,x,topY,cardW,cardH,24);ctx.clip();
@@ -7540,21 +7531,29 @@ async function exportProjectImage(){
       const textCx = i===1 ? x+236 : x+222;
       drawColorKpiIcon(ctx,c.type,iconCx,topY+90,(i===2?138:172));
       ctx.fillStyle=gold;ctx.fillRect(dividerCx,topY+25,4,106);
-      drawText(ctx,c.title,textCx,topY+20,31,navy,700);
-      if(i===1){
-        // Fit the full amount + currency on one line instead of clipping the word บาท.
-        const moneyMaxW=cardW-(textCx-x)-22;
-        let moneySize=48;
+      // V104: text-only/layout refinement to match the supplied reference.
+      // Keep card dimensions, colors, icons and all project data unchanged.
+      const titleY=topY+22;
+      const valueY=topY+69;
+      drawText(ctx,c.title,textCx,titleY,31,navy,650);
+      if(i===0){
+        // Progress percentage is intentionally the largest KPI value.
+        drawText(ctx,c.value,textCx,valueY,66,c.color,700);
+      }else if(i===1){
+        // Keep the full amount + บาท on one line while making it as large as the card allows.
+        const moneyMaxW=cardW-(textCx-x)-18;
+        let moneySize=50;
         ctx.save();
-        while(moneySize>35){
-          ctx.font=`600 ${moneySize}px "Mitr","Thonburi","Noto Sans Thai",sans-serif`;
+        while(moneySize>36){
+          ctx.font=`650 ${moneySize}px "Mitr","Thonburi","Noto Sans Thai",sans-serif`;
           if(ctx.measureText(c.value).width<=moneyMaxW) break;
           moneySize-=1;
         }
         ctx.restore();
-        drawText(ctx,c.value,textCx,topY+72,moneySize,c.color,600);
+        drawText(ctx,c.value,textCx,valueY,moneySize,c.color,650);
       }else{
-        drawWrappedText(ctx,c.value,textCx,topY+70,cardW-(textCx-x)-24,58,50,c.color,700,1);
+        // Remaining-time value enlarged and vertically balanced like the reference.
+        drawWrappedText(ctx,c.value,textCx,valueY,cardW-(textCx-x)-18,62,50,c.color,650,1);
       }
 
       if(i===0){
@@ -7596,7 +7595,7 @@ async function exportProjectImage(){
       }
     });
 
-    // V104: brighter 3D green progress segment used by all three export progress bars.
+    // V103: bright 3D green progress segment used by all three export progress bars.
     function fillExport3DGreenBar(x,y,w,h,r){
       if(w<=0) return;
       ctx.save();
@@ -7605,10 +7604,9 @@ async function exportProjectImage(){
       ctx.shadowBlur=7;
       ctx.shadowOffsetY=3;
       const g=ctx.createLinearGradient(x,y,x,y+h);
-      g.addColorStop(0,"#32F2B1");
-      g.addColorStop(.38,"#0EDC96");
-      g.addColorStop(.72,"#00C889");
-      g.addColorStop(1,"#009F76");
+      g.addColorStop(0,"#25E7A5");
+      g.addColorStop(.42,"#10D998");
+      g.addColorStop(1,"#06B982");
       fillRoundRect(ctx,x,y,w,h,r,g);
       ctx.restore();
 
@@ -7630,7 +7628,7 @@ async function exportProjectImage(){
       const headerH=62;
       const cy=y+headerH/2;
       const hg=ctx.createLinearGradient(x,0,x+w,0);
-      hg.addColorStop(0,"#043C79");hg.addColorStop(.48,"#087FB2");hg.addColorStop(1,"#05B8A6");
+      hg.addColorStop(0,"#073B70");hg.addColorStop(.55,"#086AA0");hg.addColorStop(1,"#079D9A");
       fillRoundRect(ctx,x,y,w,headerH,20,hg);
       ctx.fillStyle=hg;ctx.fillRect(x,y+38,w,24);
 
@@ -7652,7 +7650,7 @@ async function exportProjectImage(){
       }
       ctx.save();
       ctx.fillStyle="#FFFFFF";
-      ctx.font=`700 34px "Mitr","Thonburi","Noto Sans Thai",sans-serif`;
+      ctx.font=`600 30px "Mitr","Thonburi","Noto Sans Thai",sans-serif`;
       ctx.textAlign="left";
       ctx.textBaseline="middle";
       ctx.fillText(String(title||""),textX,cy+1);
@@ -7661,17 +7659,17 @@ async function exportProjectImage(){
 
     // ===== PAYMENT =====
     const payX=38,payY=488,payW=930,payH=302;
-    ctx.save();ctx.shadowColor="rgba(0,103,158,.18)";ctx.shadowBlur=20;ctx.shadowOffsetY=8;
+    ctx.save();ctx.shadowColor="rgba(20,65,100,.10)";ctx.shadowBlur=16;ctx.shadowOffsetY=6;
     fillRoundRect(ctx,payX,payY,payW,payH,20,"#FFFFFF");ctx.restore();
     sectionHeader(payX,payY,payW,"สถานะการเบิกเงิน","payment");
 
-    drawText(ctx,"เบิกแล้ว",82,572,30,navy,700);
+    drawText(ctx,"เบิกแล้ว",82,576,26,navy,500);
     // V86: fixed columns so the word "บาท" is vertically aligned on both rows.
-    drawText(ctx,money(pay.paidAmount),432,570,37,green,700,"right");
-    drawText(ctx,"บาท",450,570,34,green,700,"left");
-    drawText(ctx,"คงเหลือ",82,624,30,navy,700);
-    drawText(ctx,money(pay.balance),432,620,37,green,700,"right");
-    drawText(ctx,"บาท",450,620,34,green,700,"left");
+    drawText(ctx,money(pay.paidAmount),432,572,33,green,500,"right");
+    drawText(ctx,"บาท",450,572,33,green,500,"left");
+    drawText(ctx,"คงเหลือ",82,626,26,navy,500);
+    drawText(ctx,money(pay.balance),432,622,33,green,500,"right");
+    drawText(ctx,"บาท",450,622,33,green,500,"left");
 
     fillRoundRect(ctx,582,586,332,34,17,"#D8E3EC");
     const payBarX=582,payBarW=332,payBarY=586;
@@ -7787,7 +7785,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V104",W-42,1027,20,"#FFFFFF",700,"right");
+    drawText(ctx,"V104",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
