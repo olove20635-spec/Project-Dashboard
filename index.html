@@ -3273,6 +3273,18 @@ strong,b,
   align-content:start!important;
   align-items:flex-start!important;
 }
+
+/* =========================================================
+   V128 — TRUE TASK NOTE LEFT FIX
+   Root cause: white-space:pre-wrap preserved template indentation,
+   making the text appear centered even when text-align:left.
+   ========================================================= */
+.task > .task-note{
+  white-space:pre-line!important;
+  text-align:left!important;
+  padding-left:14px!important;
+  padding-right:14px!important;
+}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3286,7 +3298,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V126 • Task Note Force Left</div>
+      <h1>Project Dashboard</h1><div class="build-version">V128 • Task Note True Left Fix</div>
     </div>
 
 
@@ -6930,9 +6942,7 @@ function openDetail(id){
           ${
             task.note
               ? `
-                <div class="task-note" style="display:block!important;width:100%!important;box-sizing:border-box!important;text-align:left!important;padding-left:14px!important;padding-right:14px!important;text-indent:0!important;direction:ltr!important;">
-                  ${escapeHTML(task.note)}
-                </div>
+                <div class="task-note" style="display:block!important;width:100%!important;box-sizing:border-box!important;text-align:left!important;padding-left:14px!important;padding-right:14px!important;text-indent:0!important;direction:ltr!important;white-space:pre-line!important;">${escapeHTML(task.note)}</div>
               `
               : ""
           }
