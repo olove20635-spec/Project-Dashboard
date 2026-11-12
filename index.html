@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261112-v56-installment-modal-buttons-fix">
+<meta name="dashboard-build" content="20261112-v57-quick-edit-close-real-fix">
 <title>Project Dashboard V19</title>
-<link rel="manifest" href="./manifest.json?build=20261112-v56-installment-modal-buttons-fix">
+<link rel="manifest" href="./manifest.json?build=20261112-v57-quick-edit-close-real-fix">
 
 
 <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
@@ -21,7 +21,7 @@
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261112-v56-installment-modal-buttons-fix";
+  var BUILD = "20261112-v57-quick-edit-close-real-fix";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -2930,6 +2930,24 @@ strong,b,
   z-index:10002!important;
 }
 
+
+/* ===== TEMP BUILD LABEL — remove when system is stable ===== */
+.build-label{
+  display:inline-flex;
+  align-items:center;
+  margin-top:7px;
+  padding:4px 9px;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;
+  background:rgba(255,255,255,.10);
+  color:rgba(255,255,255,.88);
+  font-size:9px;
+  font-weight:500;
+  letter-spacing:.5px;
+}
+/* V57: inline display must never keep a closed quick-edit modal visible */
+#quickEditModal:not(.show){display:none!important}
+
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2944,6 +2962,7 @@ strong,b,
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
       <h1>Project Dashboard</h1>
+      <div class="build-label" id="buildLabel">CURRENT BUILD • V57</div>
     </div>
 
 
@@ -8894,8 +8913,13 @@ function openQuickEdit(type){
   setTimeout(()=>fields.querySelector("input,textarea,select")?.focus(),80);
 }
 function closeQuickEdit(){
-  document.getElementById("quickEditModal")?.classList.remove("show");
+  const modal=document.getElementById("quickEditModal");
+  if(modal){
+    modal.classList.remove("show");
+    modal.style.display="none";
+  }
   quickEditType=null;
+  quickInstallmentIndex=-1;
   document.body.style.overflow="";
 }
 function saveQuickEdit(){
