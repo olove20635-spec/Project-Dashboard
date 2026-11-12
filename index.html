@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V89 • Export Visual Polish</div>
+      <h1>Project Dashboard</h1><div class="build-version">V90 • Project Info Centered</div>
     </div>
 
 
@@ -7631,17 +7631,27 @@ async function exportProjectImage(){
       ["วันแล้วเสร็จ",project.endDate?formatDate(project.endDate):"-","flag"]
     ];
 
-    // V80: icon is fixed at the far-left of every row.
+    // V90: vertically center icon, label, divider and value inside every project-info row.
     // icon | label | gold divider | value
-    const rowX=1012,rowW=846,rowH=31,rowStartY=558,rowGap=36;
+    const rowX=1012,rowW=846,rowH=31,rowStartY=555,rowGap=36;
     const iconX=1037,labelX=1068,dividerX=1260,valueX=1290;
+    const drawInfoRowText=(text,x,cy,size,color,weight=500)=>{
+      ctx.save();
+      ctx.fillStyle=color;
+      ctx.font=`${weight} ${size}px "Mitr","Thonburi","Noto Sans Thai",sans-serif`;
+      ctx.textAlign="left";
+      ctx.textBaseline="middle";
+      ctx.fillText(String(text??""),x,cy+1);
+      ctx.restore();
+    };
     info.forEach((r,i)=>{
-      const yy=rowStartY+i*rowGap;
-      fillRoundRect(ctx,rowX,yy-3,rowW,rowH,5,i%2===0?"#E6EFF6":"#F8FBFD");
-      if(r[2]) drawIcon(ctx,r[2],iconX,yy+10,24,navy);
-      drawText(ctx,r[0],labelX,yy,20,navy,500);
-      ctx.fillStyle=gold;ctx.fillRect(dividerX,yy-1,3,23);
-      drawWrappedText(ctx,r[1],valueX,yy,1850-valueX,27,20,"#263D58",400,1);
+      const rowTop=rowStartY+i*rowGap;
+      const cy=rowTop+rowH/2;
+      fillRoundRect(ctx,rowX,rowTop,rowW,rowH,5,i%2===0?"#E6EFF6":"#F8FBFD");
+      if(r[2]) drawIcon(ctx,r[2],iconX,cy,20,navy);
+      drawInfoRowText(r[0],labelX,cy,20,navy,500);
+      ctx.fillStyle=gold;ctx.fillRect(dividerX,cy-11.5,3,23);
+      drawInfoRowText(r[1],valueX,cy,20,"#263D58",400);
     });
 
     // ===== NOTE =====
@@ -7671,7 +7681,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V89",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V90",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
