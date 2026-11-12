@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261112-v43-payment-regular-swipe-right-only">
+<meta name="dashboard-build" content="20261112-v44-swipe-right-no-delay">
 <title>Project Dashboard V19</title>
-<link rel="manifest" href="./manifest.json?build=20261112-v43-payment-regular-swipe-right-only">
+<link rel="manifest" href="./manifest.json?build=20261112-v44-swipe-right-no-delay">
 
 
 <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
@@ -21,7 +21,7 @@
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261112-v43-payment-regular-swipe-right-only";
+  var BUILD = "20261112-v44-swipe-right-no-delay";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -6136,7 +6136,8 @@ function setupDetailSwipe(){
     // V42: swipe RIGHT closes the project detail.
     // Swipe left does nothing; project-to-project horizontal navigation is disabled.
     if(dx>70 && Math.abs(dx)>Math.abs(dy)*1.25){
-      closeDetail(true);
+      // V44: close immediately — no slide/fade/blur delay
+      closeDetail(false);
       return;
     }
 
