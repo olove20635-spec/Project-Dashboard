@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261112-v140-location-after-ksp">
+<meta name="dashboard-build" content="20261112-v141-location-ksp-bottom-right">
 <title>Project Dashboard V19</title>
-<link rel="manifest" href="./manifest.json?build=20261112-v140-location-after-ksp">
+<link rel="manifest" href="./manifest.json?build=20261112-v141-location-ksp-bottom-right">
 
 
 <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
@@ -21,7 +21,7 @@
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261112-v140-location-after-ksp";
+  var BUILD = "20261112-v141-location-ksp-bottom-right";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -3319,7 +3319,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V140 • Location After KSP</div>
+      <h1>Project Dashboard</h1><div class="build-version">V141 • Location KSP Bottom Right</div>
     </div>
 
 
@@ -7816,11 +7816,11 @@ async function exportProjectImage(){
     const titleLineH=54;
     drawWrappedText(ctx,title,100,titleY,930,titleLineH,titleSize,navy,700,2);
 
-    // V140: location sits immediately after the KSP logo, at the logo's lower-right.
-    // Keep it in the left/header safe zone so it never runs under the project photo.
-    const locationX=365;
-    const locationY=86;
-    const locationMaxW=610;
+    // V141: location is anchored at the lower-right of the KSP logo.
+    // It stays above the project title and inside the left safe zone.
+    const locationX=455;
+    const locationY=82;
+    const locationMaxW=500;
     const pinX=locationX+8;
     ctx.save();
     ctx.fillStyle="#E73535";
@@ -8179,7 +8179,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V140",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V141",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
