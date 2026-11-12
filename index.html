@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261111-v37-font-project-contractor">
+<meta name="dashboard-build" content="20261112-v41-global-font-unified">
 <title>Project Dashboard V19</title>
-<link rel="manifest" href="./manifest.json?build=20261111-v37-font-project-contractor">
+<link rel="manifest" href="./manifest.json?build=20261112-v41-global-font-unified">
 
 
 <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
@@ -21,7 +21,7 @@
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261111-v37-font-project-contractor";
+  var BUILD = "20261112-v41-global-font-unified";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -2503,6 +2503,110 @@ strong,b{font-weight:500!important}
   font-weight:300!important;
   color:#7b8798!important;
   letter-spacing:0!important;
+}
+
+
+/* =========================================================
+   V41 GLOBAL TYPOGRAPHY — single font system for EVERY page
+   ========================================================= */
+:root{
+  --app-font:"Mitr","Thonburi","Noto Sans Thai",sans-serif;
+}
+html,body,
+body *,body *::before,body *::after,
+button,input,select,textarea,option{
+  font-family:var(--app-font)!important;
+  font-style:normal!important;
+  font-synthesis:none!important;
+  letter-spacing:0!important;
+}
+
+/* Default copy */
+body,button,input,select,textarea,option{
+  font-weight:400!important;
+}
+
+/* Muted labels / secondary descriptions */
+.contractor-label,
+.contractor-contact small,
+.contractor-extra span,
+.modern-kpi-label,
+.payment-summary .project-text-title,
+.timeline-meta,
+.detail-location,
+.project-location,
+.project-company,
+.project-subtitle,
+.project-card .project-location,
+.project-card .project-company{
+  font-weight:300!important;
+}
+
+/* Normal information values */
+.contractor-name,
+.contractor-contact>strong,
+.contractor-extra strong,
+.contractor-company-value,
+.timeline-dates,
+.timeline-dates *,
+.modern-kpi-value,
+.payment-summary>div>div,
+.payment-summary>div>div *,
+.project-card .project-name,
+.detail-title,
+.project-name{
+  font-weight:400!important;
+}
+
+/* Headings / emphasis only — no 700/800/900 */
+h1,h2,h3,h4,h5,h6,
+strong,b,
+.section-title,
+.payment-title,
+.payment-card-title,
+.project-percent,
+.hero-donut-value,
+.main-progress-head strong,
+.payment-installments-details>summary{
+  font-weight:500!important;
+}
+
+/* Payment figures were still receiving old inline/class weight 900 */
+.payment-card .payment-summary,
+.payment-card .payment-summary *,
+.payment-summary [style*="font-weight"],
+.payment-summary strong,
+.payment-summary b{
+  font-family:var(--app-font)!important;
+  font-weight:400!important;
+  font-variant-numeric:normal!important;
+  font-feature-settings:normal!important;
+}
+
+/* Keep payment labels lighter */
+.payment-card .payment-summary .project-text-title{
+  font-weight:300!important;
+}
+
+/* Project card title + small detail text: definitely same family */
+.project-card,
+.project-card *,
+.detail-hero,
+.detail-hero *{
+  font-family:var(--app-font)!important;
+}
+.project-card .project-name{
+  font-weight:400!important;
+}
+.project-card .project-location,
+.project-card .project-company{
+  font-weight:300!important;
+}
+
+/* Inputs/editor pages also use the same font */
+.modal,.modal *,form,form *,label,
+.sheet,.sheet *,.popup,.popup *{
+  font-family:var(--app-font)!important;
 }
 
 </style>
