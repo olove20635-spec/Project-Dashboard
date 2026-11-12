@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V91 • Remaining Text Black</div>
+      <h1>Project Dashboard</h1><div class="build-version">V92 • Timeline Percent Labels</div>
     </div>
 
 
@@ -7530,13 +7530,19 @@ async function exportProjectImage(){
           fillRoundRect(ctx,bx,by,elapsedW,34,17,tg);
         }
         const remainingW=Math.max(0,bw-elapsedW);
+        const elapsedCenter=bx+(elapsedW/2);
         const remainingCenter=bx+elapsedW+(remainingW/2);
-        // V89: match master reference — remaining percentage centered in grey segment
-        if(remainingW>54){
-          drawText(ctx,Math.round(remainingPct)+"% เหลือ",remainingCenter,by+4,18,"#111827",600,"center");
+
+        // V92: show only percentages inside each timeline segment.
+        // Green segment = elapsed percentage, light segment = remaining percentage.
+        // Both labels are black and vertically/horizontally centered.
+        if(elapsedW>42){
+          drawText(ctx,Math.round(elapsedPct)+"%",elapsedCenter,by+4,18,"#111827",700,"center");
         }
-        // V89: show remaining days once below the timeline, aligned to the left edge
-        drawText(ctx,days.short,bx,by+39,17,"#111827",500,"left");
+        if(remainingW>42){
+          drawText(ctx,Math.round(remainingPct)+"%",remainingCenter,by+4,18,"#111827",700,"center");
+        }
+        // Remaining days are already displayed as the KPI value above; no duplicate caption below.
       }
     });
 
@@ -7681,7 +7687,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V91",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V92",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
