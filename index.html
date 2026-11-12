@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V86 • Export Fine Alignment</div>
+      <h1>Project Dashboard</h1><div class="build-version">V87 • Export Photo Frame</div>
     </div>
 
 
@@ -7381,12 +7381,30 @@ async function exportProjectImage(){
     ctx.beginPath(); ctx.moveTo(1125,0);ctx.lineTo(1490,0);ctx.lineTo(1275,266);ctx.lineTo(1015,266);ctx.closePath();ctx.fill();
     ctx.restore();
 
-    // gold + blue diagonal accent entering the photo edge
+    // V87: broad diagonal photo-frame motif to match the reference image.
+    // Pale-blue wedge sits behind the photo; yellow/blue bands form the inner edge.
     ctx.save();
-    ctx.strokeStyle=gold;ctx.lineWidth=8;
-    ctx.beginPath();ctx.moveTo(1378,-8);ctx.lineTo(1248,244);ctx.stroke();
-    ctx.strokeStyle="#1978A8";ctx.lineWidth=10;
-    ctx.beginPath();ctx.moveTo(1422,-8);ctx.lineTo(1292,244);ctx.stroke();
+    ctx.fillStyle="#E8F5FB";
+    ctx.beginPath();
+    ctx.moveTo(1110,0); ctx.lineTo(1378,0); ctx.lineTo(1260,252); ctx.lineTo(930,252);
+    ctx.closePath(); ctx.fill();
+
+    ctx.fillStyle="#D7EEF8";
+    ctx.beginPath();
+    ctx.moveTo(1240,0); ctx.lineTo(1430,0); ctx.lineTo(1304,252); ctx.lineTo(1112,252);
+    ctx.closePath(); ctx.fill();
+
+    // wide gold band
+    ctx.fillStyle="#F1C52D";
+    ctx.beginPath();
+    ctx.moveTo(1370,-8); ctx.lineTo(1400,-8); ctx.lineTo(1270,252); ctx.lineTo(1238,252);
+    ctx.closePath(); ctx.fill();
+
+    // wide blue band
+    ctx.fillStyle="#1777A8";
+    ctx.beginPath();
+    ctx.moveTo(1418,-8); ctx.lineTo(1450,-8); ctx.lineTo(1318,252); ctx.lineTo(1285,252);
+    ctx.closePath(); ctx.fill();
     ctx.restore();
 
     if(brandLogo){
@@ -7425,12 +7443,38 @@ async function exportProjectImage(){
     }
     ctx.restore();
 
-    // curved/diagonal frame accents around photo
+    // V87: photo border continues down the right edge and sweeps into the lower-right corner.
     ctx.save();
-    ctx.strokeStyle=gold;ctx.lineWidth=8;
-    ctx.beginPath();ctx.moveTo(photoX-24,0);ctx.lineTo(photoX-88,122);ctx.lineTo(photoX-112,162);ctx.stroke();
-    ctx.strokeStyle="#1C7CA9";ctx.lineWidth=10;
-    ctx.beginPath();ctx.moveTo(photoX+14,0);ctx.lineTo(photoX-52,124);ctx.lineTo(photoX-82,176);ctx.stroke();
+    ctx.lineCap="round";
+    ctx.lineJoin="round";
+
+    // inner gold edge beside the photo
+    ctx.strokeStyle="#F1C52D"; ctx.lineWidth=10;
+    ctx.beginPath();
+    ctx.moveTo(photoX-18,-8);
+    ctx.lineTo(photoX-76,104);
+    ctx.lineTo(photoX-102,154);
+    ctx.stroke();
+
+    // inner blue edge beside the photo
+    ctx.strokeStyle="#1777A8"; ctx.lineWidth=12;
+    ctx.beginPath();
+    ctx.moveTo(photoX+22,-8);
+    ctx.lineTo(photoX-38,108);
+    ctx.lineTo(photoX-66,164);
+    ctx.stroke();
+
+    // lower-right sweeping bands visible at the photo corner
+    ctx.strokeStyle="#F1C52D"; ctx.lineWidth=10;
+    ctx.beginPath();
+    ctx.moveTo(photoX+photoW-12,photoY+photoH-6);
+    ctx.quadraticCurveTo(photoX+photoW+12,photoY+photoH+10,photoX+photoW+42,photoY+photoH+44);
+    ctx.stroke();
+    ctx.strokeStyle="#1777A8"; ctx.lineWidth=13;
+    ctx.beginPath();
+    ctx.moveTo(photoX+photoW-2,photoY+photoH-20);
+    ctx.quadraticCurveTo(photoX+photoW+28,photoY+photoH+4,photoX+photoW+64,photoY+photoH+48);
+    ctx.stroke();
     ctx.restore();
 
     // ===== KPI CARDS =====
@@ -7622,7 +7666,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V86",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V87",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
