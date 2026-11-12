@@ -3254,6 +3254,25 @@ strong,b,
   transform:none!important;
 }
 
+
+/* V127 — task note: force actual text origin to left, not center */
+.task > .task-note{
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+  margin-left:0!important;
+  margin-right:0!important;
+  padding-left:14px!important;
+  padding-right:14px!important;
+  text-align:left!important;
+  text-indent:0!important;
+  direction:ltr!important;
+  place-content:initial!important;
+  justify-content:flex-start!important;
+  justify-items:start!important;
+  align-content:start!important;
+  align-items:flex-start!important;
+}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -6911,7 +6930,7 @@ function openDetail(id){
           ${
             task.note
               ? `
-                <div class="task-note">
+                <div class="task-note" style="display:block!important;width:100%!important;box-sizing:border-box!important;text-align:left!important;padding-left:14px!important;padding-right:14px!important;text-indent:0!important;direction:ltr!important;">
                   ${escapeHTML(task.note)}
                 </div>
               `
