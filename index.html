@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V94 • Money Card Centered</div>
+      <h1>Project Dashboard</h1><div class="build-version">V95 • Money Card Centered</div>
     </div>
 
 
@@ -7504,7 +7504,7 @@ async function exportProjectImage(){
       ctx.beginPath();ctx.moveTo(x+cardW-150,topY+cardH);ctx.lineTo(x+cardW,topY+cardH-105);ctx.lineTo(x+cardW,topY+cardH);ctx.closePath();ctx.fill();
       ctx.restore();
 
-      // V94: KPI alignment. Money card content is centered inside its frame and keeps "บาท" on the same line.
+      // V95: KPI alignment. Money card content is centered inside its frame and keeps "บาท" on the same line.
       const iconCx = i===1 ? x+112 : x+98;
       const dividerCx = i===1 ? x+205 : x+190;
       const textCx = i===1 ? x+236 : x+222;
@@ -7517,7 +7517,7 @@ async function exportProjectImage(){
         let moneySize=44;
         ctx.save();
         while(moneySize>32){
-          ctx.font=`600 ${moneySize}px ${EXPORT_FONT_FAMILY}`;
+          ctx.font=`600 ${moneySize}px "Mitr","Thonburi","Noto Sans Thai",sans-serif`;
           if(ctx.measureText(c.value).width<=moneyMaxW) break;
           moneySize-=1;
         }
@@ -7706,7 +7706,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V94",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V95",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
