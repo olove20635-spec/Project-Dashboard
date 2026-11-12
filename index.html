@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261112-v44-swipe-right-no-delay">
+<meta name="dashboard-build" content="20261112-v45-installment-work-detail">
 <title>Project Dashboard V19</title>
-<link rel="manifest" href="./manifest.json?build=20261112-v44-swipe-right-no-delay">
+<link rel="manifest" href="./manifest.json?build=20261112-v45-installment-work-detail">
 
 
 <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
@@ -21,7 +21,7 @@
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261112-v44-swipe-right-no-delay";
+  var BUILD = "20261112-v45-installment-work-detail";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -2637,6 +2637,20 @@ strong,b,
   text-shadow:none!important;
 }
 
+
+/* V45 — separate installment name and work detail */
+.payment-work-detail{grid-column:1/-1}
+.payment-work-detail textarea{
+  width:100%;box-sizing:border-box;min-height:82px;resize:vertical;
+  padding:13px 15px;border:1px solid #d6dfec;border-radius:16px;
+  background:#fff;color:#172033;font-family:var(--app-font)!important;
+  font-size:16px;font-weight:400;line-height:1.45;outline:none;
+}
+.payment-work-detail-view{
+  margin:4px 0 5px;color:#64748b;font-family:var(--app-font)!important;
+  font-size:14px;font-weight:400;line-height:1.45;white-space:pre-line;
+}
+
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -5128,18 +5142,19 @@ function addPaymentInstallmentRow(item={}){
   const box=document.getElementById("paymentInstallmentList"); if(!box) return;
   const row=document.createElement("div"); row.className="payment-installment-row";
   row.innerHTML=`<div class="payment-installment-no">งวด ${box.children.length+1}</div>
-    <div class="payment-desc"><label>รายละเอียดงวด</label><input class="pay-desc" type="text" placeholder="เช่น ส่งมอบอุปกรณ์" value="${escapeHTML(item.description||"")}"></div>
+    <div class="payment-desc"><label>ชื่องวด</label><input class="pay-desc" type="text" placeholder="เช่น งวดที่ 1" value="${escapeHTML(item.description||"")}"></div>
+    <div class="payment-work-detail"><label>รายละเอียดงานงวดนี้</label><textarea class="pay-work-detail" rows="3" placeholder="เช่น ส่งมอบตู้ MDB / เดินสายไฟ / ทดสอบระบบ">${escapeHTML(item.workDetail||"")}</textarea></div>
     <div><label>มูลค่า (บาท)</label><input class="pay-amount" type="number" inputmode="decimal" min="0" value="${Number(item.amount||0)||""}"></div>
     <div class="payment-status"><label>สถานะ</label><select class="pay-status"><option value="not_due">ยังไม่ถึงงวด</option><option value="paid">เบิกแล้ว</option></select></div>
     <button type="button" class="payment-remove" aria-label="ลบงวด">×</button>`;
   row.querySelector(".pay-status").value=(item.status==="paid"?"paid":"not_due");
   row.querySelector(".payment-remove").onclick=()=>{row.remove();renumberPaymentRows();updatePaymentSummaryInputs();};
-  row.querySelectorAll("input,select").forEach(el=>el.addEventListener("input",updatePaymentSummaryInputs));
+  row.querySelectorAll("input,select,textarea").forEach(el=>el.addEventListener("input",updatePaymentSummaryInputs));
   box.appendChild(row); renumberPaymentRows(); updatePaymentSummaryInputs();
 }
 function renumberPaymentRows(){document.querySelectorAll("#paymentInstallmentList .payment-installment-no").forEach((el,i)=>el.textContent=`งวด ${i+1}`);}
 function collectPaymentInstallments(){
-  return [...document.querySelectorAll("#paymentInstallmentList .payment-installment-row")].map((row,i)=>({id:row.dataset.id||`p-${Date.now()}-${i}`,description:row.querySelector(".pay-desc")?.value.trim()||`งวดที่ ${i+1}`,amount:Math.max(0,Number(row.querySelector(".pay-amount")?.value||0)),status:row.querySelector(".pay-status")?.value||"not_due"}));
+  return [...document.querySelectorAll("#paymentInstallmentList .payment-installment-row")].map((row,i)=>({id:row.dataset.id||`p-${Date.now()}-${i}`,description:row.querySelector(".pay-desc")?.value.trim()||`งวดที่ ${i+1}`,workDetail:row.querySelector(".pay-work-detail")?.value.trim()||"",amount:Math.max(0,Number(row.querySelector(".pay-amount")?.value||0)),status:row.querySelector(".pay-status")?.value||"not_due"}));
 }
 function updatePaymentSummaryInputs(){
   const items=collectPaymentInstallments(),paid=items.filter(x=>x.status==="paid"),amt=paid.reduce((s,x)=>s+Number(x.amount||0),0);
@@ -6573,7 +6588,7 @@ function openDetail(id){
         </div>
         <div class="progress-track" style="margin-top:12px;"><div class="progress-fill" style="width:${pay.percent}%"></div></div>
         <div style="text-align:right;margin-top:6px;font-weight:800;color:#1767d5;">เบิกแล้ว ${pay.percent}%</div>
-        ${pay.items?.length?`<details class="payment-installments-details"><summary>ดูรายละเอียดงวดงาน (${pay.items.length} งวด)</summary><div class="payment-detail-list">${pay.items.map((x,i)=>`<div class="payment-detail-row"><strong>งวด ${i+1}</strong><div><strong>${escapeHTML(x.description||`งวดที่ ${i+1}`)}</strong><br><small>${money(x.amount)} บาท</small></div><span class="payment-pill ${x.status}">${paymentStatusLabel(x.status)}</span></div>`).join("")}</div></details>`:""}
+        ${pay.items?.length?`<details class="payment-installments-details"><summary>ดูรายละเอียดงวดงาน (${pay.items.length} งวด)</summary><div class="payment-detail-list">${pay.items.map((x,i)=>`<div class="payment-detail-row"><strong>งวด ${i+1}</strong><div><strong>${escapeHTML(x.description||`งวดที่ ${i+1}`)}</strong>${x.workDetail?`<div class="payment-work-detail-view">${escapeHTML(x.workDetail)}</div>`:""}<small>${money(x.amount)} บาท</small></div><span class="payment-pill ${x.status}">${paymentStatusLabel(x.status)}</span></div>`).join("")}</div></details>`:""}
       </div>` : ""; })()}
 
       <div class="task-overview">
