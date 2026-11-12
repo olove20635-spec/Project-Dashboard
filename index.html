@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V93 • Timeline Percent Labels</div>
+      <h1>Project Dashboard</h1><div class="build-version">V94 • Money Card Centered</div>
     </div>
 
 
@@ -7504,14 +7504,28 @@ async function exportProjectImage(){
       ctx.beginPath();ctx.moveTo(x+cardW-150,topY+cardH);ctx.lineTo(x+cardW,topY+cardH-105);ctx.lineTo(x+cardW,topY+cardH);ctx.closePath();ctx.fill();
       ctx.restore();
 
-      // V89: KPI content alignment. Middle (money) card is centered as one balanced group.
-      const iconCx = i===1 ? x+124 : x+98;
-      const dividerCx = i===1 ? x+217 : x+190;
-      const textCx = i===1 ? x+248 : x+222;
+      // V94: KPI alignment. Money card content is centered inside its frame and keeps "บาท" on the same line.
+      const iconCx = i===1 ? x+112 : x+98;
+      const dividerCx = i===1 ? x+205 : x+190;
+      const textCx = i===1 ? x+236 : x+222;
       drawColorKpiIcon(ctx,c.type,iconCx,topY+90,(i===2?138:172));
       ctx.fillStyle=gold;ctx.fillRect(dividerCx,topY+25,4,106);
       drawText(ctx,c.title,textCx,topY+24,27,navy,600);
-      drawWrappedText(ctx,c.value,textCx,topY+72,cardW-(textCx-x)-24,54,44,c.color,600,1);
+      if(i===1){
+        // Fit the full amount + currency on one line instead of clipping the word บาท.
+        const moneyMaxW=cardW-(textCx-x)-22;
+        let moneySize=44;
+        ctx.save();
+        while(moneySize>32){
+          ctx.font=`600 ${moneySize}px ${EXPORT_FONT_FAMILY}`;
+          if(ctx.measureText(c.value).width<=moneyMaxW) break;
+          moneySize-=1;
+        }
+        ctx.restore();
+        drawText(ctx,c.value,textCx,topY+72,moneySize,c.color,600);
+      }else{
+        drawWrappedText(ctx,c.value,textCx,topY+72,cardW-(textCx-x)-24,54,44,c.color,600,1);
+      }
 
       if(i===0){
         const bx=x+70,bw=cardW-102,by=topY+154;
@@ -7692,7 +7706,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V93",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V94",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
