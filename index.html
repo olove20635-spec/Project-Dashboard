@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V78 • Project Info Alignment</div>
+      <h1>Project Dashboard</h1><div class="build-version">V79 • Project Info Fixed Columns</div>
     </div>
 
 
@@ -7228,6 +7228,17 @@ function drawIcon(ctx,type,cx,cy,size,color="#0A315D"){
     ctx.fillStyle="#D8B43E";
     for(let yy=0;yy<2;yy++)for(let xx=0;xx<3;xx++)ctx.fillRect(cx-r*.58+xx*r*.48,cy+r*.04+yy*r*.34,r*.17,r*.17);
 
+  }else if(type==="phone"){
+    ctx.beginPath();
+    ctx.moveTo(cx-r*.55,cy-r*.55);ctx.quadraticCurveTo(cx-r*.82,cy-r*.18,cx-r*.35,cy+r*.30);
+    ctx.quadraticCurveTo(cx+r*.15,cy+r*.82,cx+r*.55,cy+r*.55);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx-r*.58,cy-r*.58);ctx.lineTo(cx-r*.30,cy-r*.34);
+    ctx.moveTo(cx+r*.30,cy+r*.34);ctx.lineTo(cx+r*.58,cy+r*.58);ctx.stroke();
+
+  }else if(type==="flag"){
+    ctx.beginPath();ctx.moveTo(cx-r*.55,cy+r*.70);ctx.lineTo(cx-r*.55,cy-r*.72);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx-r*.50,cy-r*.66);ctx.lineTo(cx+r*.58,cy-r*.45);ctx.lineTo(cx+r*.18,cy);ctx.lineTo(cx-r*.50,cy-r*.10);ctx.closePath();ctx.stroke();
+
   }else if(type==="payment"){
     // เหรียญซ้อนสำหรับหัวข้อการเบิกเงิน
     ctx.strokeStyle=color;
@@ -7276,7 +7287,7 @@ function drawColorKpiIcon(ctx,type,cx,cy,size){
   ctx.restore();
 }
 /* V74: MASTER REFERENCE export rebuild - geometry, icon scale, typography and spacing matched to approved reference */
-/* V78: PROJECT INFO ALIGNMENT + visible temporary version tag */
+/* V79: PROJECT INFO FIXED COLUMNS + visible temporary version tag */
 async function exportProjectImage(){
   try{ if(document.fonts && document.fonts.ready) await document.fonts.ready; }catch(e){}
 
@@ -7486,7 +7497,7 @@ async function exportProjectImage(){
     });
 
     // ===== PROJECT INFO =====
-    // V78: align this block to the approved master reference.
+    // V79: strict fixed-column project info block.
     const infoX=990,infoY=488,infoW=892,infoH=302;
     ctx.save();ctx.shadowColor="rgba(20,65,100,.10)";ctx.shadowBlur=16;ctx.shadowOffsetY=6;
     fillRoundRect(ctx,infoX,infoY,infoW,infoH,20,"#FFFFFF");ctx.restore();
@@ -7501,23 +7512,17 @@ async function exportProjectImage(){
       ["วันแล้วเสร็จ",project.endDate?formatDate(project.endDate):"-","flag"]
     ];
 
-    // Fixed columns from master: label | gold divider | optional icon | value.
+    // Strict fixed columns: every VALUE starts at exactly the same X.
+    // label | gold divider | reserved icon column | value
     const rowX=1012,rowW=846,rowH=31,rowStartY=558,rowGap=36;
-    const labelX=1034,dividerX=1246,iconX=1284,valueX=1320;
+    const labelX=1034,dividerX=1246,iconX=1290,valueX=1332;
     info.forEach((r,i)=>{
       const yy=rowStartY+i*rowGap;
       fillRoundRect(ctx,rowX,yy-3,rowW,rowH,5,i%2===0?"#E6EFF6":"#F8FBFD");
       drawText(ctx,r[0],labelX,yy,20,navy,500);
       ctx.fillStyle=gold;ctx.fillRect(dividerX,yy-1,3,23);
-
-      let vx=valueX;
-      if(r[2]){
-        drawIcon(ctx,r[2],iconX,yy+10,20,navy);
-      } else {
-        // Keep text values in the same value column even when no icon is used.
-        vx=1284;
-      }
-      drawWrappedText(ctx,r[1],vx,yy,1850-vx,27,20,"#263D58",400,1);
+      if(r[2]) drawIcon(ctx,r[2],iconX,yy+10,20,navy);
+      drawWrappedText(ctx,r[1],valueX,yy,1850-valueX,27,20,"#263D58",400,1);
     });
 
     // ===== NOTE =====
@@ -7547,8 +7552,8 @@ async function exportProjectImage(){
     ctx.strokeStyle="rgba(255,255,255,.78)";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(175,1044);ctx.lineTo(665,1044);ctx.moveTo(1255,1044);ctx.lineTo(1745,1044);ctx.stroke();
     drawIcon(ctx,"calendar",744,1044,28,"#FFFFFF");
     drawText(ctx,"อัปเดต "+generatedDate,W/2,1027,22,"#FFFFFF",500,"center");
-    // V78: temporary build tag for cache/version verification
-    drawText(ctx,"V78",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    // V79: temporary build tag for cache/version verification
+    drawText(ctx,"V79",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
