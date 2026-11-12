@@ -2949,9 +2949,9 @@ strong,b,
 #quickEditModal:not(.show){display:none!important}
 
 
-/* V59: background editor preview = exact export photo viewport (855x212) */
+/* V59: V64 background editor + export project photo viewport = true 16:9 */
 #backgroundModal .bg-preview{
-  aspect-ratio:855 / 212 !important;
+  aspect-ratio:16 / 9 !important;
   min-height:0 !important;
   width:100%;
   background-color:#dce7f2;
@@ -2987,7 +2987,7 @@ strong,b,
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
       <h1>Project Dashboard</h1>
-      <div class="build-label" id="buildLabel">CURRENT BUILD • V63</div>
+      <div class="build-label" id="buildLabel">CURRENT BUILD • V64</div>
     </div>
 
 
@@ -7280,8 +7280,8 @@ async function exportProjectImage(){
 
     // ภาพขวาบน — ใหญ่, crop ตามตำแหน่งที่ผู้ใช้ปรับ, fade ด้านซ้ายแบบนุ่ม
     ctx.save();roundRectPath(ctx,1010,16,855,212,24);ctx.clip();
-    if(image){drawCoverPositioned(ctx,image,1010,16,855,212,bgTransform.y,bgTransform.x,bgTransform.zoom);}else{ctx.fillStyle="#DCE7F2";ctx.fillRect(1010,16,855,212);}
-    const fade=ctx.createLinearGradient(1010,0,1210,0);fade.addColorStop(0,"rgba(255,255,255,.32)");fade.addColorStop(.55,"rgba(255,255,255,.10)");fade.addColorStop(1,"rgba(255,255,255,0)");ctx.fillStyle=fade;ctx.fillRect(1010,16,220,212);ctx.restore();
+    if(image){drawCoverPositioned(ctx,image,1490,16,375,211,bgTransform.y,bgTransform.x,bgTransform.zoom);}else{ctx.fillStyle="#DCE7F2";ctx.fillRect(1490,16,375,211);}
+    const fade=ctx.createLinearGradient(1490,0,1570,0);fade.addColorStop(0,"rgba(255,255,255,.32)");fade.addColorStop(.55,"rgba(255,255,255,.10)");fade.addColorStop(1,"rgba(255,255,255,0)");ctx.fillStyle=fade;ctx.fillRect(1010,16,220,212);ctx.restore();
 
     // KPI 3 ช่อง
     const topY=270, cardH=220, gap=18, left=28, cardW=(W-56-gap*2)/3;
