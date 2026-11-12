@@ -2987,7 +2987,7 @@ strong,b,
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
       <h1>Project Dashboard</h1>
-      <div class="build-label" id="buildLabel">CURRENT BUILD • V61</div>
+      <div class="build-label" id="buildLabel">CURRENT BUILD • V62</div>
     </div>
 
 
@@ -6143,7 +6143,7 @@ function updateBackgroundPreview(){
   if(!preview) return;
   const has=!!pendingBackgroundImage && !pendingBackgroundRemove;
   preview.style.backgroundImage=has?`url(${JSON.stringify(pendingBackgroundImage)})`:"";
-  preview.style.backgroundSize=has?`${pendingBackgroundZoom*100}% auto`:"cover";
+  preview.style.setProperty("background-size",has?`${pendingBackgroundZoom*100}% auto`:"cover","important");
   preview.style.backgroundPosition=`${pendingBackgroundX}% ${pendingBackgroundY}%`;
   preview.classList.toggle("has-image",has);
   if(text) text.style.display=has?"none":"";
