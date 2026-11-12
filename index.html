@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V90 • Project Info Centered</div>
+      <h1>Project Dashboard</h1><div class="build-version">V91 • Remaining Text Black</div>
     </div>
 
 
@@ -7533,10 +7533,10 @@ async function exportProjectImage(){
         const remainingCenter=bx+elapsedW+(remainingW/2);
         // V89: match master reference — remaining percentage centered in grey segment
         if(remainingW>54){
-          drawText(ctx,Math.round(remainingPct)+"% เหลือ",remainingCenter,by+4,18,"#FFFFFF",600,"center");
+          drawText(ctx,Math.round(remainingPct)+"% เหลือ",remainingCenter,by+4,18,"#111827",600,"center");
         }
         // V89: show remaining days once below the timeline, aligned to the left edge
-        drawText(ctx,days.short,bx,by+43,17,"#52677D",400,"left");
+        drawText(ctx,days.short,bx,by+39,17,"#111827",500,"left");
       }
     });
 
@@ -7681,7 +7681,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V90",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V91",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
