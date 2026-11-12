@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261112-v136-location-right-only">
+<meta name="dashboard-build" content="20261112-v137-location-right-fit">
 <title>Project Dashboard V19</title>
-<link rel="manifest" href="./manifest.json?build=20261112-v136-location-right-only">
+<link rel="manifest" href="./manifest.json?build=20261112-v137-location-right-fit">
 
 
 <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
@@ -21,7 +21,7 @@
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261112-v136-location-right-only";
+  var BUILD = "20261112-v137-location-right-fit";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -3319,7 +3319,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V136 • Location Right Only</div>
+      <h1>Project Dashboard</h1><div class="build-version">V137 • Location Right Fit</div>
     </div>
 
 
@@ -7809,25 +7809,25 @@ async function exportProjectImage(){
 
     fillRoundRect(ctx,64,122,11,112,6,gold);
 
-    // V136: keep the project title in its original left position.
+    // V137: keep the project title in its original left position.
     const title=String(project.name||"-");
     const titleSize=title.length>62?43:title.length>42?47:title.length>28?52:57;
     const titleY=116;
     const titleLineH=54;
     drawWrappedText(ctx,title,100,titleY,930,titleLineH,titleSize,navy,700,2);
 
-    // V136: move ONLY the location to the right side, close to the project photo.
+    // V137: move ONLY the location to the right side, close to the project photo.
     // It has its own fixed zone so it cannot push or move the project title.
-    const locationX=940;
-    const locationY=198;
-    const locationMaxW=285;
+    const locationX=900;
+    const locationY=200;
+    const locationMaxW=350;
     const pinX=locationX+8;
     ctx.save();
     ctx.fillStyle="#E73535";
     ctx.beginPath();ctx.arc(pinX,locationY+9,7,0,Math.PI*2);ctx.fill();
     ctx.beginPath();ctx.moveTo(pinX-5,locationY+14);ctx.lineTo(pinX,locationY+25);ctx.lineTo(pinX+5,locationY+14);ctx.closePath();ctx.fill();
     ctx.restore();
-    drawWrappedText(ctx,project.location||"-",locationX+30,locationY,locationMaxW-30,29,23,"#294765",500,1);
+    drawWrappedText(ctx,project.location||"-",locationX+30,locationY,locationMaxW-30,24,19,"#294765",600,1);
 
     // V97: upper-right project photo uses a true diagonal cut, matching the reference.
     // Both left and right sides use the same parallel gold / blue frame language.
@@ -8179,7 +8179,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V136",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V137",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
