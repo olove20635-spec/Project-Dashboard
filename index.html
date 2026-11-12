@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261112-v45-installment-work-detail">
+<meta name="dashboard-build" content="20261112-v47-corrected-live-base">
 <title>Project Dashboard V19</title>
-<link rel="manifest" href="./manifest.json?build=20261112-v45-installment-work-detail">
+<link rel="manifest" href="./manifest.json?build=20261112-v47-corrected-live-base">
 
 
 <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
@@ -21,7 +21,7 @@
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261112-v45-installment-work-detail";
+  var BUILD = "20261112-v47-corrected-live-base";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -2769,6 +2769,71 @@ strong,b,
 .preview-card {
   cursor: default;
 }
+
+
+/* ===== V47 CORRECTED — based on actual live V45 source ===== */
+
+/* 1) clean installment-details chevron */
+.payment-toggle .payment-toggle-arrow,
+.payment-detail-toggle .payment-toggle-arrow,
+.payment-detail-toggle .chevron,
+.payment-toggle .chevron{
+  display:inline-block!important;
+  width:9px!important;height:9px!important;
+  margin-left:8px!important;
+  border-right:2px solid currentColor!important;
+  border-bottom:2px solid currentColor!important;
+  transform:rotate(45deg)!important;
+  font-size:0!important;line-height:0!important;
+  vertical-align:3px!important;
+}
+.payment-toggle.open .payment-toggle-arrow,
+.payment-detail-toggle.open .payment-toggle-arrow,
+.payment-toggle.open .chevron,
+.payment-detail-toggle.open .chevron{transform:rotate(225deg)!important;vertical-align:-2px!important;}
+
+/* 2) REAL installment editor layout — amount gets room; trash remains compact */
+#paymentInstallmentList .payment-installment-row{
+  grid-template-columns:minmax(0,1fr)!important;
+}
+#paymentInstallmentList .payment-installment-row .payment-installment-grid,
+#paymentInstallmentList .payment-installment-row .payment-row-grid{
+  grid-template-columns:minmax(0,1fr)!important;
+}
+#paymentInstallmentList .pay-amount{
+  width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  font-size:15px!important;
+  letter-spacing:0!important;
+  font-variant-numeric:tabular-nums!important;
+}
+#paymentInstallmentList .pay-status{min-width:0!important;width:100%!important}
+#paymentInstallmentList .payment-remove,
+#paymentInstallmentList .remove-installment,
+#paymentInstallmentList .pay-remove{width:46px!important;min-width:46px!important}
+
+/* On phones, value + status must not be squeezed into a narrow 3-column row */
+@media(max-width:600px){
+  #paymentInstallmentList .payment-installment-row{
+    overflow:visible!important;
+  }
+  #paymentInstallmentList .payment-installment-row input,
+  #paymentInstallmentList .payment-installment-row select,
+  #paymentInstallmentList .payment-installment-row textarea{
+    max-width:100%!important;
+  }
+}
+
+/* 3) export preview: outside area is clickable, content is not */
+#exportPreview{cursor:pointer}
+#exportPreview .export-preview-card,
+#exportPreview .export-preview-box,
+#exportPreview .preview-card,
+#exportPreview canvas,
+#exportPreview img{cursor:default}
+
+/* 4) no blue block/strip behind export hero image */
 
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -8667,6 +8732,18 @@ document.addEventListener('click', function (e) {
   overlay.classList.remove('show','active','open');
   document.body.style.overflow = '';
 }, true);
+
+
+/* V47 corrected: tap outside export preview to close */
+document.addEventListener("click",function(e){
+  const overlay=document.getElementById("exportPreview");
+  if(!overlay || e.target!==overlay) return;
+  const close=overlay.querySelector(".close,[data-close-export],#closeExportPreview,.export-preview-close");
+  if(close){ close.click(); return; }
+  overlay.classList.remove("show","open","active");
+  overlay.style.display="none";
+  document.body.style.overflow="";
+},true);
 
 </script>
 </body>
