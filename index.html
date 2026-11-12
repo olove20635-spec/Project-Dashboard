@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261112-v52-installment-tap-edit-fix">
+<meta name="dashboard-build" content="20261112-v53-four-fixes">
 <title>Project Dashboard V19</title>
-<link rel="manifest" href="./manifest.json?build=20261112-v52-installment-tap-edit-fix">
+<link rel="manifest" href="./manifest.json?build=20261112-v53-four-fixes">
 
 
 <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
@@ -21,7 +21,7 @@
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261112-v52-installment-tap-edit-fix";
+  var BUILD = "20261112-v53-four-fixes";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -2891,6 +2891,12 @@ strong,b,
 /* ===== V52 installment rows are direct-edit targets ===== */
 .payment-detail-row.payment-inline-edit{pointer-events:auto!important;touch-action:manipulation}
 .payment-detail-row.payment-inline-edit>*{pointer-events:none}
+
+
+/* ===== V53 interaction fixes ===== */
+.task-direct-edit{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:rgba(20,80,160,.08)}
+.task-direct-edit:active{transform:scale(.995)}
+.payment-detail-row{cursor:pointer;touch-action:manipulation}
 
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -6527,7 +6533,7 @@ function openDetail(id){
 
       taskHTML += `
 
-        <div class="task status-${taskStatus}">
+        <div class="task status-${taskStatus} task-direct-edit" onclick="openTaskModal(${task.id})">
 
           <div class="task-row">
 
@@ -6957,7 +6963,7 @@ function openDetail(id){
 
         <button
           class="btn task-btn"
-          data-detail-action="task" onclick="event.stopPropagation(); openTaskModal()"
+          data-detail-action="background" onclick="event.stopPropagation(); openBackgroundEditor()"
         >
           + เพิ่มรูปภาพ
         </button>
@@ -8937,6 +8943,29 @@ function openInstallmentQuickEditByData(description,amount,fallbackIndex){
   if(idx<0 && fallbackIndex>=0 && fallbackIndex<p.installments.length) idx=fallbackIndex;
   if(idx>=0) openInstallmentQuickEdit(idx);
 }
+
+
+/* V53-1: close export preview when tapping outside the card */
+(function(){
+  const m=document.getElementById("exportReadyModal");
+  if(!m || m.dataset.outsideCloseReady) return;
+  m.dataset.outsideCloseReady="1";
+  const outsideClose=e=>{
+    if(e.target===m){ e.preventDefault(); e.stopPropagation(); closeExportReady(); }
+  };
+  m.addEventListener("click",outsideClose);
+  m.addEventListener("touchend",outsideClose,{passive:false});
+})();
+
+/* V53-2: reliable installment card tap edit via delegation */
+document.addEventListener("click",function(e){
+  const row=e.target.closest(".payment-detail-row");
+  if(!row || !row.closest(".payment-installments-details")) return;
+  e.preventDefault(); e.stopPropagation();
+  const rows=[...row.parentElement.querySelectorAll(".payment-detail-row")];
+  const idx=rows.indexOf(row);
+  if(idx>=0) openInstallmentQuickEdit(idx);
+},true);
 
 </script>
 </body>
