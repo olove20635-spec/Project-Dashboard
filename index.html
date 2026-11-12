@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V107 • Money Text Adjust</div>
+      <h1>Project Dashboard</h1><div class="build-version">V108 • Money Text Adjust</div>
     </div>
 
 
@@ -7529,18 +7529,20 @@ async function exportProjectImage(){
       const iconCx = i===1 ? x+122 : x+98;
       const dividerCx = i===1 ? x+220 : x+190;
       const textCx = i===1 ? x+254 : x+222;
-      drawColorKpiIcon(ctx,c.type,iconCx,topY+90,(i===2?138:172));
-      ctx.fillStyle=gold;ctx.fillRect(dividerCx,topY+25,4,106);
-      // V104: text-only/layout refinement to match the supplied reference.
-      // Keep card dimensions, colors, icons and all project data unchanged.
-      const titleY=topY+22;
-      const valueY=topY+69;
+      // V108: move the ENTIRE money KPI group down together (icon + divider + title + value)
+      // so the full group is vertically centered inside the white card.
+      const groupYOffset = i===1 ? 10 : 0;
+      drawColorKpiIcon(ctx,c.type,iconCx,topY+90+groupYOffset,(i===2?138:172));
+      ctx.fillStyle=gold;ctx.fillRect(dividerCx,topY+25+groupYOffset,4,106);
+      // Keep card dimensions, colors and all project data unchanged.
+      const titleY=topY+22+groupYOffset;
+      const valueY=topY+69+groupYOffset;
       drawText(ctx,c.title,textCx,titleY,31,navy,650);
       if(i===0){
         // V105: progress value slightly lighter and raised for better visual balance.
         drawText(ctx,c.value,textCx,valueY-10,58,c.color,600);
       }else if(i===1){
-        // V107: money value lighter, slightly raised, and the whole money KPI group centered more evenly.
+        // V108: money value keeps the lighter weight; vertical centering is handled by groupYOffset above.
         // Keep the full amount + บาท on one line while making it as large as the card allows.
         const moneyMaxW=cardW-(textCx-x)-14;
         let moneySize=50;
@@ -7786,7 +7788,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V107",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V108",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
