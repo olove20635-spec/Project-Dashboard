@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261112-v58-export-font-blue-bg-fix">
+<meta name="dashboard-build" content="20261112-v59-bg-preview-matches-export">
 <title>Project Dashboard V19</title>
-<link rel="manifest" href="./manifest.json?build=20261112-v58-export-font-blue-bg-fix">
+<link rel="manifest" href="./manifest.json?build=20261112-v59-bg-preview-matches-export">
 
 
 <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
@@ -21,7 +21,7 @@
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261112-v58-export-font-blue-bg-fix";
+  var BUILD = "20261112-v59-bg-preview-matches-export";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -2948,6 +2948,24 @@ strong,b,
 /* V57: inline display must never keep a closed quick-edit modal visible */
 #quickEditModal:not(.show){display:none!important}
 
+
+/* V59: background editor preview = exact export photo viewport (855x212) */
+#backgroundModal .bg-preview{
+  aspect-ratio:855 / 212 !important;
+  min-height:0 !important;
+  width:100%;
+  background-color:#dce7f2;
+  background-size:cover !important;
+  background-repeat:no-repeat !important;
+  border-radius:18px;
+}
+#backgroundModal .bg-preview.has-image::after{
+  content:"";
+  position:absolute;inset:0 auto 0 0;width:25.7%;
+  pointer-events:none;
+  background:linear-gradient(90deg,rgba(255,255,255,.32),rgba(255,255,255,.10) 55%,rgba(255,255,255,0));
+}
+
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2962,7 +2980,7 @@ strong,b,
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
       <h1>Project Dashboard</h1>
-      <div class="build-label" id="buildLabel">CURRENT BUILD • V58</div>
+      <div class="build-label" id="buildLabel">CURRENT BUILD • V59</div>
     </div>
 
 
@@ -6105,9 +6123,9 @@ function updateBackgroundPreview(){
   const preview=document.getElementById("bgPreview"), text=document.getElementById("bgPreviewText"), guide=document.getElementById("bgGuide"), slider=document.getElementById("bgPositionSlider"), value=document.getElementById("bgPositionValue");
   if(!preview) return;
   const has=!!pendingBackgroundImage && !pendingBackgroundRemove;
-  preview.style.backgroundImage=has?`linear-gradient(90deg, rgba(7,59,115,.78) 0%, rgba(7,59,115,.34) 18%, rgba(7,59,115,.08) 38%, rgba(7,59,115,0) 58%), url(${JSON.stringify(pendingBackgroundImage)})`:"";
-  preview.style.backgroundSize=has?"100% 100%, cover":"cover";
-  preview.style.backgroundPosition=has?`center, center ${pendingBackgroundPosition}%`:`center ${pendingBackgroundPosition}%`;
+  preview.style.backgroundImage=has?`url(${JSON.stringify(pendingBackgroundImage)})`:"";
+  preview.style.backgroundSize="cover";
+  preview.style.backgroundPosition=`center ${pendingBackgroundPosition}%`;
   preview.classList.toggle("has-image",has);
   if(text) text.style.display=has?"none":""; if(guide) guide.style.display=has?"block":"none";
   if(slider) slider.value=String(Math.round(pendingBackgroundPosition)); if(value) value.textContent=Math.round(pendingBackgroundPosition)+"%";
