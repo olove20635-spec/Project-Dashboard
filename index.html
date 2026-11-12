@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V96 • Export Bar Labels</div>
+      <h1>Project Dashboard</h1><div class="build-version">V97 • Diagonal Photo Frame</div>
     </div>
 
 
@@ -7435,51 +7435,66 @@ async function exportProjectImage(){
     ctx.restore();
     drawWrappedText(ctx,project.location||"-",132,211,800,29,23,"#294765",500,1);
 
-    // photo: large 16:9 viewport, integrated into header
-    const photoX=1296, photoY=12, photoW=586, photoH=232;
+    // V97: upper-right project photo uses a true diagonal cut, matching the reference.
+    // Both left and right sides use the same parallel gold / blue frame language.
+    const photoX=1282, photoY=12, photoW=610, photoH=232;
+    const photoTL=photoX+72;      // top-left is pushed right
+    const photoBL=photoX-42;      // bottom-left sweeps left
+    const photoTR=photoX+photoW-6;
+    const photoBR=photoX+photoW-62; // bottom-right sweeps left too
+
+    // Pale architectural wedges behind the diagonal photo.
     ctx.save();
-    roundRectPath(ctx,photoX,photoY,photoW,photoH,24);ctx.clip();
+    ctx.fillStyle="#EAF6FB";
+    ctx.beginPath();
+    ctx.moveTo(photoBL-190,photoY+photoH);
+    ctx.lineTo(photoTL-82,photoY);
+    ctx.lineTo(photoTL+18,photoY);
+    ctx.lineTo(photoBL+12,photoY+photoH);
+    ctx.closePath();ctx.fill();
+    ctx.fillStyle="#DCEFF8";
+    ctx.beginPath();
+    ctx.moveTo(photoBL-92,photoY+photoH);
+    ctx.lineTo(photoTL-20,photoY);
+    ctx.lineTo(photoTL+42,photoY);
+    ctx.lineTo(photoBL-8,photoY+photoH);
+    ctx.closePath();ctx.fill();
+    ctx.restore();
+
+    // Clip the actual image to a four-sided diagonal polygon.
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(photoTL,photoY);
+    ctx.lineTo(photoTR,photoY);
+    ctx.lineTo(photoBR,photoY+photoH);
+    ctx.lineTo(photoBL,photoY+photoH);
+    ctx.closePath();
+    ctx.clip();
     if(image){
-      drawCoverPositioned(ctx,image,photoX,photoY,photoW,photoH,bgTransform.y,bgTransform.x,bgTransform.zoom);
+      drawCoverPositioned(ctx,image,photoX-42,photoY,photoW+42,photoH,bgTransform.y,bgTransform.x,bgTransform.zoom);
     }else{
       const pg=ctx.createLinearGradient(photoX,photoY,photoX+photoW,photoY+photoH);
       pg.addColorStop(0,"#DDEAF3");pg.addColorStop(1,"#C9D9E6");
-      ctx.fillStyle=pg;ctx.fillRect(photoX,photoY,photoW,photoH);
+      ctx.fillStyle=pg;ctx.fillRect(photoX-42,photoY,photoW+42,photoH);
     }
     ctx.restore();
 
-    // V87: photo border continues down the right edge and sweeps into the lower-right corner.
+    // Parallel decorative bands on BOTH sides of the photo.
     ctx.save();
-    ctx.lineCap="round";
+    ctx.lineCap="butt";
     ctx.lineJoin="round";
 
-    // inner gold edge beside the photo
-    ctx.strokeStyle="#F1C52D"; ctx.lineWidth=10;
-    ctx.beginPath();
-    ctx.moveTo(photoX-18,-8);
-    ctx.lineTo(photoX-76,104);
-    ctx.lineTo(photoX-102,154);
-    ctx.stroke();
+    // LEFT: gold outer band + blue inner band, following the diagonal cut.
+    ctx.strokeStyle="#F1C52D";ctx.lineWidth=10;
+    ctx.beginPath();ctx.moveTo(photoTL-42,photoY-10);ctx.lineTo(photoBL-42,photoY+photoH+8);ctx.stroke();
+    ctx.strokeStyle="#1777A8";ctx.lineWidth=12;
+    ctx.beginPath();ctx.moveTo(photoTL-18,photoY-10);ctx.lineTo(photoBL-18,photoY+photoH+8);ctx.stroke();
 
-    // inner blue edge beside the photo
-    ctx.strokeStyle="#1777A8"; ctx.lineWidth=12;
-    ctx.beginPath();
-    ctx.moveTo(photoX+22,-8);
-    ctx.lineTo(photoX-38,108);
-    ctx.lineTo(photoX-66,164);
-    ctx.stroke();
-
-    // lower-right sweeping bands visible at the photo corner
-    ctx.strokeStyle="#F1C52D"; ctx.lineWidth=10;
-    ctx.beginPath();
-    ctx.moveTo(photoX+photoW-12,photoY+photoH-6);
-    ctx.quadraticCurveTo(photoX+photoW+12,photoY+photoH+10,photoX+photoW+42,photoY+photoH+44);
-    ctx.stroke();
-    ctx.strokeStyle="#1777A8"; ctx.lineWidth=13;
-    ctx.beginPath();
-    ctx.moveTo(photoX+photoW-2,photoY+photoH-20);
-    ctx.quadraticCurveTo(photoX+photoW+28,photoY+photoH+4,photoX+photoW+64,photoY+photoH+48);
-    ctx.stroke();
+    // RIGHT: mirror the same gold / blue diagonal motif.
+    ctx.strokeStyle="#F1C52D";ctx.lineWidth=10;
+    ctx.beginPath();ctx.moveTo(photoTR+18,photoY-10);ctx.lineTo(photoBR+18,photoY+photoH+8);ctx.stroke();
+    ctx.strokeStyle="#1777A8";ctx.lineWidth=12;
+    ctx.beginPath();ctx.moveTo(photoTR+42,photoY-10);ctx.lineTo(photoBR+42,photoY+photoH+8);ctx.stroke();
     ctx.restore();
 
     // ===== KPI CARDS =====
@@ -7716,7 +7731,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V96",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V97",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
