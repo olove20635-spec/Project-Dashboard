@@ -3275,7 +3275,7 @@ strong,b,
 }
 
 /* =========================================================
-   V128 — TRUE TASK NOTE LEFT FIX
+   V129 — TRUE TASK NOTE LEFT FIX
    Root cause: white-space:pre-wrap preserved template indentation,
    making the text appear centered even when text-align:left.
    ========================================================= */
@@ -3298,7 +3298,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V128 • Task Note True Left Fix</div>
+      <h1>Project Dashboard</h1><div class="build-version">V129 • Task Note True Left Fix</div>
     </div>
 
 
@@ -7411,8 +7411,36 @@ function closeDetail(animated=false){
 
 let preparedExportBlob=null, preparedExportName="", preparedExportTitle="";
 function closeExportReady(){ const m=document.getElementById("exportReadyModal"),img=document.getElementById("exportPreviewImage"); if(m){m.classList.remove("show");m.style.display="none";} if(img?.dataset.url){URL.revokeObjectURL(img.dataset.url);delete img.dataset.url;img.removeAttribute("src");} }
-function savePreparedExport(){
+async function savePreparedExport(){
   if(!preparedExportBlob) return;
+
+  // V129: iPhone/iPad — do not open the generated PNG in a second Safari page.
+  // iOS browsers do not allow a web page to write directly into Photos without
+  // a native user confirmation. Use the native iOS share sheet instead, where
+  // the user can choose “บันทึกรูปภาพ / Save Image”.
+  const file=new File(
+    [preparedExportBlob],
+    preparedExportName||"project-dashboard.png",
+    {type:"image/png"}
+  );
+
+  const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
+
+  if(isIOS && navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))){
+    try{
+      await navigator.share({files:[file],title:preparedExportTitle||"Project Dashboard"});
+      closeExportReady();
+      return;
+    }catch(e){
+      if(e?.name==="AbortError") return;
+      console.warn("iOS save/share failed",e);
+      showToast("ไม่สามารถเปิดเมนูบันทึกภาพได้","error");
+      return;
+    }
+  }
+
+  // Other browsers keep the normal download behavior.
   const u=URL.createObjectURL(preparedExportBlob);
   const a=document.createElement("a");
   a.href=u;
