@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V79 • Project Info Fixed Columns</div>
+      <h1>Project Dashboard</h1><div class="build-version">V80 • Project Info Fixed Columns</div>
     </div>
 
 
@@ -7228,6 +7228,22 @@ function drawIcon(ctx,type,cx,cy,size,color="#0A315D"){
     ctx.fillStyle="#D8B43E";
     for(let yy=0;yy<2;yy++)for(let xx=0;xx<3;xx++)ctx.fillRect(cx-r*.58+xx*r*.48,cy+r*.04+yy*r*.34,r*.17,r*.17);
 
+  }else if(type==="worker"){
+    // ผู้ควบคุมงาน: คนสวมหมวกเซฟตี้
+    ctx.beginPath();ctx.arc(cx,cy-r*.10,r*.28,0,Math.PI*2);ctx.stroke();
+    ctx.beginPath();ctx.arc(cx,cy-r*.18,r*.48,Math.PI,Math.PI*2);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx-r*.55,cy-r*.18);ctx.lineTo(cx+r*.55,cy-r*.18);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx-r*.58,cy+r*.72);ctx.quadraticCurveTo(cx,cy+r*.22,cx+r*.58,cy+r*.72);ctx.stroke();
+  }else if(type==="building"){
+    // ผู้รับเหมา: อาคาร/บริษัท
+    ctx.strokeRect(cx-r*.58,cy-r*.48,r*1.16,r*1.18);
+    ctx.beginPath();ctx.moveTo(cx-r*.72,cy-r*.48);ctx.lineTo(cx,cy-r*.78);ctx.lineTo(cx+r*.72,cy-r*.48);ctx.stroke();
+    ctx.fillRect(cx-r*.34,cy-r*.18,r*.16,r*.16);ctx.fillRect(cx+r*.18,cy-r*.18,r*.16,r*.16);
+    ctx.fillRect(cx-r*.34,cy+r*.18,r*.16,r*.16);ctx.fillRect(cx+r*.18,cy+r*.18,r*.16,r*.16);
+  }else if(type==="person"){
+    // ผู้ประสานงาน: บุคคล/ผู้ติดต่อ
+    ctx.beginPath();ctx.arc(cx,cy-r*.30,r*.28,0,Math.PI*2);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx-r*.62,cy+r*.70);ctx.quadraticCurveTo(cx,cy+r*.12,cx+r*.62,cy+r*.70);ctx.stroke();
   }else if(type==="phone"){
     ctx.beginPath();
     ctx.moveTo(cx-r*.55,cy-r*.55);ctx.quadraticCurveTo(cx-r*.82,cy-r*.18,cx-r*.35,cy+r*.30);
@@ -7287,7 +7303,7 @@ function drawColorKpiIcon(ctx,type,cx,cy,size){
   ctx.restore();
 }
 /* V74: MASTER REFERENCE export rebuild - geometry, icon scale, typography and spacing matched to approved reference */
-/* V79: PROJECT INFO FIXED COLUMNS + visible temporary version tag */
+/* V80: PROJECT INFO FIXED COLUMNS + visible temporary version tag */
 async function exportProjectImage(){
   try{ if(document.fonts && document.fonts.ready) await document.fonts.ready; }catch(e){}
 
@@ -7431,7 +7447,7 @@ async function exportProjectImage(){
         fillRoundRect(ctx,bx,by,bw,34,17,"#D8E3EC");
         if(schedule.remainingPct>0){const tg=ctx.createLinearGradient(bx,0,bx+bw,0);tg.addColorStop(0,"#12C58E");tg.addColorStop(1,"#059E76");fillRoundRect(ctx,bx,by,bw*schedule.remainingPct/100,34,17,tg);}
         drawText(ctx,Math.max(0,schedule.remainingPct)+"% เหลือ",bx+bw/2,by+4,20,schedule.remainingPct>28?"#FFFFFF":ink,600,"center");
-        drawText(ctx,"เหลือ "+Math.max(0,schedule.remainingDays)+" วัน",bx,topY+192,17,navy,500);
+        // V80: remove duplicate remaining-days text below the progress bar.
       }
     });
 
@@ -7497,31 +7513,31 @@ async function exportProjectImage(){
     });
 
     // ===== PROJECT INFO =====
-    // V79: strict fixed-column project info block.
+    // V80: project info with left-side contextual icons.
     const infoX=990,infoY=488,infoW=892,infoH=302;
     ctx.save();ctx.shadowColor="rgba(20,65,100,.10)";ctx.shadowBlur=16;ctx.shadowOffsetY=6;
     fillRoundRect(ctx,infoX,infoY,infoW,infoH,20,"#FFFFFF");ctx.restore();
     sectionHeader(infoX,infoY,infoW,"ข้อมูลโครงการ","info");
 
     const info=[
-      ["ผู้ควบคุมงาน",project.controller||"-",null],
-      ["ผู้รับเหมา",project.contractorCompany||"-",null],
-      ["ผู้ประสานงาน",project.contractorContact||"-",null],
+      ["ผู้ควบคุมงาน",project.controller||"-","worker"],
+      ["ผู้รับเหมา",project.contractorCompany||"-","building"],
+      ["ผู้ประสานงาน",project.contractorContact||"-","person"],
       ["โทรศัพท์",project.contractorPhone||"-","phone"],
       ["วันเริ่มงาน",project.startDate?formatDate(project.startDate):"-","calendar"],
       ["วันแล้วเสร็จ",project.endDate?formatDate(project.endDate):"-","flag"]
     ];
 
-    // Strict fixed columns: every VALUE starts at exactly the same X.
-    // label | gold divider | reserved icon column | value
+    // V80: icon is fixed at the far-left of every row.
+    // icon | label | gold divider | value
     const rowX=1012,rowW=846,rowH=31,rowStartY=558,rowGap=36;
-    const labelX=1034,dividerX=1246,iconX=1290,valueX=1332;
+    const iconX=1034,labelX=1062,dividerX=1260,valueX=1290;
     info.forEach((r,i)=>{
       const yy=rowStartY+i*rowGap;
       fillRoundRect(ctx,rowX,yy-3,rowW,rowH,5,i%2===0?"#E6EFF6":"#F8FBFD");
+      if(r[2]) drawIcon(ctx,r[2],iconX,yy+10,20,navy);
       drawText(ctx,r[0],labelX,yy,20,navy,500);
       ctx.fillStyle=gold;ctx.fillRect(dividerX,yy-1,3,23);
-      if(r[2]) drawIcon(ctx,r[2],iconX,yy+10,20,navy);
       drawWrappedText(ctx,r[1],valueX,yy,1850-valueX,27,20,"#263D58",400,1);
     });
 
@@ -7549,11 +7565,10 @@ async function exportProjectImage(){
     ctx.beginPath();ctx.moveTo(1750,1028);ctx.lineTo(1840,1028);ctx.lineTo(1805,1080);ctx.lineTo(1715,1080);ctx.closePath();ctx.fill();ctx.restore();
 
     const generatedDate=new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"long",year:"numeric"}).format(new Date());
-    ctx.strokeStyle="rgba(255,255,255,.78)";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(175,1044);ctx.lineTo(665,1044);ctx.moveTo(1255,1044);ctx.lineTo(1745,1044);ctx.stroke();
-    drawIcon(ctx,"calendar",744,1044,28,"#FFFFFF");
-    drawText(ctx,"อัปเดต "+generatedDate,W/2,1027,22,"#FFFFFF",500,"center");
-    // V79: temporary build tag for cache/version verification
-    drawText(ctx,"V79",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    // V80: date is left aligned, no icon and no “อัปเดต” prefix.
+    drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
+    // temporary build tag for cache/version verification
+    drawText(ctx,"V80",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
