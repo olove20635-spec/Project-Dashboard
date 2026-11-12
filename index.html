@@ -3289,6 +3289,23 @@ strong,b,
 /* V130: Export preview uses one action because iOS opens the same native share sheet for saving/sharing */
 .export-ready-actions.export-ready-actions-single{grid-template-columns:1fr !important;}
 .export-ready-actions-single .export-save-share{width:100% !important;grid-column:1 / -1 !important;}
+
+/* ===== V133 RESTORE PROJECT EDIT BUTTON ===== */
+.detail-buttons{
+  grid-template-columns:.85fr 1.35fr 1.8fr!important;
+  gap:10px!important;
+}
+.detail-buttons .project-edit-btn{
+  width:100%!important;
+  color:#12386f!important;
+  background:#eaf2ff!important;
+  font-weight:700!important;
+}
+@media(max-width:390px){
+  .detail-buttons{grid-template-columns:.8fr 1.35fr 1.65fr!important;gap:8px!important}
+  .detail-buttons .btn{font-size:13px!important;padding-left:6px!important;padding-right:6px!important}
+}
+
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3302,7 +3319,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V132 • Export Title Larger</div>
+      <h1>Project Dashboard</h1><div class="build-version">V133 • Restore Project Edit Button</div>
     </div>
 
 
@@ -7344,7 +7361,15 @@ function openDetail(id){
         </button>
 
         <button
+          class="btn edit-btn project-edit-btn"
+          data-detail-action="edit" onclick="event.stopPropagation(); editProject()"
+        >
+          แก้ไขโครงการ
+        </button>
+
+        <button
           class="btn task-btn"
+          id="detailBackgroundBtn"
           data-detail-action="background" onclick="event.stopPropagation(); openBackgroundEditor()"
         >
           + เพิ่มรูปภาพ
@@ -8146,7 +8171,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V132",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V133",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
