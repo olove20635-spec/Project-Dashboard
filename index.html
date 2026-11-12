@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261112-v47-corrected-live-base">
+<meta name="dashboard-build" content="20261112-v48-quick-edit">
 <title>Project Dashboard V19</title>
-<link rel="manifest" href="./manifest.json?build=20261112-v47-corrected-live-base">
+<link rel="manifest" href="./manifest.json?build=20261112-v48-quick-edit">
 
 
 <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
@@ -21,7 +21,7 @@
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261112-v47-corrected-live-base";
+  var BUILD = "20261112-v48-quick-edit";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -2835,6 +2835,26 @@ strong,b,
 
 /* 4) no blue block/strip behind export hero image */
 
+
+/* ===== V48 QUICK EDIT ===== */
+.quick-editable{cursor:pointer;position:relative;-webkit-tap-highlight-color:rgba(11,91,211,.10)}
+.quick-editable:active{opacity:.72}
+.quick-editable-card{cursor:pointer}
+.quick-editable-card:active{transform:scale(.992)}
+.quick-edit-modal{z-index:260!important;background:rgba(3,16,34,.52)!important;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.quick-edit-box{width:min(92vw,470px);overflow:hidden;border-radius:24px;background:#f7f9fc;box-shadow:0 28px 80px rgba(5,20,43,.30);border:1px solid rgba(255,255,255,.8)}
+.quick-edit-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 18px 15px;color:#fff;background:linear-gradient(120deg,#05264d,#07427d)}
+.quick-edit-kicker{font-size:9px;opacity:.7;margin-bottom:2px}
+.quick-edit-head h3{margin:0;font-size:19px;font-weight:800}
+.quick-edit-close{width:38px;height:38px;border:0;border-radius:12px;background:rgba(255,255,255,.14);color:#fff;font-size:22px}
+.quick-edit-fields{padding:17px 18px 4px}
+.quick-edit-fields label{margin:0 0 6px;color:#506078;font-size:11px;font-weight:700}
+.quick-edit-fields input,.quick-edit-fields textarea,.quick-edit-fields select{width:100%;min-height:50px;margin:0 0 14px;border:1px solid #d9e2ee;border-radius:14px;background:#fff;font:inherit;color:#172033;padding:12px 13px}
+.quick-edit-fields textarea{min-height:110px;resize:vertical}
+.quick-edit-actions{display:grid;grid-template-columns:1fr 1.45fr;gap:9px;padding:12px 18px calc(16px + env(safe-area-inset-bottom));border-top:1px solid #e2e8f0;background:#fff}
+.quick-edit-hint{margin:-5px 0 13px;color:#8792a2;font-size:10px;line-height:1.45}
+@media(max-width:600px){.quick-edit-modal{align-items:flex-end!important;padding:0!important}.quick-edit-box{width:100%;max-width:none;border-radius:24px 24px 0 0}.quick-edit-head{padding:18px}.quick-edit-actions{padding-bottom:calc(14px + env(safe-area-inset-bottom))}}
+
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3078,6 +3098,25 @@ strong,b,
 
     </div>
 
+  </div>
+</div>
+
+
+<!-- QUICK EDIT MODAL -->
+<div id="quickEditModal" class="modal quick-edit-modal">
+  <div class="quick-edit-box">
+    <div class="quick-edit-head">
+      <div>
+        <div class="quick-edit-kicker">แก้ไขข้อมูล</div>
+        <h3 id="quickEditTitle">แก้ไข</h3>
+      </div>
+      <button type="button" class="quick-edit-close" onclick="closeQuickEdit()">×</button>
+    </div>
+    <div id="quickEditFields" class="quick-edit-fields"></div>
+    <div class="quick-edit-actions">
+      <button type="button" class="btn cancel" onclick="closeQuickEdit()">ยกเลิก</button>
+      <button type="button" class="btn save" onclick="saveQuickEdit()">บันทึก</button>
+    </div>
   </div>
 </div>
 
@@ -6616,7 +6655,7 @@ function openDetail(id){
             ความคืบหน้าโครงการ
           </span>
 
-          <strong>
+          <strong class="quick-editable" onclick="openQuickEdit('progress')">
             ${progress}%
           </strong>
 
@@ -6656,7 +6695,7 @@ function openDetail(id){
             มูลค่าโครงการ
           </div>
 
-          <div class="modern-kpi-value">
+          <div class="modern-kpi-value quick-editable" onclick="openQuickEdit('value')">
             ${money(project.value)}
           </div>
 
@@ -6664,7 +6703,7 @@ function openDetail(id){
 
 
 
-        <div class="modern-kpi timeline-kpi ${days.cls}">
+        <div class="modern-kpi timeline-kpi ${days.cls} quick-editable-card" onclick="openQuickEdit('dates')">
           <div class="modern-kpi-icon detail-line-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M8 3.5v4M16 3.5v4M4 9.5h16"/><path d="M8 13h3M13 13h3M8 16h3M13 16h3"/></svg></div>
           <div class="modern-kpi-label">ระยะเวลาโครงการ</div>
           <div class="timeline-dates"><span>${formatDate(project.startDate)}</span><span class="timeline-arrow">→</span><span>${formatDate(project.endDate)}</span></div>
@@ -6681,7 +6720,7 @@ function openDetail(id){
 
             <div class="contractor-card">
 
-              <div class="contractor-head">
+              <div class="contractor-head quick-editable-card" onclick="openQuickEdit('controller')">
 
                 <div class="contractor-icon detail-line-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 20V5.5L12 3v17M12 8h7v12M3 20h18"/><path d="M8 8h1M8 11h1M8 14h1M15 11h1M15 14h1M15 17h1"/></svg></div>
 
@@ -6696,15 +6735,15 @@ function openDetail(id){
 
               <div class="contractor-contact-grid">
 
-                <div class="contractor-contact">
+                <div class="contractor-contact quick-editable-card" onclick="openQuickEdit('contractor')">
 
                   <small>บริษัทรับเหมา</small>
                   <strong class="contractor-company-value">${escapeHTML(project.contractorCompany || "-")}</strong>
-                  <div class="contractor-extra contractor-phone-row"><span>เบอร์โทรศัพท์</span><strong>${escapeHTML(project.contractorPhone || "-")}</strong></div>
+                  <div class="contractor-extra contractor-phone-row quick-editable" onclick="event.stopPropagation();openQuickEdit('phone')"><span>เบอร์โทรศัพท์</span><strong>${escapeHTML(project.contractorPhone || "-")}</strong></div>
 
                 </div>
 
-                <div class="contractor-contact contractor-coordinator">
+                <div class="contractor-contact contractor-coordinator quick-editable-card" onclick="openQuickEdit('coordinator')">
 
                   <small>ผู้ประสานงาน</small>
                   <strong>${escapeHTML(project.contractorContact || "-")}</strong>
@@ -6745,7 +6784,7 @@ function openDetail(id){
         project.remark
           ? `
 
-            <div class="project-note-card">
+            <div class="project-note-card quick-editable-card" onclick="openQuickEdit('remark')">
 
               <div class="project-text-title">
                 หมายเหตุ
@@ -6763,7 +6802,7 @@ function openDetail(id){
 
 
       ${(()=>{ const pay=getPaymentInfo(project); return (pay.total||pay.paidAmount) ? `
-      <div class="project-text-card" style="margin-top:14px;">
+      <div class="project-text-card quick-editable-card" style="margin-top:14px;" onclick="openQuickEdit('payments')">
         <div class="project-text-title payment-title"><span class="inline-line-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="7" rx="6.5" ry="2.7"/><path d="M5.5 7v4c0 1.5 2.9 2.7 6.5 2.7s6.5-1.2 6.5-2.7V7M5.5 11v4c0 1.5 2.9 2.7 6.5 2.7s6.5-1.2 6.5-2.7v-4"/></svg></span>สถานะการเบิกเงิน</div>
         <div class="payment-summary" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;">
           <div><div class="project-text-title">เบิกแล้ว</div><div class="payment-figure">${money(pay.paidAmount)}</div></div>
@@ -8743,6 +8782,85 @@ document.addEventListener("click",function(e){
   overlay.classList.remove("show","open","active");
   overlay.style.display="none";
   document.body.style.overflow="";
+},true);
+
+
+/* ===== V48 QUICK EDIT LOGIC ===== */
+let quickEditType=null;
+
+function quickEditProject(){
+  return projects.find(p=>p.id===selectedProjectId) || null;
+}
+function quickField(label,html){
+  return `<label>${label}</label>${html}`;
+}
+function openQuickEdit(type){
+  const p=quickEditProject(); if(!p) return;
+  quickEditType=type;
+  const modal=document.getElementById("quickEditModal");
+  const title=document.getElementById("quickEditTitle");
+  const fields=document.getElementById("quickEditFields");
+  if(!modal||!title||!fields)return;
+
+  const configs={
+    progress:["ความคืบหน้าโครงการ",quickField("เปอร์เซ็นต์",`<input id="qeProgress" type="number" inputmode="numeric" min="0" max="100" value="${clamp(p.progress,0,100)}">`)+(p.tasks?.length?`<div class="quick-edit-hint">โครงการนี้มีรายการงาน ระบบจะคำนวณเปอร์เซ็นต์จากรายการงานอัตโนมัติ</div>`:"")],
+    value:["มูลค่าโครงการ",quickField("มูลค่า (บาท)",`<input id="qeValue" type="number" inputmode="decimal" min="0" value="${Number(p.value||0)}">`)],
+    dates:["ระยะเวลาโครงการ",quickField("วันเริ่มโครงการ",`<input id="qeStart" type="date" value="${p.startDate||""}">`)+quickField("วันสิ้นสุดโครงการ",`<input id="qeEnd" type="date" value="${p.endDate||""}">`)],
+    controller:["ผู้ควบคุมงาน",quickField("ชื่อผู้ควบคุมงาน",`<input id="qeController" type="text" value="${escapeHTML(p.controller||"")}">`)],
+    contractor:["บริษัทรับเหมา",quickField("ชื่อบริษัทรับเหมา",`<input id="qeContractor" type="text" value="${escapeHTML(p.contractorCompany||"")}">`)],
+    coordinator:["ผู้ประสานงาน",quickField("ชื่อผู้ประสานงาน",`<input id="qeCoordinator" type="text" value="${escapeHTML(p.contractorContact||"")}">`)],
+    phone:["เบอร์โทรศัพท์",quickField("เบอร์โทรศัพท์",`<input id="qePhone" type="tel" inputmode="tel" value="${escapeHTML(formatThaiPhone(p.contractorPhone||""))}">`)],
+    remark:["หมายเหตุ",quickField("หมายเหตุ",`<textarea id="qeRemark">${escapeHTML(p.remark||"")}</textarea>`)],
+    payments:["แก้ไขงวดงาน",`<div class="quick-edit-hint">เปิดหน้าแก้ไขโครงการไปยังส่วนงวดงานโดยตรง</div>`]
+  };
+  const cfg=configs[type]; if(!cfg)return;
+  title.textContent=cfg[0]; fields.innerHTML=cfg[1];
+
+  if(type==="payments"){
+    closeQuickEdit();
+    openProjectModal(p.id);
+    setTimeout(()=>document.getElementById("paymentInstallmentList")?.scrollIntoView({behavior:"smooth",block:"start"}),80);
+    return;
+  }
+
+  modal.classList.add("show");
+  document.body.style.overflow="hidden";
+  if(type==="phone"){
+    const el=document.getElementById("qePhone");
+    el?.addEventListener("input",()=>{el.value=formatThaiPhone(el.value)});
+  }
+  setTimeout(()=>fields.querySelector("input,textarea,select")?.focus(),80);
+}
+function closeQuickEdit(){
+  document.getElementById("quickEditModal")?.classList.remove("show");
+  quickEditType=null;
+  document.body.style.overflow="";
+}
+function saveQuickEdit(){
+  const p=quickEditProject(); if(!p||!quickEditType)return;
+  switch(quickEditType){
+    case "progress":
+      if(!(p.tasks?.length)) p.progress=clamp(Number(document.getElementById("qeProgress")?.value||0),0,100);
+      break;
+    case "value": p.value=Math.max(0,Number(document.getElementById("qeValue")?.value||0)); break;
+    case "dates":
+      p.startDate=document.getElementById("qeStart")?.value||"";
+      p.endDate=document.getElementById("qeEnd")?.value||"";
+      break;
+    case "controller": p.controller=(document.getElementById("qeController")?.value||"").trim(); break;
+    case "contractor": p.contractorCompany=(document.getElementById("qeContractor")?.value||"").trim(); break;
+    case "coordinator": p.contractorContact=(document.getElementById("qeCoordinator")?.value||"").trim(); break;
+    case "phone": p.contractorPhone=formatThaiPhone(document.getElementById("qePhone")?.value||""); break;
+    case "remark": p.remark=(document.getElementById("qeRemark")?.value||"").trim(); break;
+  }
+  saveData();
+  render();
+  closeQuickEdit();
+  openDetail(p.id);
+}
+document.addEventListener("click",e=>{
+  const modal=document.getElementById("quickEditModal");
+  if(modal && e.target===modal) closeQuickEdit();
 },true);
 
 </script>
