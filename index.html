@@ -2987,7 +2987,7 @@ strong,b,
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
       <h1>Project Dashboard</h1>
-      <div class="build-label" id="buildLabel">CURRENT BUILD • V65</div>
+      <div class="build-label" id="buildLabel">CURRENT BUILD • V66</div>
     </div>
 
 
@@ -7046,7 +7046,7 @@ function openDetail(id){
           class="btn export-btn"
           id="detailExportBtn" data-detail-action="export"
         >
-          Export 16:9
+          Export
         </button>
 
       </div>
@@ -7256,7 +7256,7 @@ async function exportProjectImage(){
   if(exportProjectBusy) return;
   exportProjectBusy=true;
   const exportButton=document.querySelector('[data-detail-action="export"]');
-  const oldText=exportButton?.textContent||"Export 16:9";
+  const oldText=exportButton?.textContent||"Export";
   if(exportButton){exportButton.disabled=true;exportButton.textContent="กำลังสร้างภาพ...";}
   try{
     const project=projects.find(p=>p.id===selectedProjectId);
@@ -7281,9 +7281,9 @@ async function exportProjectImage(){
     fillRoundRect(ctx,58,130,12,92,6,"#D8B43E");
     const title=String(project.name||"-");
     const titleSize=title.length>62?30:title.length>42?33:title.length>28?37:42;
-    drawWrappedText(ctx,title,92,112,790,38,titleSize,"#0A2F5B",900,3);
-    drawText(ctx,"📍",92,204,22,"#D93636",800);
-    drawWrappedText(ctx,project.location||"-",126,202,750,28,23,"#294765",800,1);
+    drawWrappedText(ctx,title,92,112,790,38,titleSize,"#0A2F5B",650,3);
+    drawText(ctx,"📍",92,204,22,"#D93636",500);
+    drawWrappedText(ctx,project.location||"-",126,202,750,28,23,"#294765",500,1);
 
     // ภาพขวาบน — ใหญ่, crop ตามตำแหน่งที่ผู้ใช้ปรับ, fade ด้านซ้ายแบบนุ่ม
     ctx.save();roundRectPath(ctx,1010,16,855,212,24);ctx.clip();
@@ -7297,38 +7297,38 @@ async function exportProjectImage(){
       {title:"มูลค่างาน",type:"money",value:money(project.value)+" บาท",color:"#079C7A"},
       {title:"ระยะเวลาคงเหลือ",type:"calendar",value:days.short,color:days.cls==="overdue"?"#D93636":"#079C7A"}
     ];
-    kpis.forEach((c,i)=>{const x=left+i*(cardW+gap);fillRoundRect(ctx,x,topY,cardW,cardH,20,"#FFFFFF");ctx.strokeStyle="#D6E0EB";ctx.lineWidth=2;roundRectPath(ctx,x,topY,cardW,cardH,20);ctx.stroke();drawIcon(ctx,c.type,x+72,topY+87,76,"#0A315D");ctx.fillStyle="#D8B43E";ctx.fillRect(x+150,topY+34,4,92);drawText(ctx,c.title,x+180,topY+27,30,"#0A2F5B",900);drawWrappedText(ctx,c.value,x+180,topY+72,cardW-205,58,48,c.color,900,1);
-      if(i===0){fillRoundRect(ctx,x+150,topY+151,cardW-185,34,17,"#E2E7ED");if(progress>0)fillRoundRect(ctx,x+150,topY+151,(cardW-185)*progress/100,34,17,"#08A483");drawText(ctx,progress+"%",x+150+(cardW-185)/2,topY+154,21,progress>8?"#FFFFFF":"#173650",900,"center");}
-      if(i===2 && schedule.valid){fillRoundRect(ctx,x+150,topY+151,cardW-185,34,17,"#E2E7ED");if(schedule.remainingPct>0)fillRoundRect(ctx,x+150,topY+151,(cardW-185)*schedule.remainingPct/100,34,17,"#08A483");drawText(ctx,Math.max(0,schedule.remainingPct)+"% เหลือ",x+150+(cardW-185)/2,topY+154,20,schedule.remainingPct>28?"#FFFFFF":"#173650",900,"center");
-        drawText(ctx,"เหลือ "+Math.max(0,schedule.remainingDays)+" วัน",x+150,topY+193,18,"#60758E",800);
+    kpis.forEach((c,i)=>{const x=left+i*(cardW+gap);fillRoundRect(ctx,x,topY,cardW,cardH,20,"#FFFFFF");ctx.strokeStyle="#D6E0EB";ctx.lineWidth=2;roundRectPath(ctx,x,topY,cardW,cardH,20);ctx.stroke();drawIcon(ctx,c.type,x+72,topY+87,76,"#0A315D");ctx.fillStyle="#D8B43E";ctx.fillRect(x+150,topY+34,4,92);drawText(ctx,c.title,x+180,topY+27,30,"#0A2F5B",650);drawWrappedText(ctx,c.value,x+180,topY+72,cardW-205,58,48,c.color,650,1);
+      if(i===0){fillRoundRect(ctx,x+150,topY+151,cardW-185,34,17,"#E2E7ED");if(progress>0)fillRoundRect(ctx,x+150,topY+151,(cardW-185)*progress/100,34,17,"#08A483");drawText(ctx,progress+"%",x+150+(cardW-185)/2,topY+154,21,progress>8?"#FFFFFF":"#173650",650,"center");}
+      if(i===2 && schedule.valid){fillRoundRect(ctx,x+150,topY+151,cardW-185,34,17,"#E2E7ED");if(schedule.remainingPct>0)fillRoundRect(ctx,x+150,topY+151,(cardW-185)*schedule.remainingPct/100,34,17,"#08A483");drawText(ctx,Math.max(0,schedule.remainingPct)+"% เหลือ",x+150+(cardW-185)/2,topY+154,20,schedule.remainingPct>28?"#FFFFFF":"#173650",650,"center");
+        drawText(ctx,"เหลือ "+Math.max(0,schedule.remainingDays)+" วัน",x+150,topY+193,18,"#60758E",500);
       }
     });
 
     // สถานะการเบิกเงิน
     fillRoundRect(ctx,28,510,1000,285,20,"#FFFFFF");fillRoundRect(ctx,28,510,1000,58,20,"#0A315D");ctx.fillStyle="#0A315D";ctx.fillRect(28,548,1000,20);
-    drawIcon(ctx,"payment",72,539,48,"#E0BC42");drawText(ctx,"สถานะการเบิกเงิน",112,521,31,"#FFFFFF",900);
-    drawText(ctx,"เบิกแล้ว",70,596,29,"#0A2F5B",900);drawText(ctx,money(pay.paidAmount)+" บาท",250,589,38,"#079C7A",900);
-    drawText(ctx,"คงเหลือ",70,648,29,"#0A2F5B",900);drawText(ctx,money(pay.balance)+" บาท",250,641,38,"#079C7A",900);
-    fillRoundRect(ctx,620,606,350,34,17,"#E1E6EC");if(pay.percent>0)fillRoundRect(ctx,620,606,350*pay.percent/100,34,17,"#08A483");drawText(ctx,pay.percent.toFixed(pay.percent%1?2:0)+"%",795,609,21,pay.percent>20?"#FFFFFF":"#173650",900,"center");
-    [["ทั้งหมด",pay.total+" งวด"],["เบิกแล้ว",pay.paid+" งวด"],["คงเหลือ",pay.remaining+" งวด"]].forEach((b,i)=>{const bx=70+i*300;fillRoundRect(ctx,bx,701,270,72,14,"#E8F7F3");drawText(ctx,b[0],bx+135,709,21,"#173650",800,"center");drawText(ctx,b[1],bx+135,736,31,"#087E68",900,"center");});
+    drawIcon(ctx,"payment",72,539,48,"#E0BC42");drawText(ctx,"สถานะการเบิกเงิน",112,521,31,"#FFFFFF",650);
+    drawText(ctx,"เบิกแล้ว",70,596,29,"#0A2F5B",650);drawText(ctx,money(pay.paidAmount)+" บาท",250,589,38,"#079C7A",650);
+    drawText(ctx,"คงเหลือ",70,648,29,"#0A2F5B",650);drawText(ctx,money(pay.balance)+" บาท",250,641,38,"#079C7A",650);
+    fillRoundRect(ctx,620,606,350,34,17,"#E1E6EC");if(pay.percent>0)fillRoundRect(ctx,620,606,350*pay.percent/100,34,17,"#08A483");drawText(ctx,pay.percent.toFixed(pay.percent%1?2:0)+"%",795,609,21,pay.percent>20?"#FFFFFF":"#173650",650,"center");
+    [["ทั้งหมด",pay.total+" งวด"],["เบิกแล้ว",pay.paid+" งวด"],["คงเหลือ",pay.remaining+" งวด"]].forEach((b,i)=>{const bx=70+i*300;fillRoundRect(ctx,bx,701,270,72,14,"#E8F7F3");drawText(ctx,b[0],bx+135,709,21,"#173650",500,"center");drawText(ctx,b[1],bx+135,736,31,"#087E68",650,"center");});
 
     // ข้อมูลโครงการ + ผู้ควบคุมงาน
     fillRoundRect(ctx,1048,510,844,285,20,"#FFFFFF");fillRoundRect(ctx,1048,510,844,58,20,"#0A315D");ctx.fillStyle="#0A315D";ctx.fillRect(1048,548,844,20);
-    drawIcon(ctx,"info",1092,539,46,"#E0BC42");drawText(ctx,"ข้อมูลโครงการ",1132,521,31,"#FFFFFF",900);
+    drawIcon(ctx,"info",1092,539,46,"#E0BC42");drawText(ctx,"ข้อมูลโครงการ",1132,521,31,"#FFFFFF",650);
     const info=[["ผู้ควบคุมงาน",project.controller||"-"],["ผู้รับเหมา",project.contractorCompany||"-"],["ผู้ประสานงาน",project.contractorContact||"-"],["โทรศัพท์",project.contractorPhone||"-"],["วันเริ่มงาน",project.startDate?formatDate(project.startDate):"-"],["วันแล้วเสร็จ",project.endDate?formatDate(project.endDate):"-"]];
-    info.forEach((r,i)=>{const yy=578+i*33;if(i%2===0){ctx.fillStyle="#F1F4F7";ctx.fillRect(1068,yy-4,804,31);}drawText(ctx,r[0],1090,yy,22,"#0A2F5B",900);ctx.fillStyle="#D8B43E";ctx.fillRect(1330,yy,3,22);drawWrappedText(ctx,r[1],1360,yy,480,27,22,"#263D58",800,1);});
+    info.forEach((r,i)=>{const yy=578+i*33;if(i%2===0){ctx.fillStyle="#F1F4F7";ctx.fillRect(1068,yy-4,804,31);}drawText(ctx,r[0],1090,yy,22,"#0A2F5B",650);ctx.fillStyle="#D8B43E";ctx.fillRect(1330,yy,3,22);drawWrappedText(ctx,r[1],1360,yy,480,27,22,"#263D58",500,1);});
 
     // หมายเหตุ — จัด icon และข้อความให้อยู่แนวเดียวกัน
     fillRoundRect(ctx,28,818,1864,205,20,"#FFFFFF");ctx.strokeStyle="#D8B43E";ctx.lineWidth=3;roundRectPath(ctx,28,818,1864,205,20);ctx.stroke();
-    fillRoundRect(ctx,28,818,1864,58,20,"#0A315D");ctx.fillStyle="#0A315D";ctx.fillRect(28,856,1864,20);drawIcon(ctx,"note",72,846,46,"#E0BC42");drawText(ctx,"หมายเหตุ",112,828,31,"#FFFFFF",900);
+    fillRoundRect(ctx,28,818,1864,58,20,"#0A315D");ctx.fillStyle="#0A315D";ctx.fillRect(28,856,1864,20);drawIcon(ctx,"note",72,846,46,"#E0BC42");drawText(ctx,"หมายเหตุ",112,828,31,"#FFFFFF",650);
     const note=getProjectRemark(project)||getProjectDescription(project)||"ยังไม่มีหมายเหตุเพิ่มเติม";
-    fillRoundRect(ctx,48,900,1824,92,14,"#FFFDF6");
-    drawWrappedText(ctx,note,72,918,1770,38,29,"#0A2F5B",850,2);
+    fillRoundRect(ctx,48,650,1824,92,14,"#FFFDF6");
+    drawWrappedText(ctx,note,72,918,1770,38,29,"#0A2F5B",550,2);
 
     // Footer — เขียนเดือนเต็มและเว้นขอบมากพอ
     const fg=ctx.createLinearGradient(0,0,W,0);fg.addColorStop(0,"#0A315D");fg.addColorStop(.72,"#087DB3");fg.addColorStop(1,"#079C7A");ctx.fillStyle=fg;ctx.fillRect(0,1040,W,40);
     const generatedDate=new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"long",year:"numeric"}).format(new Date());
-    drawText(ctx,"อัปเดต "+generatedDate,W/2,1046,19,"#FFFFFF",900,"center");
+    drawText(ctx,"อัปเดต "+generatedDate,W/2,1046,19,"#FFFFFF",650,"center");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
