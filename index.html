@@ -3136,6 +3136,33 @@ strong,b,
   line-height:1.55!important;
 }
 
+
+/* =========================================================
+   V122 — PROJECT NOTE: MOVE THE WHOLE TITLE + BODY GROUP UP
+   Fixes the orange note card itself. Both title and body move together.
+   ========================================================= */
+.project-note-card{
+  min-height:112px!important;
+  box-sizing:border-box!important;
+  display:grid!important;
+  grid-template-rows:auto auto!important;
+  align-content:start!important;
+  justify-content:stretch!important;
+  row-gap:16px!important;
+  padding:14px 16px 20px!important;
+}
+.project-note-card .project-text-title{
+  margin:0!important;
+  padding:0!important;
+  transform:none!important;
+}
+.project-note-card .project-text-content{
+  margin:0!important;
+  padding:0!important;
+  transform:none!important;
+  line-height:1.55!important;
+}
+
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3149,7 +3176,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V121 • Balanced Note Card</div>
+      <h1>Project Dashboard</h1><div class="build-version">V122 • Note Text Position Fix</div>
     </div>
 
 
@@ -7967,7 +7994,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V121",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V122",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
