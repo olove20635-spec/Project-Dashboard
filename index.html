@@ -2686,6 +2686,90 @@ strong,b,
   }
 }
 
+
+/* V47 — requested UI fixes */
+
+/* Installment amount/status row: give the amount enough real width on mobile */
+.installment-bottom-row,
+.installment-meta-row {
+  display: grid !important;
+  grid-template-columns: minmax(180px, 1.05fr) minmax(210px, 1.45fr) 64px !important;
+  gap: 12px !important;
+  align-items: end !important;
+}
+.installment-bottom-row > *,
+.installment-meta-row > * { min-width: 0 !important; }
+.installment-bottom-row input,
+.installment-meta-row input,
+.installment-amount {
+  width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  font-family: inherit !important;
+  font-variant-numeric: normal !important;
+}
+
+/* Hide native select arrows in installment editor; use a clean CSS chevron */
+.installment-bottom-row select,
+.installment-meta-row select {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #173b73 50%),
+    linear-gradient(135deg, #173b73 50%, transparent 50%) !important;
+  background-position:
+    calc(100% - 22px) calc(50% - 3px),
+    calc(100% - 16px) calc(50% - 3px) !important;
+  background-size: 6px 6px, 6px 6px !important;
+  background-repeat: no-repeat !important;
+  padding-right: 42px !important;
+}
+
+/* Details accordion: replace the text/glyph arrow with a neat chevron */
+.installment-toggle,
+.payment-detail-toggle,
+.installment-details-toggle {
+  position: relative !important;
+}
+.installment-toggle .chevron,
+.payment-detail-toggle .chevron,
+.installment-details-toggle .chevron {
+  font-size: 0 !important;
+  width: 12px !important;
+  height: 12px !important;
+  border-right: 2px solid currentColor !important;
+  border-bottom: 2px solid currentColor !important;
+  transform: rotate(45deg) !important;
+  transition: transform .18s ease !important;
+  display: inline-block !important;
+}
+.installment-toggle.open .chevron,
+.payment-detail-toggle.open .chevron,
+.installment-details-toggle.open .chevron {
+  transform: rotate(225deg) !important;
+}
+
+@media (max-width: 480px) {
+  .installment-bottom-row,
+  .installment-meta-row {
+    grid-template-columns: minmax(170px, 1fr) minmax(200px, 1.35fr) 60px !important;
+    gap: 10px !important;
+  }
+}
+
+/* Export preview: backdrop itself is clickable; card remains above it */
+.export-preview-overlay,
+.export-preview-backdrop,
+.preview-overlay {
+  cursor: pointer;
+}
+.export-preview-modal,
+.export-preview-card,
+.preview-modal,
+.preview-card {
+  cursor: default;
+}
+
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -8567,6 +8651,22 @@ else{
 
   document.addEventListener("touchcancel",hide,{passive:true});
 })();
+
+
+
+/* V47: tap outside export preview card to close */
+document.addEventListener('click', function (e) {
+  const overlay = e.target.closest && e.target.closest('.export-preview-overlay, .export-preview-backdrop, .preview-overlay');
+  if (!overlay || e.target !== overlay) return;
+  const closeBtn = overlay.querySelector('[data-close-export], .export-preview-close, .preview-close, button[aria-label="ปิด"], button[aria-label="Close"]');
+  if (closeBtn) {
+    closeBtn.click();
+    return;
+  }
+  overlay.style.display = 'none';
+  overlay.classList.remove('show','active','open');
+  document.body.style.overflow = '';
+}, true);
 
 </script>
 </body>
