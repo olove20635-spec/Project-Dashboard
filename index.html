@@ -2651,6 +2651,41 @@ strong,b,
   font-size:14px;font-weight:400;line-height:1.45;white-space:pre-line;
 }
 
+
+/* V46 — installment editor: prevent amount digits from being squeezed */
+.installment-row .installment-bottom-row,
+.installment-card .installment-bottom-row,
+.installment-item .installment-bottom-row,
+.installment-row .installment-meta-row,
+.installment-card .installment-meta-row,
+.installment-item .installment-meta-row {
+  grid-template-columns: minmax(145px, 0.95fr) minmax(190px, 2.05fr) 72px !important;
+}
+
+.installment-row input[type="number"],
+.installment-card input[type="number"],
+.installment-item input[type="number"],
+.installment-row .installment-amount,
+.installment-card .installment-amount,
+.installment-item .installment-amount {
+  min-width: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 480px) {
+  .installment-row .installment-bottom-row,
+  .installment-card .installment-bottom-row,
+  .installment-item .installment-bottom-row,
+  .installment-row .installment-meta-row,
+  .installment-card .installment-meta-row,
+  .installment-item .installment-meta-row {
+    grid-template-columns: minmax(125px, 1fr) minmax(175px, 1.75fr) 64px !important;
+    gap: 10px !important;
+  }
+}
+
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
