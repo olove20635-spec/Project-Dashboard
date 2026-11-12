@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V108 • Money Text Adjust</div>
+      <h1>Project Dashboard</h1><div class="build-version">V110 • Money Group Balanced</div>
     </div>
 
 
@@ -7531,12 +7531,12 @@ async function exportProjectImage(){
       const textCx = i===1 ? x+254 : x+222;
       // V108: move the ENTIRE money KPI group down together (icon + divider + title + value)
       // so the full group is vertically centered inside the white card.
-      const groupYOffset = i===1 ? 10 : 0;
+      const groupYOffset = i===1 ? 6 : 0;
       drawColorKpiIcon(ctx,c.type,iconCx,topY+90+groupYOffset,(i===2?138:172));
       ctx.fillStyle=gold;ctx.fillRect(dividerCx,topY+25+groupYOffset,4,106);
       // Keep card dimensions, colors and all project data unchanged.
-      const titleY=topY+22+groupYOffset;
-      const valueY=topY+69+groupYOffset;
+      const titleY=topY+25+groupYOffset;
+      const valueY=topY+76+groupYOffset;
       drawText(ctx,c.title,textCx,titleY,31,navy,650);
       if(i===0){
         // V105: progress value slightly lighter and raised for better visual balance.
@@ -7553,7 +7553,7 @@ async function exportProjectImage(){
           moneySize-=1;
         }
         ctx.restore();
-        drawText(ctx,c.value,textCx,valueY-10,moneySize,c.color,600);
+        drawText(ctx,c.value,textCx,valueY,moneySize,c.color,600);
       }else{
         // V106: remaining-time value lighter and raised to match the progress KPI balance.
         drawWrappedText(ctx,c.value,textCx,valueY-10,cardW-(textCx-x)-18,62,50,c.color,600,1);
@@ -7788,7 +7788,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V108",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V110",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
