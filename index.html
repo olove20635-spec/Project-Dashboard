@@ -2987,7 +2987,7 @@ strong,b,
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
       <h1>Project Dashboard</h1>
-      <div class="build-label" id="buildLabel">CURRENT BUILD • V64</div>
+      <div class="build-label" id="buildLabel">CURRENT BUILD • V65</div>
     </div>
 
 
@@ -7106,9 +7106,16 @@ async function sharePreparedExport(){
   if(!preparedExportBlob) return;
   const file=new File([preparedExportBlob],preparedExportName||"project-dashboard.png",{type:"image/png"});
   if(navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))){
-    try{ await navigator.share({files:[file],title:preparedExportTitle}); return; }catch(e){ if(e?.name==="AbortError") return; console.warn(e); }
+    try{
+      await navigator.share({files:[file],title:preparedExportTitle});
+      closeExportReady();
+      return;
+    }catch(e){
+      if(e?.name==="AbortError") return;
+      console.warn(e);
+    }
   }
-  const u=URL.createObjectURL(preparedExportBlob),a=document.createElement("a");a.href=u;a.download=preparedExportName||"project-dashboard.png";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),30000);
+  const u=URL.createObjectURL(preparedExportBlob),a=document.createElement("a");a.href=u;a.download=preparedExportName||"project-dashboard.png";document.body.appendChild(a);a.click();a.remove();closeExportReady();setTimeout(()=>URL.revokeObjectURL(u),30000);
 }
 
 
