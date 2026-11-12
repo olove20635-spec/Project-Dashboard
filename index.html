@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V81 • Export Alignment Fix</div>
+      <h1>Project Dashboard</h1><div class="build-version">V82 • Export Alignment Fix</div>
     </div>
 
 
@@ -7445,9 +7445,21 @@ async function exportProjectImage(){
       if(i===2 && schedule.valid){
         const bx=x+220,bw=cardW-252,by=topY+154;
         fillRoundRect(ctx,bx,by,bw,34,17,"#D8E3EC");
-        if(schedule.remainingPct>0){const tg=ctx.createLinearGradient(bx,0,bx+bw,0);tg.addColorStop(0,"#12C58E");tg.addColorStop(1,"#059E76");fillRoundRect(ctx,bx,by,bw*schedule.remainingPct/100,34,17,tg);}
-        drawText(ctx,Math.max(0,schedule.remainingPct)+"% เหลือ",bx+bw/2,by+4,20,schedule.remainingPct>28?"#FFFFFF":ink,600,"center");
-        // V80: remove duplicate remaining-days text below the progress bar.
+        // V82: timeline bar = เวลาที่ใช้ไป (สีเขียว) + เวลาคงเหลือ (สีเทา)
+        // ตัวเลข "% เหลือ" จึงต้องอยู่กึ่งกลางของช่วงสีเทาที่เหลือ ไม่ใช่กึ่งกลางทั้งแถบ
+        const elapsedPct=Math.max(0,Math.min(100,schedule.elapsedPct));
+        const remainingPct=Math.max(0,Math.min(100,schedule.remainingPct));
+        const elapsedW=bw*elapsedPct/100;
+        if(elapsedW>0){
+          const tg=ctx.createLinearGradient(bx,0,bx+bw,0);
+          tg.addColorStop(0,"#12C58E");
+          tg.addColorStop(1,"#059E76");
+          fillRoundRect(ctx,bx,by,elapsedW,34,17,tg);
+        }
+        const remainingW=Math.max(0,bw-elapsedW);
+        const remainingCenter=bx+elapsedW+(remainingW/2);
+        drawText(ctx,remainingPct+"% เหลือ",remainingCenter,by+4,20,"#FFFFFF",600,"center");
+        // ไม่แสดงข้อความจำนวนวันซ้ำใต้แถบ
       }
     });
 
@@ -7458,7 +7470,7 @@ async function exportProjectImage(){
       fillRoundRect(ctx,x,y,w,62,20,hg);
       ctx.fillStyle=hg;ctx.fillRect(x,y+38,w,24);
 
-      // V81: clean section header — no diagonal overlay strips inside the bar.
+      // V82: clean section header — no diagonal overlay strips inside the bar.
 
       drawIcon(ctx,iconType,x+48,y+31,42,gold);
       drawText(ctx,title,x+84,y+12,30,"#FFFFFF",600);
@@ -7564,7 +7576,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V81",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V82",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
