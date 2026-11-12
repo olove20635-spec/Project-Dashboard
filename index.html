@@ -3319,7 +3319,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V137 • Location Right Fit</div>
+      <h1>Project Dashboard</h1><div class="build-version">V138 • Location No Overlap</div>
     </div>
 
 
@@ -7809,18 +7809,18 @@ async function exportProjectImage(){
 
     fillRoundRect(ctx,64,122,11,112,6,gold);
 
-    // V137: keep the project title in its original left position.
+    // V138: keep the project title in its original left position.
     const title=String(project.name||"-");
     const titleSize=title.length>62?43:title.length>42?47:title.length>28?52:57;
     const titleY=116;
     const titleLineH=54;
     drawWrappedText(ctx,title,100,titleY,930,titleLineH,titleSize,navy,700,2);
 
-    // V137: move ONLY the location to the right side, close to the project photo.
+    // V138: move ONLY the location to the right side, but stop before the diagonal photo edge.
     // It has its own fixed zone so it cannot push or move the project title.
-    const locationX=900;
+    const locationX=850;
     const locationY=200;
-    const locationMaxW=350;
+    const locationMaxW=370;
     const pinX=locationX+8;
     ctx.save();
     ctx.fillStyle="#E73535";
@@ -8179,7 +8179,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V137",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V138",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
