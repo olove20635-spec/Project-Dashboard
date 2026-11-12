@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261112-v55-installment-real-fix">
+<meta name="dashboard-build" content="20261112-v56-installment-modal-buttons-fix">
 <title>Project Dashboard V19</title>
-<link rel="manifest" href="./manifest.json?build=20261112-v55-installment-real-fix">
+<link rel="manifest" href="./manifest.json?build=20261112-v56-installment-modal-buttons-fix">
 
 
 <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
@@ -21,7 +21,7 @@
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261112-v55-installment-real-fix";
+  var BUILD = "20261112-v56-installment-modal-buttons-fix";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -2902,6 +2902,33 @@ strong,b,
 /* ===== V54 task direct edit ===== */
 .task-direct-edit,.task-empty-direct-add{touch-action:manipulation;-webkit-tap-highlight-color:rgba(35,91,170,.10)}
 .task-direct-edit:active,.task-empty-direct-add:active{opacity:.76}
+
+
+/* ===== V56 QUICK EDIT MODAL INTERACTION FIX ===== */
+#quickEditModal{
+  position:fixed!important;
+  inset:0!important;
+  z-index:10000!important;
+  pointer-events:auto!important;
+}
+#quickEditModal.show{display:flex!important}
+#quickEditModal .quick-edit-box{
+  position:relative!important;
+  z-index:10001!important;
+  pointer-events:auto!important;
+}
+#quickEditModal .quick-edit-box *,
+#quickEditModal button,
+#quickEditModal input,
+#quickEditModal textarea,
+#quickEditModal select{
+  pointer-events:auto!important;
+  touch-action:manipulation;
+}
+#quickEditModal .quick-edit-actions{
+  position:relative!important;
+  z-index:10002!important;
+}
 
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -9019,6 +9046,35 @@ document.addEventListener("click",function(e){
     openTaskModal(id);
   }
   document.addEventListener("click",handleTaskTap,true);
+})();
+
+
+/* ===== V56 direct Quick Edit controls ===== */
+(function(){
+  function closeQE(e){
+    if(e){e.preventDefault();e.stopPropagation();}
+    closeQuickEdit();
+  }
+  function saveQE(e){
+    if(e){e.preventDefault();e.stopPropagation();}
+    saveQuickEdit();
+  }
+
+  document.addEventListener("click",function(e){
+    const modal=document.getElementById("quickEditModal");
+    if(!modal || !modal.classList.contains("show")) return;
+
+    if(e.target===modal) return closeQE(e);
+
+    const close=e.target.closest(".quick-edit-close");
+    if(close && modal.contains(close)) return closeQE(e);
+
+    const cancel=e.target.closest(".quick-edit-actions .cancel");
+    if(cancel && modal.contains(cancel)) return closeQE(e);
+
+    const save=e.target.closest(".quick-edit-actions .save");
+    if(save && modal.contains(save)) return saveQE(e);
+  },true);
 })();
 
 </script>
