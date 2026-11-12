@@ -7276,7 +7276,7 @@ function drawColorKpiIcon(ctx,type,cx,cy,size){
   ctx.restore();
 }
 /* V74: MASTER REFERENCE export rebuild - geometry, icon scale, typography and spacing matched to approved reference */
-/* V75: CLEAN CANVAS MASTER — single export renderer matched to approved reference */
+/* V76: EXPORT MASTER MATCH — rebuilt against approved second reference image */
 async function exportProjectImage(){
   try{ if(document.fonts && document.fonts.ready) await document.fonts.ready; }catch(e){}
 
@@ -7322,7 +7322,7 @@ async function exportProjectImage(){
     ctx.fillStyle=page; ctx.fillRect(0,0,W,H);
 
     // ===== HEADER =====
-    ctx.fillStyle="#FFFFFF"; ctx.fillRect(0,0,W,270);
+    ctx.fillStyle="#FFFFFF"; ctx.fillRect(0,0,W,252);
 
     // soft architectural diagonal ribbons
     ctx.save();
@@ -7361,7 +7361,7 @@ async function exportProjectImage(){
     drawWrappedText(ctx,project.location||"-",132,211,800,29,23,"#294765",500,1);
 
     // photo: large 16:9 viewport, integrated into header
-    const photoX=1260, photoY=12, photoW=620, photoH=246;
+    const photoX=1278, photoY=12, photoW=586, photoH=232;
     ctx.save();
     roundRectPath(ctx,photoX,photoY,photoW,photoH,24);ctx.clip();
     if(image){
@@ -7382,7 +7382,7 @@ async function exportProjectImage(){
     ctx.restore();
 
     // ===== KPI CARDS =====
-    const topY=286,cardH=214,gap=22,left=38,cardW=(W-76-gap*2)/3;
+    const topY=270,cardH=196,gap=22,left=38,cardW=(W-76-gap*2)/3;
     const kpis=[
       {title:"ความคืบหน้างาน",type:"progress",value:progress+"%",color:green},
       {title:"มูลค่างาน",type:"money",value:money(project.value)+" บาท",color:green},
@@ -7403,7 +7403,7 @@ async function exportProjectImage(){
       ctx.beginPath();ctx.moveTo(x+cardW-150,topY+cardH);ctx.lineTo(x+cardW,topY+cardH-105);ctx.lineTo(x+cardW,topY+cardH);ctx.closePath();ctx.fill();
       ctx.restore();
 
-      drawColorKpiIcon(ctx,c.type,x+96,topY+96,138);
+      drawColorKpiIcon(ctx,c.type,x+98,topY+90,158);
       ctx.fillStyle=gold;ctx.fillRect(x+190,topY+25,4,106);
       drawText(ctx,c.title,x+222,topY+24,27,navy,600);
       drawWrappedText(ctx,c.value,x+222,topY+72,cardW-250,54,44,c.color,600,1);
@@ -7442,19 +7442,19 @@ async function exportProjectImage(){
     }
 
     // ===== PAYMENT =====
-    const payX=38,payY=522,payW=930,payH=306;
+    const payX=38,payY=488,payW=930,payH=302;
     ctx.save();ctx.shadowColor="rgba(20,65,100,.10)";ctx.shadowBlur=16;ctx.shadowOffsetY=6;
     fillRoundRect(ctx,payX,payY,payW,payH,20,"#FFFFFF");ctx.restore();
     sectionHeader(payX,payY,payW,"สถานะการเบิกเงิน","payment");
 
-    drawText(ctx,"เบิกแล้ว",82,610,26,navy,500);
-    drawText(ctx,money(pay.paidAmount)+" บาท",248,606,33,green,500);
-    drawText(ctx,"คงเหลือ",82,660,26,navy,500);
-    drawText(ctx,money(pay.balance)+" บาท",248,656,33,green,500);
+    drawText(ctx,"เบิกแล้ว",82,576,26,navy,500);
+    drawText(ctx,money(pay.paidAmount)+" บาท",248,572,33,green,500);
+    drawText(ctx,"คงเหลือ",82,626,26,navy,500);
+    drawText(ctx,money(pay.balance)+" บาท",248,622,33,green,500);
 
-    fillRoundRect(ctx,582,620,332,34,17,"#D8E3EC");
-    if(pay.percent>0){const pg=ctx.createLinearGradient(582,0,914,0);pg.addColorStop(0,"#13C68E");pg.addColorStop(1,"#079C7B");fillRoundRect(ctx,582,620,332*pay.percent/100,34,17,pg);}
-    drawText(ctx,pay.percent.toFixed(pay.percent%1?2:0)+"%",748,623,19,pay.percent>20?"#FFFFFF":ink,500,"center");
+    fillRoundRect(ctx,582,586,332,34,17,"#D8E3EC");
+    if(pay.percent>0){const pg=ctx.createLinearGradient(582,0,914,0);pg.addColorStop(0,"#13C68E");pg.addColorStop(1,"#079C7B");fillRoundRect(ctx,582,586,332*pay.percent/100,34,17,pg);}
+    drawText(ctx,pay.percent.toFixed(pay.percent%1?2:0)+"%",748,589,19,pay.percent>20?"#FFFFFF":ink,500,"center");
 
     const statBoxes=[
       {label:"ทั้งหมด",value:pay.total+" งวด",icon:"layers"},
@@ -7462,7 +7462,7 @@ async function exportProjectImage(){
       {label:"คงเหลือ",value:pay.remaining+" งวด",icon:"hourglass"}
     ];
     statBoxes.forEach((b,i)=>{
-      const bx=68+i*278,by=716,bw=252,bh=86;
+      const bx=68+i*278,by=682,bw=252,bh=84;
       const sg=ctx.createLinearGradient(bx,by,bx+bw,by+bh);
       sg.addColorStop(0,"#E9FAF6");sg.addColorStop(1,"#DDF4F1");
       fillRoundRect(ctx,bx,by,bw,bh,15,sg);
@@ -7486,7 +7486,7 @@ async function exportProjectImage(){
     });
 
     // ===== PROJECT INFO =====
-    const infoX=990,infoY=522,infoW=892,infoH=306;
+    const infoX=990,infoY=488,infoW=892,infoH=302;
     ctx.save();ctx.shadowColor="rgba(20,65,100,.10)";ctx.shadowBlur=16;ctx.shadowOffsetY=6;
     fillRoundRect(ctx,infoX,infoY,infoW,infoH,20,"#FFFFFF");ctx.restore();
     sectionHeader(infoX,infoY,infoW,"ข้อมูลโครงการ","info");
@@ -7500,7 +7500,7 @@ async function exportProjectImage(){
       ["วันแล้วเสร็จ",project.endDate?formatDate(project.endDate):"-","flag"]
     ];
     info.forEach((r,i)=>{
-      const yy=592+i*36;
+      const yy=558+i*36;
       // Approved reference uses six equal-height horizontal bands.
       fillRoundRect(ctx,1014,yy-3,846,31,5,i%2===0?"#E6EFF6":"#F8FBFD");
       drawText(ctx,r[0],1038,yy,20,navy,500);
@@ -7515,7 +7515,7 @@ async function exportProjectImage(){
     });
 
     // ===== NOTE =====
-    const noteX=38,noteY=850,noteW=1844,noteH=150;
+    const noteX=38,noteY=812,noteW=1844,noteH=174;
     ctx.save();ctx.shadowColor="rgba(20,65,100,.08)";ctx.shadowBlur=14;ctx.shadowOffsetY=5;
     fillRoundRect(ctx,noteX,noteY,noteW,noteH,20,"#FFFFFF");ctx.restore();
     ctx.strokeStyle=gold;ctx.lineWidth=3;roundRectPath(ctx,noteX,noteY,noteW,noteH,20);ctx.stroke();
@@ -7524,13 +7524,13 @@ async function exportProjectImage(){
     const note=getProjectRemark(project)||getProjectDescription(project)||"ยังไม่มีหมายเหตุเพิ่มเติม";
     const ng=ctx.createLinearGradient(58,922,1862,992);
     ng.addColorStop(0,"#FFFDF6");ng.addColorStop(1,"#FFF9E9");
-    fillRoundRect(ctx,58,916,1804,68,14,ng);
-    drawWrappedText(ctx,note,88,931,1725,34,25,navy,400,1);
+    fillRoundRect(ctx,58,880,1804,86,14,ng);
+    drawWrappedText(ctx,note,88,902,1725,36,25,navy,400,1);
 
     // ===== FOOTER =====
     const fg=ctx.createLinearGradient(0,0,W,0);
     fg.addColorStop(0,navy);fg.addColorStop(.72,"#087DB3");fg.addColorStop(1,green);
-    ctx.fillStyle=fg;ctx.fillRect(0,1016,W,64);
+    ctx.fillStyle=fg;ctx.fillRect(0,1004,W,76);
 
     // decorative footer diagonals only, no icon
     ctx.save();ctx.globalAlpha=.20;ctx.fillStyle="#48B9D0";
@@ -7538,7 +7538,9 @@ async function exportProjectImage(){
     ctx.beginPath();ctx.moveTo(1750,1028);ctx.lineTo(1840,1028);ctx.lineTo(1805,1080);ctx.lineTo(1715,1080);ctx.closePath();ctx.fill();ctx.restore();
 
     const generatedDate=new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"long",year:"numeric"}).format(new Date());
-    drawText(ctx,"อัปเดต "+generatedDate,W/2,1033,20,"#FFFFFF",500,"center");
+    ctx.strokeStyle="rgba(255,255,255,.78)";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(175,1044);ctx.lineTo(665,1044);ctx.moveTo(1255,1044);ctx.lineTo(1745,1044);ctx.stroke();
+    drawIcon(ctx,"calendar",744,1044,28,"#FFFFFF");
+    drawText(ctx,"อัปเดต "+generatedDate,W/2,1027,22,"#FFFFFF",500,"center");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
