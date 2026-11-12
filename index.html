@@ -7416,7 +7416,7 @@ async function exportProjectImage(){
       ctx.fillRect(60,108,390,14);
     }
 
-    fillRoundRect(ctx,64,122,11,98,6,gold);
+    fillRoundRect(ctx,64,122,11,112,6,gold);
 
     const title=String(project.name||"-");
     const titleSize=title.length>62?30:title.length>42?34:title.length>28?36:39;
@@ -7499,10 +7499,14 @@ async function exportProjectImage(){
       ctx.beginPath();ctx.moveTo(x+cardW-150,topY+cardH);ctx.lineTo(x+cardW,topY+cardH-105);ctx.lineTo(x+cardW,topY+cardH);ctx.closePath();ctx.fill();
       ctx.restore();
 
-      drawColorKpiIcon(ctx,c.type,x+98,topY+90,(i===2?138:172));
-      ctx.fillStyle=gold;ctx.fillRect(x+190,topY+25,4,106);
-      drawText(ctx,c.title,x+222,topY+24,27,navy,600);
-      drawWrappedText(ctx,c.value,x+222,topY+72,cardW-250,54,44,c.color,600,1);
+      // V88: KPI content alignment. Middle (money) card is centered as one balanced group.
+      const iconCx = i===1 ? x+112 : x+98;
+      const dividerCx = i===1 ? x+205 : x+190;
+      const textCx = i===1 ? x+236 : x+222;
+      drawColorKpiIcon(ctx,c.type,iconCx,topY+90,(i===2?138:172));
+      ctx.fillStyle=gold;ctx.fillRect(dividerCx,topY+25,4,106);
+      drawText(ctx,c.title,textCx,topY+24,27,navy,600);
+      drawWrappedText(ctx,c.value,textCx,topY+72,cardW-(textCx-x)-24,54,44,c.color,600,1);
 
       if(i===0){
         const bx=x+70,bw=cardW-102,by=topY+154;
@@ -7579,7 +7583,9 @@ async function exportProjectImage(){
       {label:"คงเหลือ",value:pay.remaining+" งวด",icon:"hourglass"}
     ];
     statBoxes.forEach((b,i)=>{
-      const bx=68+i*278,by=682,bw=252,bh=84;
+      // V88: reference alignment — three equal cards, equal gaps, centered across payment panel.
+      const bw=258,bh=84,by=682;
+      const bx=68+i*288;
       const sg=ctx.createLinearGradient(bx,by,bx+bw,by+bh);
       sg.addColorStop(0,"#E9FAF6");sg.addColorStop(1,"#DDF4F1");
       fillRoundRect(ctx,bx,by,bw,bh,15,sg);
@@ -7666,7 +7672,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V87",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V88",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
