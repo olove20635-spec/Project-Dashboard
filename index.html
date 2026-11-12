@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261112-v53-four-fixes">
+<meta name="dashboard-build" content="20261112-v54-task-tap-edit-fix">
 <title>Project Dashboard V19</title>
-<link rel="manifest" href="./manifest.json?build=20261112-v53-four-fixes">
+<link rel="manifest" href="./manifest.json?build=20261112-v54-task-tap-edit-fix">
 
 
 <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
@@ -21,7 +21,7 @@
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261112-v53-four-fixes";
+  var BUILD = "20261112-v54-task-tap-edit-fix";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -2897,6 +2897,11 @@ strong,b,
 .task-direct-edit{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:rgba(20,80,160,.08)}
 .task-direct-edit:active{transform:scale(.995)}
 .payment-detail-row{cursor:pointer;touch-action:manipulation}
+
+
+/* ===== V54 task direct edit ===== */
+.task-direct-edit,.task-empty-direct-add{touch-action:manipulation;-webkit-tap-highlight-color:rgba(35,91,170,.10)}
+.task-direct-edit:active,.task-empty-direct-add:active{opacity:.76}
 
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -6497,7 +6502,7 @@ function openDetail(id){
 
     taskHTML = `
 
-      <div style="
+      <div class="task-empty-direct-add" onclick="event.stopPropagation();openTaskModal()" style="
         text-align:center;
         color:var(--muted);
         padding:25px 10px;
@@ -6505,8 +6510,9 @@ function openDetail(id){
         background:#fff;
         border:1px dashed #dfe4ea;
         border-radius:15px;
+        cursor:pointer;
       ">
-        ยังไม่มีรายการงาน
+        ยังไม่มีรายการงาน<br><strong style="display:inline-block;margin-top:7px;color:#315a96;">แตะเพื่อเพิ่มรายการงาน</strong>
       </div>
 
     `;
@@ -6533,7 +6539,7 @@ function openDetail(id){
 
       taskHTML += `
 
-        <div class="task status-${taskStatus} task-direct-edit" onclick="openTaskModal(${task.id})">
+        <div class="task status-${taskStatus} task-direct-edit" data-task-id="${task.id}">
 
           <div class="task-row">
 
@@ -8966,6 +8972,22 @@ document.addEventListener("click",function(e){
   const idx=rows.indexOf(row);
   if(idx>=0) openInstallmentQuickEdit(idx);
 },true);
+
+
+/* ===== V54: reliable direct task editing ===== */
+(function(){
+  function handleTaskTap(e){
+    const card=e.target.closest(".task-direct-edit[data-task-id]");
+    if(!card) return;
+    if(e.target.closest(".task-actions,button,a,input,select,textarea,label")) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const raw=card.dataset.taskId;
+    const id=/^\d+$/.test(raw) ? Number(raw) : raw;
+    openTaskModal(id);
+  }
+  document.addEventListener("click",handleTaskTap,true);
+})();
 
 </script>
 </body>
