@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261112-v57-quick-edit-close-real-fix">
+<meta name="dashboard-build" content="20261112-v58-export-font-blue-bg-fix">
 <title>Project Dashboard V19</title>
-<link rel="manifest" href="./manifest.json?build=20261112-v57-quick-edit-close-real-fix">
+<link rel="manifest" href="./manifest.json?build=20261112-v58-export-font-blue-bg-fix">
 
 
 <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
@@ -21,7 +21,7 @@
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261112-v57-quick-edit-close-real-fix";
+  var BUILD = "20261112-v58-export-font-blue-bg-fix";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -2962,7 +2962,7 @@ strong,b,
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
       <h1>Project Dashboard</h1>
-      <div class="build-label" id="buildLabel">CURRENT BUILD • V57</div>
+      <div class="build-label" id="buildLabel">CURRENT BUILD • V58</div>
     </div>
 
 
@@ -7116,11 +7116,11 @@ function fillRoundRect(ctx,x,y,w,h,r,color){
   ctx.save(); roundRectPath(ctx,x,y,w,h,r); ctx.fillStyle=color; ctx.fill(); ctx.restore();
 }
 function drawText(ctx,text,x,y,size,color="#111827",weight=600,align="left"){
-  ctx.save(); ctx.fillStyle=color; ctx.font=`${weight} ${size}px "Thonburi","Noto Sans Thai",-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif`;
+  ctx.save(); ctx.fillStyle=color; ctx.font=`${weight} ${size}px "Mitr","Noto Sans Thai",sans-serif`;
   ctx.textAlign=align; ctx.textBaseline="top"; ctx.fillText(String(text??""),x,y); ctx.restore();
 }
 function drawWrappedText(ctx,text,x,y,maxWidth,lineHeight,size,color="#111827",weight=500,maxLines=99){
-  ctx.save(); ctx.fillStyle=color; ctx.font=`${weight} ${size}px "Thonburi","Noto Sans Thai",-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif`;
+  ctx.save(); ctx.fillStyle=color; ctx.font=`${weight} ${size}px "Mitr","Noto Sans Thai",sans-serif`;
   ctx.textAlign="left"; ctx.textBaseline="top";
   const raw=String(text??"").replace(/\r/g,""); let lines=[];
   for(const para of raw.split("\n")){
@@ -7223,6 +7223,8 @@ function drawIcon(ctx,type,cx,cy,size,color="#0A315D"){
   ctx.restore();
 }
 async function exportProjectImage(){
+  try{ if(document.fonts && document.fonts.ready) await document.fonts.ready; }catch(e){}
+
   if(exportProjectBusy) return;
   exportProjectBusy=true;
   const exportButton=document.querySelector('[data-detail-action="export"]');
@@ -7243,21 +7245,8 @@ async function exportProjectImage(){
     const W=1920,H=1080;
     ctx.fillStyle="#F4F7FB";ctx.fillRect(0,0,W,H);
 
-    // HEADER — โลโก้บนพื้นขาว + fade ฟุ้งเฉียงเข้าหาน้ำเงิน
+    // HEADER — พื้นขาวสะอาด ไม่มีพื้นหลังสีน้ำเงินหลังรูปภาพ
     ctx.fillStyle="#FFFFFF";ctx.fillRect(0,0,W,245);
-    const hg=ctx.createLinearGradient(250,-90,1160,300);
-    hg.addColorStop(0,"rgba(255,255,255,0)");
-    hg.addColorStop(.24,"rgba(255,255,255,.02)");
-    hg.addColorStop(.42,"rgba(210,231,248,.18)");
-    hg.addColorStop(.58,"rgba(139,190,228,.42)");
-    hg.addColorStop(.74,"rgba(53,125,184,.74)");
-    hg.addColorStop(.90,"rgba(10,74,133,.95)");
-    hg.addColorStop(1,"#073B73");
-    ctx.fillStyle=hg;ctx.fillRect(250,0,W-250,245);
-    // ฟุ้งซ้ำอีกชั้นเพื่อไม่ให้เห็นเส้นขอบของ fade
-    const haze=ctx.createRadialGradient(520,100,30,650,105,520);
-    haze.addColorStop(0,"rgba(255,255,255,.72)");haze.addColorStop(.45,"rgba(215,235,250,.30)");haze.addColorStop(1,"rgba(255,255,255,0)");
-    ctx.fillStyle=haze;ctx.fillRect(250,0,900,245);
     if(brandLogo){const mw=335,mh=108,r=Math.min(mw/brandLogo.width,mh/brandLogo.height);ctx.drawImage(brandLogo,55,18,brandLogo.width*r,brandLogo.height*r);}
     ctx.strokeStyle="#D8B43E";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(545,0);ctx.lineTo(710,145);ctx.stroke();
     fillRoundRect(ctx,58,130,12,92,6,"#D8B43E");
@@ -7270,7 +7259,7 @@ async function exportProjectImage(){
     // ภาพขวาบน — ใหญ่, crop ตามตำแหน่งที่ผู้ใช้ปรับ, fade ด้านซ้ายแบบนุ่ม
     ctx.save();roundRectPath(ctx,1010,16,855,212,24);ctx.clip();
     if(image){drawCoverPositioned(ctx,image,1010,16,855,212,bgPosition);}else{ctx.fillStyle="#DCE7F2";ctx.fillRect(1010,16,855,212);}
-    const fade=ctx.createLinearGradient(1010,0,1430,0);fade.addColorStop(0,"rgba(7,59,115,.96)");fade.addColorStop(.20,"rgba(7,59,115,.68)");fade.addColorStop(.48,"rgba(7,59,115,.28)");fade.addColorStop(.78,"rgba(7,59,115,.06)");fade.addColorStop(1,"rgba(7,59,115,0)");ctx.fillStyle=fade;ctx.fillRect(1010,16,440,212);ctx.restore();
+    const fade=ctx.createLinearGradient(1010,0,1210,0);fade.addColorStop(0,"rgba(255,255,255,.32)");fade.addColorStop(.55,"rgba(255,255,255,.10)");fade.addColorStop(1,"rgba(255,255,255,0)");ctx.fillStyle=fade;ctx.fillRect(1010,16,220,212);ctx.restore();
 
     // KPI 3 ช่อง
     const topY=270, cardH=220, gap=18, left=28, cardW=(W-56-gap*2)/3;
