@@ -2966,6 +2966,13 @@ strong,b,
   background:linear-gradient(90deg,rgba(255,255,255,.32),rgba(255,255,255,.10) 55%,rgba(255,255,255,0));
 }
 
+
+/* V60: free pan + pinch zoom background editor */
+#backgroundModal .bg-position-panel{display:none!important}
+#backgroundModal .bg-preview{touch-action:none!important;cursor:grab}
+#backgroundModal .bg-preview.dragging{cursor:grabbing}
+#backgroundModal .bg-gesture-note{text-align:center;font-weight:700;color:#7d8798;padding:14px 4px 4px}
+
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2980,7 +2987,7 @@ strong,b,
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
       <h1>Project Dashboard</h1>
-      <div class="build-label" id="buildLabel">CURRENT BUILD • V59</div>
+      <div class="build-label" id="buildLabel">CURRENT BUILD • V60</div>
     </div>
 
 
@@ -3375,34 +3382,9 @@ strong,b,
       onchange="changeProjectBackground(event)"
     >
 
-    <div class="bg-position-panel">
-
-      <div class="bg-position-head">
-
-        <span>ตำแหน่งภาพแนวตั้ง</span>
-
-        <strong id="bgPositionValue">
-          50%
-        </strong>
-
-      </div>
-
-      <input
-        id="bgPositionSlider"
-        type="range"
-        min="0"
-        max="100"
-        value="50"
-        oninput="changeBackgroundPosition(this.value)"
-      >
-
-    </div>
-
-    <div class="bg-note">
-      เลือกภาพแล้วสามารถลากภาพขึ้น–ลง หรือใช้ Slider เพื่อจัดตำแหน่งก่อนบันทึก
-      <br>
-      0% = ด้านบน, 50% = กึ่งกลาง, 100% = ด้านล่าง
-    </div>
+    <div class="bg-note bg-gesture-note">
+       ลากภาพได้ทุกทิศทาง • ใช้ 2 นิ้วเพื่อซูมเข้า–ออก
+     </div>
 
     <div class="bg-buttons">
 
@@ -3457,6 +3439,8 @@ const PROJECT_BG_KEY =
 
 const PROJECT_BG_POSITION_KEY =
   "personal-project-dashboard-project-bg-position-v1";
+const PROJECT_BG_TRANSFORM_KEY =
+  "personal-project-dashboard-project-bg-transform-v1";
 
 const PROJECT_ORDER_KEY =
   "personal-project-dashboard-project-order-v1";
@@ -3472,12 +3456,17 @@ let editingTaskId = null;
 
 let pendingBackgroundImage = "";
 let pendingBackgroundPosition = 50;
+let pendingBackgroundX = 50;
+let pendingBackgroundY = 50;
+let pendingBackgroundZoom = 1;
 let pendingBackgroundRemove = false;
 let exportProjectBusy = false;
 
 let bgDragging = false;
-let bgDragStartY = 0;
-let bgDragStartPosition = 50;
+let bgPointers = new Map();
+let bgDragStartX = 0, bgDragStartY = 0;
+let bgStartX = 50, bgStartY = 50;
+let bgPinchStartDistance = 0, bgPinchStartZoom = 1;
 
 
 /* ==================================================
@@ -4323,6 +4312,34 @@ function deleteProjectBackgroundPosition(id){
     JSON.stringify(positions)
   );
 
+}
+
+function getBackgroundTransforms(){
+  try{return JSON.parse(localStorage.getItem(PROJECT_BG_TRANSFORM_KEY)||"{}");}
+  catch(error){return {};}
+}
+function getProjectBackgroundTransform(id){
+  const all=getBackgroundTransforms(), v=all[String(id)]||{};
+  const legacyY=getProjectBackgroundPosition(id);
+  return {
+    x:clamp(Number.isFinite(Number(v.x))?Number(v.x):50,0,100),
+    y:clamp(Number.isFinite(Number(v.y))?Number(v.y):legacyY,0,100),
+    zoom:Math.max(1,Math.min(4,Number(v.zoom)||1))
+  };
+}
+function setProjectBackgroundTransform(id,value){
+  const all=getBackgroundTransforms();
+  all[String(id)]={
+    x:clamp(value.x,0,100),
+    y:clamp(value.y,0,100),
+    zoom:Math.max(1,Math.min(4,Number(value.zoom)||1))
+  };
+  localStorage.setItem(PROJECT_BG_TRANSFORM_KEY,JSON.stringify(all));
+}
+function deleteProjectBackgroundTransform(id){
+  const all=getBackgroundTransforms();
+  delete all[String(id)];
+  localStorage.setItem(PROJECT_BG_TRANSFORM_KEY,JSON.stringify(all));
 }
 
 
@@ -6120,18 +6137,23 @@ async function deleteTask(
 }
 
 function updateBackgroundPreview(){
-  const preview=document.getElementById("bgPreview"), text=document.getElementById("bgPreviewText"), guide=document.getElementById("bgGuide"), slider=document.getElementById("bgPositionSlider"), value=document.getElementById("bgPositionValue");
+  const preview=document.getElementById("bgPreview"),
+        text=document.getElementById("bgPreviewText"),
+        guide=document.getElementById("bgGuide");
   if(!preview) return;
   const has=!!pendingBackgroundImage && !pendingBackgroundRemove;
   preview.style.backgroundImage=has?`url(${JSON.stringify(pendingBackgroundImage)})`:"";
-  preview.style.backgroundSize="cover";
-  preview.style.backgroundPosition=`center ${pendingBackgroundPosition}%`;
+  preview.style.backgroundSize=has?`${pendingBackgroundZoom*100}% auto`:"cover";
+  preview.style.backgroundPosition=`${pendingBackgroundX}% ${pendingBackgroundY}%`;
   preview.classList.toggle("has-image",has);
-  if(text) text.style.display=has?"none":""; if(guide) guide.style.display=has?"block":"none";
-  if(slider) slider.value=String(Math.round(pendingBackgroundPosition)); if(value) value.textContent=Math.round(pendingBackgroundPosition)+"%";
+  if(text) text.style.display=has?"none":"";
+  if(guide) guide.style.display=has?"block":"none";
 }
-function changeBackgroundPosition(value){ pendingBackgroundPosition=clamp(Number(value)||0,0,100); updateBackgroundPreview(); }
-function removeProjectBackground(){ pendingBackgroundRemove=true; pendingBackgroundImage=""; updateBackgroundPreview(); }
+function removeProjectBackground(){
+  pendingBackgroundRemove=true; pendingBackgroundImage="";
+  pendingBackgroundX=50; pendingBackgroundY=50; pendingBackgroundZoom=1;
+  updateBackgroundPreview();
+}
 async function changeProjectBackground(event){
   const file=event?.target?.files?.[0]; if(!file) return;
   if(!file.type.startsWith("image/")){ alert("กรุณาเลือกไฟล์รูปภาพ"); return; }
@@ -6159,6 +6181,10 @@ function openBackgroundEditor(){
     getProjectBackgroundPosition(
       selectedProjectId
     );
+  const bgTransform = getProjectBackgroundTransform(selectedProjectId);
+  pendingBackgroundX = bgTransform.x;
+  pendingBackgroundY = bgTransform.y;
+  pendingBackgroundZoom = bgTransform.zoom;
 
   pendingBackgroundRemove =
     false;
@@ -6187,114 +6213,57 @@ function cancelBackgroundEditor(){
 
   pendingBackgroundImage = "";
   pendingBackgroundPosition = 50;
+  pendingBackgroundX = 50; pendingBackgroundY = 50; pendingBackgroundZoom = 1;
   pendingBackgroundRemove = false;
-  bgDragging = false;
+  bgDragging = false; bgPointers.clear();
 
 }
 
+function bgPointerDistance(){
+  const pts=[...bgPointers.values()];
+  if(pts.length<2) return 0;
+  return Math.hypot(pts[1].x-pts[0].x,pts[1].y-pts[0].y);
+}
 function startBackgroundDrag(event){
-
-  if(
-    !pendingBackgroundImage ||
-    pendingBackgroundRemove
-  ){
-    return;
+  if(!pendingBackgroundImage||pendingBackgroundRemove) return;
+  event.preventDefault();
+  bgPointers.set(event.pointerId,{x:event.clientX,y:event.clientY});
+  try{event.currentTarget.setPointerCapture(event.pointerId);}catch(error){}
+  if(bgPointers.size===1){
+    bgDragging=true; bgDragStartX=event.clientX; bgDragStartY=event.clientY;
+    bgStartX=pendingBackgroundX; bgStartY=pendingBackgroundY;
+  }else if(bgPointers.size===2){
+    bgPinchStartDistance=bgPointerDistance();
+    bgPinchStartZoom=pendingBackgroundZoom;
   }
-
-  bgDragging = true;
-
-  bgDragStartY =
-    event.clientY;
-
-  bgDragStartPosition =
-    pendingBackgroundPosition;
-
-  document
-    .getElementById(
-      "bgPreview"
-    )
-    .classList.add(
-      "dragging"
-    );
-
-  try{
-
-    event.currentTarget
-      .setPointerCapture(
-        event.pointerId
-      );
-
-  }
-  catch(error){}
-
+  event.currentTarget.classList.add("dragging");
 }
-
 function moveBackgroundDrag(event){
-
-  if(!bgDragging){
-    return;
+  if(!bgPointers.has(event.pointerId)) return;
+  event.preventDefault();
+  bgPointers.set(event.pointerId,{x:event.clientX,y:event.clientY});
+  const preview=document.getElementById("bgPreview");
+  if(bgPointers.size>=2){
+    const d=bgPointerDistance();
+    if(bgPinchStartDistance>0) pendingBackgroundZoom=Math.max(1,Math.min(4,bgPinchStartZoom*d/bgPinchStartDistance));
+  }else if(bgDragging){
+    const w=preview.clientWidth||600,h=preview.clientHeight||150;
+    pendingBackgroundX=clamp(bgStartX+(event.clientX-bgDragStartX)/w*100,0,100);
+    pendingBackgroundY=clamp(bgStartY+(event.clientY-bgDragStartY)/h*100,0,100);
   }
-
-  const preview =
-    document.getElementById(
-      "bgPreview"
-    );
-
-  const height =
-    preview.clientHeight ||
-    180;
-
-  const deltaY =
-    event.clientY -
-    bgDragStartY;
-
-  const deltaPercent =
-    (
-      -deltaY /
-      height
-    ) *
-    100;
-
-  pendingBackgroundPosition =
-    clamp(
-      bgDragStartPosition +
-      deltaPercent,
-      0,
-      100
-    );
-
   updateBackgroundPreview();
-
 }
-
 function endBackgroundDrag(event){
-
-  if(!bgDragging){
-    return;
+  bgPointers.delete(event.pointerId);
+  try{event.currentTarget.releasePointerCapture(event.pointerId);}catch(error){}
+  if(bgPointers.size===0){
+    bgDragging=false; event.currentTarget.classList.remove("dragging");
+  }else if(bgPointers.size===1){
+    const p=[...bgPointers.values()][0];
+    bgDragging=true; bgDragStartX=p.x; bgDragStartY=p.y;
+    bgStartX=pendingBackgroundX; bgStartY=pendingBackgroundY;
   }
-
-  bgDragging = false;
-
-  document
-    .getElementById(
-      "bgPreview"
-    )
-    .classList.remove(
-      "dragging"
-    );
-
-  try{
-
-    event.currentTarget
-      .releasePointerCapture(
-        event.pointerId
-      );
-
-  }
-  catch(error){}
-
 }
-
 function saveBackgroundEditor(){
 
   const wasRemovingBackground = pendingBackgroundRemove;
@@ -6311,6 +6280,7 @@ function saveBackgroundEditor(){
     deleteProjectBackgroundPosition(
       selectedProjectId
     );
+    deleteProjectBackgroundTransform(selectedProjectId);
 
   }
   else if(
@@ -6326,8 +6296,11 @@ function saveBackgroundEditor(){
 
       setProjectBackgroundPosition(
         selectedProjectId,
-        pendingBackgroundPosition
+        pendingBackgroundY
       );
+      setProjectBackgroundTransform(selectedProjectId,{
+        x:pendingBackgroundX,y:pendingBackgroundY,zoom:pendingBackgroundZoom
+      });
 
     }
     catch(error){
@@ -6353,6 +6326,7 @@ function saveBackgroundEditor(){
 
   pendingBackgroundImage = "";
   pendingBackgroundPosition = 50;
+  pendingBackgroundX = 50; pendingBackgroundY = 50; pendingBackgroundZoom = 1;
   pendingBackgroundRemove = false;
 
   render();
@@ -7151,10 +7125,14 @@ function drawWrappedText(ctx,text,x,y,maxWidth,lineHeight,size,color="#111827",w
   lines.forEach((line,i)=>{ let out=line; if(i===maxLines-1 && lines.length===maxLines){ while(out && ctx.measureText(out+"…").width>maxWidth) out=out.slice(0,-1); } ctx.fillText(out,x,y+i*lineHeight); });
   ctx.restore(); return y+lines.length*lineHeight;
 }
-function drawCoverPositioned(ctx,img,x,y,w,h,positionY=50){
+function drawCoverPositioned(ctx,img,x,y,w,h,positionY=50,positionX=50,zoom=1){
   if(!img||!img.width||!img.height) return;
-  const scale=Math.max(w/img.width,h/img.height), sw=w/scale, sh=h/scale;
-  const sx=(img.width-sw)/2, sy=Math.max(0,(img.height-sh)*(Math.max(0,Math.min(100,Number(positionY)||50))/100));
+  zoom=Math.max(1,Math.min(4,Number(zoom)||1));
+  const baseScale=Math.max(w/img.width,h/img.height)*zoom;
+  const sw=w/baseScale, sh=h/baseScale;
+  const maxX=Math.max(0,img.width-sw), maxY=Math.max(0,img.height-sh);
+  const sx=maxX*(clamp(positionX,0,100)/100);
+  const sy=maxY*(clamp(positionY,0,100)/100);
   ctx.drawImage(img,sx,sy,sw,sh,x,y,w,h);
 }
 
@@ -7254,6 +7232,7 @@ async function exportProjectImage(){
     if(project.tasks?.length) recalculateProject(project);
     const progress=clamp(project.progress,0,100), days=daysInfo(project), schedule=scheduleInfo(project), pay=getPaymentInfo(project);
     const background=getProjectBackground(project.id), bgPosition=getProjectBackgroundPosition(project.id);
+    const bgTransform=getProjectBackgroundTransform(project.id);
     let image=null,brandLogo=null;
     if(background){try{image=await loadCanvasImage(background);}catch(e){console.warn(e);}}
     try{brandLogo=await loadCanvasImage(EXPORT_BRAND_LOGO);}catch(e){console.warn(e);}
@@ -7276,7 +7255,7 @@ async function exportProjectImage(){
 
     // ภาพขวาบน — ใหญ่, crop ตามตำแหน่งที่ผู้ใช้ปรับ, fade ด้านซ้ายแบบนุ่ม
     ctx.save();roundRectPath(ctx,1010,16,855,212,24);ctx.clip();
-    if(image){drawCoverPositioned(ctx,image,1010,16,855,212,bgPosition);}else{ctx.fillStyle="#DCE7F2";ctx.fillRect(1010,16,855,212);}
+    if(image){drawCoverPositioned(ctx,image,1010,16,855,212,bgTransform.y,bgTransform.x,bgTransform.zoom);}else{ctx.fillStyle="#DCE7F2";ctx.fillRect(1010,16,855,212);}
     const fade=ctx.createLinearGradient(1010,0,1210,0);fade.addColorStop(0,"rgba(255,255,255,.32)");fade.addColorStop(.55,"rgba(255,255,255,.10)");fade.addColorStop(1,"rgba(255,255,255,0)");ctx.fillStyle=fade;ctx.fillRect(1010,16,220,212);ctx.restore();
 
     // KPI 3 ช่อง
