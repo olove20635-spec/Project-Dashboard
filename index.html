@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V75 • Canvas Export Master</div>
+      <h1>Project Dashboard</h1><div class="build-version">V77 • Export Version Tag</div>
     </div>
 
 
@@ -7276,7 +7276,7 @@ function drawColorKpiIcon(ctx,type,cx,cy,size){
   ctx.restore();
 }
 /* V74: MASTER REFERENCE export rebuild - geometry, icon scale, typography and spacing matched to approved reference */
-/* V76: EXPORT MASTER MATCH — rebuilt against approved second reference image */
+/* V77: EXPORT MASTER MATCH + visible version tag on home and exported image */
 async function exportProjectImage(){
   try{ if(document.fonts && document.fonts.ready) await document.fonts.ready; }catch(e){}
 
@@ -7541,6 +7541,8 @@ async function exportProjectImage(){
     ctx.strokeStyle="rgba(255,255,255,.78)";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(175,1044);ctx.lineTo(665,1044);ctx.moveTo(1255,1044);ctx.lineTo(1745,1044);ctx.stroke();
     drawIcon(ctx,"calendar",744,1044,28,"#FFFFFF");
     drawText(ctx,"อัปเดต "+generatedDate,W/2,1027,22,"#FFFFFF",500,"center");
+    // V77: visible build tag on exported image for cache/version verification
+    drawText(ctx,"V77",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
