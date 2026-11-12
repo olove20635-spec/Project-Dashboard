@@ -7551,7 +7551,7 @@ async function exportProjectImage(){
       if(i===0){
         const bx=x+70,bw=cardW-102,by=topY+154;
         fillRoundRect(ctx,bx,by,bw,34,17,"#D8E3EC");
-        if(progress>0){const pg=ctx.createLinearGradient(bx,0,bx+bw,0);pg.addColorStop(0,"#12C58E");pg.addColorStop(1,"#059E76");fillRoundRect(ctx,bx,by,bw*progress/100,34,17,pg);}
+        if(progress>0){fillExport3DGreenBar(bx,by,bw*progress/100,34,17);}
         // V96: percentage labels sit at the right side of each segment.
         // Green segment uses white text; remaining light segment uses dark navy for contrast.
         const progressW=bw*progress/100;
@@ -7569,10 +7569,7 @@ async function exportProjectImage(){
         const remainingPct=Math.max(0,Math.min(100,schedule.remainingPct));
         const elapsedW=bw*elapsedPct/100;
         if(elapsedW>0){
-          const tg=ctx.createLinearGradient(bx,0,bx+bw,0);
-          tg.addColorStop(0,"#12C58E");
-          tg.addColorStop(1,"#059E76");
-          fillRoundRect(ctx,bx,by,elapsedW,34,17,tg);
+          fillExport3DGreenBar(bx,by,elapsedW,34,17);
         }
         const remainingW=Math.max(0,bw-elapsedW);
         const elapsedCenter=bx+(elapsedW/2);
@@ -7589,6 +7586,34 @@ async function exportProjectImage(){
         // Remaining days are already displayed as the KPI value above; no duplicate caption below.
       }
     });
+
+    // V102: bright 3D green progress segment used by all three export progress bars.
+    function fillExport3DGreenBar(x,y,w,h,r){
+      if(w<=0) return;
+      ctx.save();
+      // soft lower shadow gives the filled segment depth without changing layout
+      ctx.shadowColor="rgba(0,118,86,.24)";
+      ctx.shadowBlur=7;
+      ctx.shadowOffsetY=3;
+      const g=ctx.createLinearGradient(x,y,x,y+h);
+      g.addColorStop(0,"#25E7A5");
+      g.addColorStop(.42,"#10D998");
+      g.addColorStop(1,"#06B982");
+      fillRoundRect(ctx,x,y,w,h,r,g);
+      ctx.restore();
+
+      // glossy top highlight + subtle bottom shade for the reference-like 3D finish
+      ctx.save();
+      const hi=ctx.createLinearGradient(x,y,x,y+h*.55);
+      hi.addColorStop(0,"rgba(255,255,255,.34)");
+      hi.addColorStop(1,"rgba(255,255,255,0)");
+      fillRoundRect(ctx,x+2,y+2,Math.max(0,w-4),Math.max(0,h*.48),Math.max(1,r-2),hi);
+      const shade=ctx.createLinearGradient(x,y+h*.55,x,y+h);
+      shade.addColorStop(0,"rgba(0,90,68,0)");
+      shade.addColorStop(1,"rgba(0,90,68,.13)");
+      fillRoundRect(ctx,x+1,y+1,Math.max(0,w-2),Math.max(0,h-2),Math.max(1,r-1),shade);
+      ctx.restore();
+    }
 
     // reusable modern section header
     function sectionHeader(x,y,w,title,iconType){
@@ -7643,7 +7668,7 @@ async function exportProjectImage(){
     const payPct=Math.max(0,Math.min(100,pay.percent));
     const payFillW=payBarW*payPct/100;
     const payRemainPct=Math.max(0,100-payPct);
-    if(payPct>0){const pg=ctx.createLinearGradient(payBarX,0,payBarX+payBarW,0);pg.addColorStop(0,"#13C68E");pg.addColorStop(1,"#079C7B");fillRoundRect(ctx,payBarX,payBarY,payFillW,34,17,pg);}
+    if(payPct>0){fillExport3DGreenBar(payBarX,payBarY,payFillW,34,17);}
     // V96: claimed % at right edge of green; remaining % at right edge of light segment.
     if(payFillW>50) drawText(ctx,pay.percent.toFixed(pay.percent%1?2:0)+"%",payBarX+payFillW-10,payBarY+3,18,"#FFFFFF",700,"right");
     if((payBarW-payFillW)>50) drawText(ctx,payRemainPct.toFixed(payRemainPct%1?2:0)+"%",payBarX+payBarW-10,payBarY+3,18,"#102A43",700,"right");
@@ -7752,7 +7777,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V101",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V102",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
