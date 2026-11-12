@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V82 • Export Alignment Fix</div>
+      <h1>Project Dashboard</h1><div class="build-version">V83 • Export Icon Polish</div>
     </div>
 
 
@@ -7430,7 +7430,7 @@ async function exportProjectImage(){
       ctx.beginPath();ctx.moveTo(x+cardW-150,topY+cardH);ctx.lineTo(x+cardW,topY+cardH-105);ctx.lineTo(x+cardW,topY+cardH);ctx.closePath();ctx.fill();
       ctx.restore();
 
-      drawColorKpiIcon(ctx,c.type,x+98,topY+90,158);
+      drawColorKpiIcon(ctx,c.type,x+98,topY+90,172);
       ctx.fillStyle=gold;ctx.fillRect(x+190,topY+25,4,106);
       drawText(ctx,c.title,x+222,topY+24,27,navy,600);
       drawWrappedText(ctx,c.value,x+222,topY+72,cardW-250,54,44,c.color,600,1);
@@ -7458,7 +7458,7 @@ async function exportProjectImage(){
         }
         const remainingW=Math.max(0,bw-elapsedW);
         const remainingCenter=bx+elapsedW+(remainingW/2);
-        drawText(ctx,remainingPct+"% เหลือ",remainingCenter,by+4,20,"#FFFFFF",600,"center");
+        // V83: remove the white remaining-percent label from the timeline bar
         // ไม่แสดงข้อความจำนวนวันซ้ำใต้แถบ
       }
     });
@@ -7472,7 +7472,17 @@ async function exportProjectImage(){
 
       // V82: clean section header — no diagonal overlay strips inside the bar.
 
-      drawIcon(ctx,iconType,x+48,y+31,42,gold);
+      if(iconType==="note"){
+        // V83: red exclamation mark for หมายเหตุ
+        ctx.save();
+        ctx.fillStyle="#E53935";
+        ctx.font=`700 34px ${EXPORT_FONT_FAMILY}`;
+        ctx.textAlign="center";ctx.textBaseline="middle";
+        ctx.fillText("!",x+48,y+31);
+        ctx.restore();
+      }else{
+        drawIcon(ctx,iconType,x+48,y+31,42,gold);
+      }
       drawText(ctx,title,x+84,y+12,30,"#FFFFFF",600);
     }
 
@@ -7506,13 +7516,21 @@ async function exportProjectImage(){
       ctx.save();ctx.strokeStyle="#078E83";ctx.fillStyle="#078E83";ctx.lineWidth=3;
       const ix=bx+42,iy=by+38;
       if(b.icon==="check"){
-        ctx.beginPath();ctx.arc(ix,iy,16,0,Math.PI*2);ctx.stroke();
+        // V83: reference-style circled check
+        ctx.lineWidth=3.2;
+        ctx.beginPath();ctx.arc(ix,iy,17,0,Math.PI*2);ctx.stroke();
         ctx.beginPath();ctx.moveTo(ix-8,iy);ctx.lineTo(ix-2,iy+7);ctx.lineTo(ix+10,iy-8);ctx.stroke();
       }else if(b.icon==="hourglass"){
-        ctx.strokeRect(ix-11,iy-17,22,34);
-        ctx.beginPath();ctx.moveTo(ix-9,iy-14);ctx.lineTo(ix+9,iy+14);ctx.moveTo(ix+9,iy-14);ctx.lineTo(ix-9,iy+14);ctx.stroke();
+        // V83: clean standalone hourglass (no square box)
+        ctx.lineWidth=3.2;
+        ctx.beginPath();ctx.moveTo(ix-12,iy-17);ctx.lineTo(ix+12,iy-17);ctx.moveTo(ix-12,iy+17);ctx.lineTo(ix+12,iy+17);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(ix-10,iy-15);ctx.bezierCurveTo(ix-9,iy-6,ix-3,iy-4,ix,iy);ctx.bezierCurveTo(ix+3,iy+4,ix+9,iy+6,ix+10,iy+15);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(ix+10,iy-15);ctx.bezierCurveTo(ix+9,iy-6,ix+3,iy-4,ix,iy);ctx.bezierCurveTo(ix-3,iy+4,ix-9,iy+6,ix-10,iy+15);ctx.stroke();
       }else{
-        for(let k=0;k<3;k++)ctx.strokeRect(ix-15+k*4,iy-12+k*4,24,24);
+        // V83: reference-style stacked layers
+        ctx.lineWidth=3.2;
+        const layer=(oy)=>{ctx.beginPath();ctx.moveTo(ix-16,iy+oy);ctx.lineTo(ix,iy+oy-8);ctx.lineTo(ix+16,iy+oy);ctx.lineTo(ix,iy+oy+8);ctx.closePath();ctx.stroke();};
+        layer(-8);layer(0);layer(8);
       }
       ctx.restore();
 
@@ -7576,7 +7594,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V82",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V83",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
