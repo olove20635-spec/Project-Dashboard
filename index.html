@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V97 • Diagonal Photo Frame</div>
+      <h1>Project Dashboard</h1><div class="build-version">V98 • Header Logo Center</div>
     </div>
 
 
@@ -7413,12 +7413,21 @@ async function exportProjectImage(){
     ctx.restore();
 
     if(brandLogo){
-      const mw=365,mh=96,r=Math.min(mw/brandLogo.width,mh/brandLogo.height);
-      ctx.drawImage(brandLogo,64,20,brandLogo.width*r,brandLogo.height*r);
-      // V86: remove the unwanted horizontal rule carried by the logo artwork.
-      // Keep only the two logos; the project title area starts cleanly below them.
+      // V98: clean logo block — keep both logos crisp, balanced and vertically centered.
+      // Draw inside a dedicated white area so decorative header shapes never touch the marks.
+      const logoBoxX=64, logoBoxY=20, logoBoxW=360, logoBoxH=82;
       ctx.fillStyle="#FFFFFF";
-      ctx.fillRect(60,108,390,14);
+      ctx.fillRect(logoBoxX-8,logoBoxY-8,logoBoxW+16,logoBoxH+20);
+      const r=Math.min(logoBoxW/brandLogo.width,logoBoxH/brandLogo.height);
+      const dw=brandLogo.width*r, dh=brandLogo.height*r;
+      const dx=logoBoxX+(logoBoxW-dw)/2;
+      const dy=logoBoxY+(logoBoxH-dh)/2;
+      ctx.imageSmoothingEnabled=true;
+      ctx.imageSmoothingQuality="high";
+      ctx.drawImage(brandLogo,dx,dy,dw,dh);
+      // Cover only any residual artwork below the actual logo block; no visible horizontal rule.
+      ctx.fillStyle="#FFFFFF";
+      ctx.fillRect(logoBoxX-8,logoBoxY+logoBoxH,logoBoxW+16,18);
     }
 
     fillRoundRect(ctx,64,122,11,112,6,gold);
@@ -7586,25 +7595,34 @@ async function exportProjectImage(){
 
     // reusable modern section header
     function sectionHeader(x,y,w,title,iconType){
+      const headerH=62;
+      const cy=y+headerH/2;
       const hg=ctx.createLinearGradient(x,0,x+w,0);
       hg.addColorStop(0,"#073B70");hg.addColorStop(.55,"#086AA0");hg.addColorStop(1,"#079D9A");
-      fillRoundRect(ctx,x,y,w,62,20,hg);
+      fillRoundRect(ctx,x,y,w,headerH,20,hg);
       ctx.fillStyle=hg;ctx.fillRect(x,y+38,w,24);
 
-      // V82: clean section header — no diagonal overlay strips inside the bar.
-
+      // V98: icon + heading share the exact vertical center of the 62px header bar.
+      const iconCx=x+50;
+      const textX=x+(iconType==="note"?88:88);
       if(iconType==="note"){
-        // V85: red exclamation mark for หมายเหตุ
         ctx.save();
         ctx.fillStyle="#E53935";
         ctx.font=`700 34px "Mitr","Thonburi","Noto Sans Thai",sans-serif`;
-        ctx.textAlign="center";ctx.textBaseline="middle";
-        ctx.fillText("!",x+56,y+31);
+        ctx.textAlign="center";
+        ctx.textBaseline="middle";
+        ctx.fillText("!",iconCx,cy+1);
         ctx.restore();
       }else{
-        drawIcon(ctx,iconType,x+48,y+31,42,gold);
+        drawIcon(ctx,iconType,iconCx,cy,40,gold);
       }
-      drawText(ctx,title,x+(iconType==="note"?88:84),y+12,30,"#FFFFFF",600);
+      ctx.save();
+      ctx.fillStyle="#FFFFFF";
+      ctx.font=`600 30px "Mitr","Thonburi","Noto Sans Thai",sans-serif`;
+      ctx.textAlign="left";
+      ctx.textBaseline="middle";
+      ctx.fillText(String(title||""),textX,cy+1);
+      ctx.restore();
     }
 
     // ===== PAYMENT =====
@@ -7731,7 +7749,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V97",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V98",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
