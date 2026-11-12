@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V105 • Progress KPI Text Adjust</div>
+      <h1>Project Dashboard</h1><div class="build-version">V106 • Remaining Time Text Adjust</div>
     </div>
 
 
@@ -7552,8 +7552,8 @@ async function exportProjectImage(){
         ctx.restore();
         drawText(ctx,c.value,textCx,valueY,moneySize,c.color,650);
       }else{
-        // Remaining-time value enlarged and vertically balanced like the reference.
-        drawWrappedText(ctx,c.value,textCx,valueY,cardW-(textCx-x)-18,62,50,c.color,650,1);
+        // V106: remaining-time value lighter and raised to match the progress KPI balance.
+        drawWrappedText(ctx,c.value,textCx,valueY-10,cardW-(textCx-x)-18,62,50,c.color,600,1);
       }
 
       if(i===0){
@@ -7785,7 +7785,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V105",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V106",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
