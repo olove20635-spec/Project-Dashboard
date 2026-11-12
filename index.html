@@ -3302,7 +3302,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V130 • Task Note True Left Fix</div>
+      <h1>Project Dashboard</h1><div class="build-version">V131 • Larger Export Project Title</div>
     </div>
 
 
@@ -7785,8 +7785,8 @@ async function exportProjectImage(){
     fillRoundRect(ctx,64,122,11,112,6,gold);
 
     const title=String(project.name||"-");
-    const titleSize=title.length>62?30:title.length>42?34:title.length>28?36:39;
-    drawWrappedText(ctx,title,100,116,910,45,titleSize,navy,600,2);
+    const titleSize=title.length>62?34:title.length>42?38:title.length>28?42:46;
+    drawWrappedText(ctx,title,100,112,910,50,titleSize,navy,600,2);
 
     // location pin as vector instead of emoji
     ctx.save();
@@ -8146,7 +8146,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V125",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V131",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
