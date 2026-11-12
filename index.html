@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261112-v42-payment-swipe-right-close">
+<meta name="dashboard-build" content="20261112-v43-payment-regular-swipe-right-only">
 <title>Project Dashboard V19</title>
-<link rel="manifest" href="./manifest.json?build=20261112-v42-payment-swipe-right-close">
+<link rel="manifest" href="./manifest.json?build=20261112-v43-payment-regular-swipe-right-only">
 
 
 <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
@@ -21,7 +21,7 @@
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261112-v42-payment-swipe-right-close";
+  var BUILD = "20261112-v43-payment-regular-swipe-right-only";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -2620,6 +2620,21 @@ strong,b,
   letter-spacing:0!important;
   font-variant-numeric:normal!important;
   font-feature-settings:normal!important;
+}
+
+
+/* V43 — exact rendered payment figures, regular weight */
+.project-text-card .payment-summary .payment-figure{
+  font-family:var(--app-font)!important;
+  font-size:18px!important;
+  font-weight:400!important;
+  font-style:normal!important;
+  font-synthesis:none!important;
+  letter-spacing:0!important;
+  font-variant-numeric:normal!important;
+  font-feature-settings:"kern" 1!important;
+  -webkit-text-stroke:0 transparent!important;
+  text-shadow:none!important;
 }
 
 </style>
@@ -6092,7 +6107,7 @@ function setupDetailSwipe(){
     "button,a,input,select,textarea,label,[role='button'],[data-detail-action],.detail-buttons,.secondary-actions,.task-actions"
   );
 
-  let sx=0, sy=0, active=false, atTop=false, pulling=false;
+  let sx=0, sy=0, active=false;
 
   box.addEventListener("touchstart", event => {
     if(event.touches.length !== 1 || blockedTarget(event.target)){
@@ -6100,8 +6115,7 @@ function setupDetailSwipe(){
     }
     const t=event.touches[0];
     sx=t.clientX; sy=t.clientY;
-    atTop=box.scrollTop<=8;
-    active=true; pulling=false;
+    active=true;
     box.style.transition="";
   }, {passive:true});
 
@@ -6110,14 +6124,7 @@ function setupDetailSwipe(){
     const t=event.touches[0];
     const dx=t.clientX-sx, dy=t.clientY-sy;
 
-    // Pull-down-to-close only when gesture started at the top.
-    if(atTop && dy>10 && Math.abs(dy)>Math.abs(dx)*1.05){
-      pulling=true;
-      event.preventDefault();
-      const move=Math.min(230,dy*.68);
-      box.style.transform=`translateY(${move}px)`;
-      box.style.opacity=String(Math.max(.58,1-move/520));
-    }
+    // V43: vertical drag does not close the project.
   }, {passive:false});
 
   box.addEventListener("touchend", event => {
@@ -6125,18 +6132,6 @@ function setupDetailSwipe(){
     active=false;
     const t=event.changedTouches[0];
     const dx=t.clientX-sx, dy=t.clientY-sy;
-
-    if(pulling){
-      box.style.transition="transform .30s cubic-bezier(.32,.72,0,1), opacity .22s ease";
-      if(dy>70){
-        closeDetail(true);
-        return;
-      }
-      box.style.transform="";
-      box.style.opacity="";
-      pulling=false;
-      return;
-    }
 
     // V42: swipe RIGHT closes the project detail.
     // Swipe left does nothing; project-to-project horizontal navigation is disabled.
@@ -6570,10 +6565,10 @@ function openDetail(id){
       ${(()=>{ const pay=getPaymentInfo(project); return (pay.total||pay.paidAmount) ? `
       <div class="project-text-card" style="margin-top:14px;">
         <div class="project-text-title payment-title"><span class="inline-line-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="7" rx="6.5" ry="2.7"/><path d="M5.5 7v4c0 1.5 2.9 2.7 6.5 2.7s6.5-1.2 6.5-2.7V7M5.5 11v4c0 1.5 2.9 2.7 6.5 2.7s6.5-1.2 6.5-2.7v-4"/></svg></span>สถานะการเบิกเงิน</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;">
-          <div><div class="project-text-title">เบิกแล้ว</div><div style="font-weight:900;font-size:18px;">${money(pay.paidAmount)}</div></div>
-          <div><div class="project-text-title">คงเหลือ</div><div style="font-weight:900;font-size:18px;">${money(pay.balance)}</div></div>
-          <div><div class="project-text-title">งวดงาน</div><div style="font-weight:900;font-size:18px;">${pay.paid}/${pay.total} งวด</div></div>
+        <div class="payment-summary" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;">
+          <div><div class="project-text-title">เบิกแล้ว</div><div class="payment-figure">${money(pay.paidAmount)}</div></div>
+          <div><div class="project-text-title">คงเหลือ</div><div class="payment-figure">${money(pay.balance)}</div></div>
+          <div><div class="project-text-title">งวดงาน</div><div class="payment-figure">${pay.paid}/${pay.total} งวด</div></div>
         </div>
         <div class="progress-track" style="margin-top:12px;"><div class="progress-fill" style="width:${pay.percent}%"></div></div>
         <div style="text-align:right;margin-top:6px;font-weight:800;color:#1767d5;">เบิกแล้ว ${pay.percent}%</div>
