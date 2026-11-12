@@ -2987,7 +2987,7 @@ strong,b,
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
       <h1>Project Dashboard</h1>
-      <div class="build-label" id="buildLabel">CURRENT BUILD • V67</div>
+      <div class="build-label" id="buildLabel">CURRENT BUILD • V68</div>
     </div>
 
 
@@ -7250,6 +7250,30 @@ function drawIcon(ctx,type,cx,cy,size,color="#0A315D"){
   }
   ctx.restore();
 }
+
+function drawColorKpiIcon(ctx,type,cx,cy,size){
+  const r=size/2;ctx.save();ctx.lineCap="round";ctx.lineJoin="round";
+  if(type==="progress"){
+    // เครนสีเหลือง + อาคารสีเทา/ฟ้า
+    ctx.strokeStyle="#F2B600";ctx.lineWidth=Math.max(5,size*.07);
+    ctx.beginPath();ctx.moveTo(cx-r*.55,cy+r*.55);ctx.lineTo(cx-r*.55,cy-r*.55);ctx.lineTo(cx+r*.52,cy-r*.55);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx-r*.76,cy-r*.36);ctx.lineTo(cx+r*.52,cy-r*.55);ctx.lineTo(cx+r*.05,cy-r*.72);ctx.closePath();ctx.stroke();
+    ctx.strokeStyle="#E39B00";ctx.lineWidth=Math.max(3,size*.04);ctx.beginPath();ctx.moveTo(cx-r*.55,cy-r*.45);ctx.lineTo(cx-r*.22,cy+r*.55);ctx.moveTo(cx-r*.22,cy-r*.5);ctx.lineTo(cx-r*.55,cy+r*.05);ctx.stroke();
+    ctx.strokeStyle="#6B7E91";ctx.lineWidth=Math.max(3,size*.035);ctx.beginPath();ctx.moveTo(cx+r*.38,cy-r*.5);ctx.lineTo(cx+r*.38,cy-r*.05);ctx.stroke();
+    ctx.fillStyle="#F2B600";ctx.fillRect(cx+r*.31,cy-r*.08,r*.14,r*.12);
+    ctx.fillStyle="#8396A8";ctx.fillRect(cx-r*.15,cy+r*.10,r*.82,r*.50);ctx.fillStyle="#DCE6EE";ctx.fillRect(cx-r*.05,cy+r*.20,r*.18,r*.18);ctx.fillRect(cx+r*.22,cy+r*.20,r*.18,r*.18);ctx.fillRect(cx+r*.49,cy+r*.20,r*.12,r*.18);
+    ctx.fillStyle="#526779";ctx.fillRect(cx-r*.72,cy+r*.56,r*1.45,r*.10);
+  }else if(type==="money"){
+    // เหรียญทอง + ธนบัตรเขียว
+    for(const [ox,oy] of [[-.35,.12],[-.08,-.18],[.18,.05]]){
+      ctx.fillStyle="#F7B916";ctx.beginPath();ctx.ellipse(cx+ox*r,cy+oy*r,r*.34,r*.16,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle="#FFD85C";ctx.beginPath();ctx.ellipse(cx+ox*r,cy+(oy-.04)*r,r*.27,r*.10,0,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle="#D89200";ctx.lineWidth=2;ctx.stroke();
+    }
+    ctx.save();ctx.translate(cx+r*.28,cy+r*.28);ctx.rotate(-.10);ctx.fillStyle="#16A66A";fillRoundRect(ctx,-r*.38,-r*.18,r*.76,r*.36,r*.05,"#16A66A");ctx.fillStyle="#7DE0A9";ctx.fillRect(-r*.22,-r*.08,r*.44,r*.16);ctx.restore();
+  }else drawIcon(ctx,type,cx,cy,size,"#0A315D");
+  ctx.restore();
+}
 async function exportProjectImage(){
   try{ if(document.fonts && document.fonts.ready) await document.fonts.ready; }catch(e){}
 
@@ -7277,7 +7301,12 @@ async function exportProjectImage(){
     // HEADER — พื้นขาวสะอาด ไม่มีพื้นหลังสีน้ำเงินหลังรูปภาพ
     ctx.fillStyle="#FFFFFF";ctx.fillRect(0,0,W,245);
     if(brandLogo){const mw=335,mh=108,r=Math.min(mw/brandLogo.width,mh/brandLogo.height);ctx.drawImage(brandLogo,55,18,brandLogo.width*r,brandLogo.height*r);}
-    ctx.strokeStyle="#D8B43E";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(545,0);ctx.lineTo(710,145);ctx.stroke();
+    // เส้นกราฟิกหัวภาพแบบ Modern Corporate
+    ctx.save();
+    ctx.fillStyle="#EAF5FB";ctx.beginPath();ctx.moveTo(920,0);ctx.lineTo(1260,0);ctx.lineTo(1080,245);ctx.lineTo(820,245);ctx.closePath();ctx.fill();
+    ctx.fillStyle="#D9EEF8";ctx.beginPath();ctx.moveTo(1130,0);ctx.lineTo(1320,0);ctx.lineTo(1150,245);ctx.lineTo(1010,245);ctx.closePath();ctx.fill();
+    ctx.strokeStyle="#D8B43E";ctx.lineWidth=7;ctx.beginPath();ctx.moveTo(1340,0);ctx.lineTo(1210,245);ctx.stroke();
+    ctx.strokeStyle="#1B75A5";ctx.lineWidth=9;ctx.beginPath();ctx.moveTo(1380,0);ctx.lineTo(1250,245);ctx.stroke();ctx.restore();
     fillRoundRect(ctx,58,130,12,92,6,"#D8B43E");
     const title=String(project.name||"-");
     const titleSize=title.length>62?30:title.length>42?33:title.length>28?37:42;
@@ -7297,7 +7326,7 @@ async function exportProjectImage(){
       {title:"มูลค่างาน",type:"money",value:money(project.value)+" บาท",color:"#079C7A"},
       {title:"ระยะเวลาคงเหลือ",type:"calendar",value:days.short,color:days.cls==="overdue"?"#D93636":"#079C7A"}
     ];
-    kpis.forEach((c,i)=>{const x=left+i*(cardW+gap);fillRoundRect(ctx,x,topY,cardW,cardH,20,"#FFFFFF");ctx.strokeStyle="#D6E0EB";ctx.lineWidth=2;roundRectPath(ctx,x,topY,cardW,cardH,20);ctx.stroke();drawIcon(ctx,c.type,x+72,topY+87,76,"#0A315D");ctx.fillStyle="#D8B43E";ctx.fillRect(x+150,topY+34,4,92);drawText(ctx,c.title,x+180,topY+27,30,"#0A2F5B",400);drawWrappedText(ctx,c.value,x+180,topY+72,cardW-205,58,48,c.color,400,1);
+    kpis.forEach((c,i)=>{const x=left+i*(cardW+gap);fillRoundRect(ctx,x,topY,cardW,cardH,20,"#FFFFFF");ctx.strokeStyle="#D6E0EB";ctx.lineWidth=2;roundRectPath(ctx,x,topY,cardW,cardH,20);ctx.stroke();drawColorKpiIcon(ctx,c.type,x+72,topY+87,76);ctx.fillStyle="#D8B43E";ctx.fillRect(x+150,topY+34,4,92);drawText(ctx,c.title,x+180,topY+27,30,"#0A2F5B",400);drawWrappedText(ctx,c.value,x+180,topY+72,cardW-205,58,48,c.color,400,1);
       if(i===0){fillRoundRect(ctx,x+150,topY+151,cardW-185,34,17,"#E2E7ED");if(progress>0)fillRoundRect(ctx,x+150,topY+151,(cardW-185)*progress/100,34,17,"#08A483");drawText(ctx,progress+"%",x+150+(cardW-185)/2,topY+154,21,progress>8?"#FFFFFF":"#173650",400,"center");}
       if(i===2 && schedule.valid){fillRoundRect(ctx,x+150,topY+151,cardW-185,34,17,"#E2E7ED");if(schedule.remainingPct>0)fillRoundRect(ctx,x+150,topY+151,(cardW-185)*schedule.remainingPct/100,34,17,"#08A483");drawText(ctx,Math.max(0,schedule.remainingPct)+"% เหลือ",x+150+(cardW-185)/2,topY+154,20,schedule.remainingPct>28?"#FFFFFF":"#173650",400,"center");
         drawText(ctx,"เหลือ "+Math.max(0,schedule.remainingDays)+" วัน",x+150,topY+193,18,"#60758E",400);
@@ -7305,7 +7334,7 @@ async function exportProjectImage(){
     });
 
     // สถานะการเบิกเงิน
-    fillRoundRect(ctx,28,510,1000,285,20,"#FFFFFF");fillRoundRect(ctx,28,510,1000,58,20,"#0A315D");ctx.fillStyle="#0A315D";ctx.fillRect(28,548,1000,20);
+    fillRoundRect(ctx,28,510,1000,285,20,"#FFFFFF");const phg=ctx.createLinearGradient(28,0,1028,0);phg.addColorStop(0,"#0A315D");phg.addColorStop(.72,"#075D91");phg.addColorStop(1,"#087E9E");fillRoundRect(ctx,28,510,1000,58,20,phg);ctx.fillStyle=phg;ctx.fillRect(28,548,1000,20);
     drawIcon(ctx,"payment",72,539,48,"#E0BC42");drawText(ctx,"สถานะการเบิกเงิน",112,521,31,"#FFFFFF",400);
     drawText(ctx,"เบิกแล้ว",70,596,29,"#0A2F5B",400);drawText(ctx,money(pay.paidAmount)+" บาท",250,589,38,"#079C7A",400);
     drawText(ctx,"คงเหลือ",70,648,29,"#0A2F5B",400);drawText(ctx,money(pay.balance)+" บาท",250,641,38,"#079C7A",400);
@@ -7313,22 +7342,22 @@ async function exportProjectImage(){
     [["ทั้งหมด",pay.total+" งวด"],["เบิกแล้ว",pay.paid+" งวด"],["คงเหลือ",pay.remaining+" งวด"]].forEach((b,i)=>{const bx=70+i*300;fillRoundRect(ctx,bx,701,270,72,14,"#E8F7F3");drawText(ctx,b[0],bx+135,709,21,"#173650",400,"center");drawText(ctx,b[1],bx+135,736,31,"#087E68",400,"center");});
 
     // ข้อมูลโครงการ + ผู้ควบคุมงาน
-    fillRoundRect(ctx,1048,510,844,285,20,"#FFFFFF");fillRoundRect(ctx,1048,510,844,58,20,"#0A315D");ctx.fillStyle="#0A315D";ctx.fillRect(1048,548,844,20);
+    fillRoundRect(ctx,1048,510,844,285,20,"#FFFFFF");const ihg=ctx.createLinearGradient(1048,0,1892,0);ihg.addColorStop(0,"#0A315D");ihg.addColorStop(.72,"#075D91");ihg.addColorStop(1,"#087E9E");fillRoundRect(ctx,1048,510,844,58,20,ihg);ctx.fillStyle=ihg;ctx.fillRect(1048,548,844,20);
     drawIcon(ctx,"info",1092,539,46,"#E0BC42");drawText(ctx,"ข้อมูลโครงการ",1132,521,31,"#FFFFFF",400);
     const info=[["ผู้ควบคุมงาน",project.controller||"-"],["ผู้รับเหมา",project.contractorCompany||"-"],["ผู้ประสานงาน",project.contractorContact||"-"],["โทรศัพท์",project.contractorPhone||"-"],["วันเริ่มงาน",project.startDate?formatDate(project.startDate):"-"],["วันแล้วเสร็จ",project.endDate?formatDate(project.endDate):"-"]];
     info.forEach((r,i)=>{const yy=578+i*33;if(i%2===0){ctx.fillStyle="#F1F4F7";ctx.fillRect(1068,yy-4,804,31);}drawText(ctx,r[0],1090,yy,22,"#0A2F5B",400);ctx.fillStyle="#D8B43E";ctx.fillRect(1330,yy,3,22);drawWrappedText(ctx,r[1],1360,yy,480,27,22,"#263D58",400,1);});
 
     // หมายเหตุ — จัด icon และข้อความให้อยู่แนวเดียวกัน
     fillRoundRect(ctx,28,818,1864,205,20,"#FFFFFF");ctx.strokeStyle="#D8B43E";ctx.lineWidth=3;roundRectPath(ctx,28,818,1864,205,20);ctx.stroke();
-    fillRoundRect(ctx,28,818,1864,58,20,"#0A315D");ctx.fillStyle="#0A315D";ctx.fillRect(28,856,1864,20);drawIcon(ctx,"note",72,846,46,"#E0BC42");drawText(ctx,"หมายเหตุ",112,828,31,"#FFFFFF",400);
+    const nhg=ctx.createLinearGradient(28,0,1892,0);nhg.addColorStop(0,"#0A315D");nhg.addColorStop(.72,"#075D91");nhg.addColorStop(1,"#079C9A");fillRoundRect(ctx,28,818,1864,58,20,nhg);ctx.fillStyle=nhg;ctx.fillRect(28,856,1864,20);drawIcon(ctx,"note",72,846,46,"#E0BC42");drawText(ctx,"หมายเหตุ",112,828,31,"#FFFFFF",400);
     const note=getProjectRemark(project)||getProjectDescription(project)||"ยังไม่มีหมายเหตุเพิ่มเติม";
-    fillRoundRect(ctx,48,400,1824,92,14,"#FFFDF6");
+    fillRoundRect(ctx,48,890,1824,108,14,"#FFFDF6");
     drawWrappedText(ctx,note,72,918,1770,38,29,"#0A2F5B",400,2);
 
     // Footer — เขียนเดือนเต็มและเว้นขอบมากพอ
-    const fg=ctx.createLinearGradient(0,0,W,0);fg.addColorStop(0,"#0A315D");fg.addColorStop(.72,"#087DB3");fg.addColorStop(1,"#079C7A");ctx.fillStyle=fg;ctx.fillRect(0,1040,W,40);
+    const fg=ctx.createLinearGradient(0,0,W,0);fg.addColorStop(0,"#0A315D");fg.addColorStop(.72,"#087DB3");fg.addColorStop(1,"#079C7A");ctx.fillStyle=fg;ctx.fillRect(0,1040,W,40);ctx.fillStyle="rgba(255,255,255,.10)";ctx.beginPath();ctx.moveTo(90,1040);ctx.lineTo(180,1040);ctx.lineTo(145,1080);ctx.lineTo(55,1080);ctx.closePath();ctx.fill();
     const generatedDate=new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"long",year:"numeric"}).format(new Date());
-    drawText(ctx,"อัปเดต "+generatedDate,W/2,1046,19,"#FFFFFF",400,"center");
+    drawText(ctx,generatedDate,58,1046,19,"#FFFFFF",400,"left");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
