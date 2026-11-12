@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261112-v74-export-master-reference">
+<meta name="dashboard-build" content="20261112-v134-export-header-layout">
 <title>Project Dashboard V19</title>
-<link rel="manifest" href="./manifest.json?build=20261112-v74-export-master-reference">
+<link rel="manifest" href="./manifest.json?build=20261112-v134-export-header-layout">
 
 
 <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
@@ -21,7 +21,7 @@
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261112-v74-export-master-reference";
+  var BUILD = "20261112-v134-export-header-layout";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -7809,17 +7809,23 @@ async function exportProjectImage(){
 
     fillRoundRect(ctx,64,122,11,112,6,gold);
 
+    // V134: group project name + location as one clean header block.
     const title=String(project.name||"-");
-    const titleSize=title.length>62?40:title.length>42?44:title.length>28?49:54;
-    drawWrappedText(ctx,title,100,106,930,58,titleSize,navy,600,2);
+    const titleSize=title.length>62?43:title.length>42?47:title.length>28?52:57;
+    const titleY=116;
+    const titleLineH=54;
+    drawWrappedText(ctx,title,100,titleY,930,titleLineH,titleSize,navy,700,2);
 
-    // location pin as vector instead of emoji
+    // Keep location directly under the project title.
+    const approxCharsPerLine=Math.max(1,Math.floor(930/(titleSize*0.58)));
+    const titleLines=Math.min(2,Math.max(1,Math.ceil(title.length/approxCharsPerLine)));
+    const locationY=titleY+(titleLines*titleLineH)+4;
     ctx.save();
     ctx.fillStyle="#E73535";
-    ctx.beginPath();ctx.arc(108,220,7,0,Math.PI*2);ctx.fill();
-    ctx.beginPath();ctx.moveTo(103,225);ctx.lineTo(108,236);ctx.lineTo(113,225);ctx.closePath();ctx.fill();
+    ctx.beginPath();ctx.arc(108,locationY+9,7,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.moveTo(103,locationY+14);ctx.lineTo(108,locationY+25);ctx.lineTo(113,locationY+14);ctx.closePath();ctx.fill();
     ctx.restore();
-    drawWrappedText(ctx,project.location||"-",132,211,800,29,23,"#294765",500,1);
+    drawWrappedText(ctx,project.location||"-",132,locationY,800,29,23,"#294765",500,1);
 
     // V97: upper-right project photo uses a true diagonal cut, matching the reference.
     // Both left and right sides use the same parallel gold / blue frame language.
@@ -8171,7 +8177,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V133",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V134",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
