@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261112-v41-global-font-unified">
+<meta name="dashboard-build" content="20261112-v42-payment-swipe-right-close">
 <title>Project Dashboard V19</title>
-<link rel="manifest" href="./manifest.json?build=20261112-v41-global-font-unified">
+<link rel="manifest" href="./manifest.json?build=20261112-v42-payment-swipe-right-close">
 
 
 <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
@@ -21,7 +21,7 @@
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261112-v41-global-font-unified";
+  var BUILD = "20261112-v42-payment-swipe-right-close";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -2607,6 +2607,19 @@ strong,b,
 .modal,.modal *,form,form *,label,
 .sheet,.sheet *,.popup,.popup *{
   font-family:var(--app-font)!important;
+}
+
+
+/* V42 — payment summary figures: Mitr Regular */
+.payment-card .payment-summary > div > div[style*="font-size:22px"],
+.payment-card .payment-summary > div > div[style*="font-weight:900"],
+.payment-card .payment-summary > div > div[style*="font-weight: 900"]{
+  font-family:var(--app-font)!important;
+  font-weight:400!important;
+  font-synthesis:none!important;
+  letter-spacing:0!important;
+  font-variant-numeric:normal!important;
+  font-feature-settings:normal!important;
 }
 
 </style>
@@ -6125,18 +6138,14 @@ function setupDetailSwipe(){
       return;
     }
 
-    // Horizontal project navigation loops forever.
-    if(Math.abs(dx)>65 && Math.abs(dx)>Math.abs(dy)*1.3){
-      const i=projects.findIndex(p=>p.id===selectedProjectId);
-      if(i>=0 && projects.length){
-        const next=dx<0 ? (i+1)%projects.length : (i-1+projects.length)%projects.length;
-        openDetail(projects[next].id);
-      }
+    // V42: swipe RIGHT closes the project detail.
+    // Swipe left does nothing; project-to-project horizontal navigation is disabled.
+    if(dx>70 && Math.abs(dx)>Math.abs(dy)*1.25){
+      closeDetail(true);
+      return;
     }
-  }, {passive:true});
 
-  box.addEventListener("touchcancel", () => {
-    active=false; pulling=false; box.style.transform=""; box.style.opacity="";
+    box.style.transform=""; box.style.opacity="";
   }, {passive:true});
 }
 
@@ -6340,7 +6349,7 @@ function openDetail(id){
         ${statusText(project.status)}
       </div>
 
-      <div class="detail-swipe-hint">ปัดซ้าย–ขวาเพื่อเปลี่ยนโครงการ</div>
+      <div class="detail-swipe-hint">ปัดขวาเพื่อปิดโครงการ</div>
 
       <div class="detail-hero-top">
 
