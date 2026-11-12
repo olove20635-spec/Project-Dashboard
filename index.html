@@ -2987,7 +2987,7 @@ strong,b,
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
       <h1>Project Dashboard</h1>
-      <div class="build-label" id="buildLabel">CURRENT BUILD • V70</div>
+      <div class="build-label" id="buildLabel">CURRENT BUILD • V71</div>
     </div>
 
 
@@ -7274,6 +7274,7 @@ function drawColorKpiIcon(ctx,type,cx,cy,size){
   }else drawIcon(ctx,type,cx,cy,size,"#0A315D");
   ctx.restore();
 }
+/* V71: rebuilt export geometry to match approved 16:9 reference */
 async function exportProjectImage(){
   try{ if(document.fonts && document.fonts.ready) await document.fonts.ready; }catch(e){}
 
@@ -7319,15 +7320,15 @@ async function exportProjectImage(){
     ctx.fillStyle=page; ctx.fillRect(0,0,W,H);
 
     // ===== HEADER =====
-    ctx.fillStyle="#FFFFFF"; ctx.fillRect(0,0,W,252);
+    ctx.fillStyle="#FFFFFF"; ctx.fillRect(0,0,W,258);
 
     // soft architectural diagonal ribbons
     ctx.save();
     ctx.globalAlpha=.92;
     ctx.fillStyle="#EDF7FC";
-    ctx.beginPath(); ctx.moveTo(885,0);ctx.lineTo(1325,0);ctx.lineTo(1130,244);ctx.lineTo(760,244);ctx.closePath();ctx.fill();
+    ctx.beginPath(); ctx.moveTo(900,0);ctx.lineTo(1390,0);ctx.lineTo(1195,258);ctx.lineTo(760,258);ctx.closePath();ctx.fill();
     ctx.fillStyle="#DFF1F9";
-    ctx.beginPath(); ctx.moveTo(1115,0);ctx.lineTo(1385,0);ctx.lineTo(1215,244);ctx.lineTo(1010,244);ctx.closePath();ctx.fill();
+    ctx.beginPath(); ctx.moveTo(1110,0);ctx.lineTo(1470,0);ctx.lineTo(1270,258);ctx.lineTo(1010,258);ctx.closePath();ctx.fill();
     ctx.restore();
 
     // gold + blue diagonal accent entering the photo edge
@@ -7339,26 +7340,26 @@ async function exportProjectImage(){
     ctx.restore();
 
     if(brandLogo){
-      const mw=350,mh=104,r=Math.min(mw/brandLogo.width,mh/brandLogo.height);
-      ctx.drawImage(brandLogo,58,22,brandLogo.width*r,brandLogo.height*r);
+      const mw=365,mh=108,r=Math.min(mw/brandLogo.width,mh/brandLogo.height);
+      ctx.drawImage(brandLogo,64,22,brandLogo.width*r,brandLogo.height*r);
     }
 
-    fillRoundRect(ctx,58,128,11,91,6,gold);
+    fillRoundRect(ctx,64,132,11,92,6,gold);
 
     const title=String(project.name||"-");
     const titleSize=title.length>62?29:title.length>42?32:title.length>28?35:38;
-    drawWrappedText(ctx,title,92,116,820,38,titleSize,navy,500,3);
+    drawWrappedText(ctx,title,100,118,930,40,titleSize,navy,500,3);
 
     // location pin as vector instead of emoji
     ctx.save();
     ctx.fillStyle="#E73535";
-    ctx.beginPath();ctx.arc(104,207,7,0,Math.PI*2);ctx.fill();
-    ctx.beginPath();ctx.moveTo(99,212);ctx.lineTo(104,223);ctx.lineTo(109,212);ctx.closePath();ctx.fill();
+    ctx.beginPath();ctx.arc(108,211,7,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.moveTo(103,216);ctx.lineTo(108,227);ctx.lineTo(113,216);ctx.closePath();ctx.fill();
     ctx.restore();
-    drawWrappedText(ctx,project.location||"-",126,198,760,29,23,"#294765",400,1);
+    drawWrappedText(ctx,project.location||"-",132,202,800,29,23,"#294765",400,1);
 
     // photo: large 16:9 viewport, integrated into header
-    const photoX=1292, photoY=14, photoW=572, photoH=224;
+    const photoX=1180, photoY=14, photoW=684, photoH=228;
     ctx.save();
     roundRectPath(ctx,photoX,photoY,photoW,photoH,24);ctx.clip();
     if(image){
@@ -7379,7 +7380,7 @@ async function exportProjectImage(){
     ctx.restore();
 
     // ===== KPI CARDS =====
-    const topY=268,cardH=214,gap=20,left=38,cardW=(W-76-gap*2)/3;
+    const topY=278,cardH=220,gap=20,left=38,cardW=(W-76-gap*2)/3;
     const kpis=[
       {title:"ความคืบหน้างาน",type:"progress",value:progress+"%",color:green},
       {title:"มูลค่างาน",type:"money",value:money(project.value)+" บาท",color:green},
@@ -7400,24 +7401,24 @@ async function exportProjectImage(){
       ctx.beginPath();ctx.moveTo(x+cardW-150,topY+cardH);ctx.lineTo(x+cardW,topY+cardH-105);ctx.lineTo(x+cardW,topY+cardH);ctx.closePath();ctx.fill();
       ctx.restore();
 
-      drawColorKpiIcon(ctx,c.type,x+78,topY+91,96);
-      ctx.fillStyle=gold;ctx.fillRect(x+168,topY+31,4,100);
-      drawText(ctx,c.title,x+198,topY+27,29,navy,500);
-      drawWrappedText(ctx,c.value,x+198,topY+76,cardW-226,55,46,c.color,500,1);
+      drawColorKpiIcon(ctx,c.type,x+84,topY+94,112);
+      ctx.fillStyle=gold;ctx.fillRect(x+176,topY+31,4,104);
+      drawText(ctx,c.title,x+208,topY+27,30,navy,500);
+      drawWrappedText(ctx,c.value,x+208,topY+77,cardW-235,56,48,c.color,500,1);
 
       if(i===0){
-        const bx=x+78,bw=cardW-112,by=topY+151;
+        const bx=x+84,bw=cardW-118,by=topY+158;
         fillRoundRect(ctx,bx,by,bw,35,18,"#DDE5EC");
         if(progress>0) fillRoundRect(ctx,bx,by,bw*progress/100,35,18,"#0AA77F");
         drawText(ctx,progress+"%",bx+bw/2,by+4,21,progress>10?"#FFFFFF":ink,600,"center");
       }
 
       if(i===2 && schedule.valid){
-        const bx=x+198,bw=cardW-236,by=topY+151;
+        const bx=x+208,bw=cardW-246,by=topY+158;
         fillRoundRect(ctx,bx,by,bw,35,18,"#DDE5EC");
         if(schedule.remainingPct>0) fillRoundRect(ctx,bx,by,bw*schedule.remainingPct/100,35,18,"#0AA77F");
         drawText(ctx,Math.max(0,schedule.remainingPct)+"% เหลือ",bx+bw/2,by+4,20,schedule.remainingPct>28?"#FFFFFF":ink,600,"center");
-        drawText(ctx,"เหลือ "+Math.max(0,schedule.remainingDays)+" วัน",bx,topY+193,18,muted,400);
+        drawText(ctx,"เหลือ "+Math.max(0,schedule.remainingDays)+" วัน",bx,topY+199,18,muted,400);
       }
     });
 
@@ -7439,19 +7440,19 @@ async function exportProjectImage(){
     }
 
     // ===== PAYMENT =====
-    const payX=38,payY=506,payW=958,payH=292;
+    const payX=38,payY=522,payW=958,payH=306;
     ctx.save();ctx.shadowColor="rgba(20,65,100,.10)";ctx.shadowBlur=16;ctx.shadowOffsetY=6;
     fillRoundRect(ctx,payX,payY,payW,payH,20,"#FFFFFF");ctx.restore();
     sectionHeader(payX,payY,payW,"สถานะการเบิกเงิน","payment");
 
-    drawText(ctx,"เบิกแล้ว",82,594,28,navy,500);
-    drawText(ctx,money(pay.paidAmount)+" บาท",252,588,36,green,500);
-    drawText(ctx,"คงเหลือ",82,646,28,navy,500);
-    drawText(ctx,money(pay.balance)+" บาท",252,640,36,green,500);
+    drawText(ctx,"เบิกแล้ว",82,610,28,navy,500);
+    drawText(ctx,money(pay.paidAmount)+" บาท",252,604,36,green,500);
+    drawText(ctx,"คงเหลือ",82,662,28,navy,500);
+    drawText(ctx,money(pay.balance)+" บาท",252,656,36,green,500);
 
-    fillRoundRect(ctx,602,606,330,35,18,"#DDE5EC");
-    if(pay.percent>0) fillRoundRect(ctx,602,606,330*pay.percent/100,35,18,"#0AA77F");
-    drawText(ctx,pay.percent.toFixed(pay.percent%1?2:0)+"%",767,610,20,pay.percent>20?"#FFFFFF":ink,600,"center");
+    fillRoundRect(ctx,602,622,330,35,18,"#DDE5EC");
+    if(pay.percent>0) fillRoundRect(ctx,602,622,330*pay.percent/100,35,18,"#0AA77F");
+    drawText(ctx,pay.percent.toFixed(pay.percent%1?2:0)+"%",767,626,20,pay.percent>20?"#FFFFFF":ink,600,"center");
 
     const statBoxes=[
       {label:"ทั้งหมด",value:pay.total+" งวด",icon:"layers"},
@@ -7459,7 +7460,7 @@ async function exportProjectImage(){
       {label:"คงเหลือ",value:pay.remaining+" งวด",icon:"hourglass"}
     ];
     statBoxes.forEach((b,i)=>{
-      const bx=70+i*286,by=700,bw=258,bh=78;
+      const bx=70+i*286,by=718,bw=258,bh=86;
       const sg=ctx.createLinearGradient(bx,by,bx+bw,by+bh);
       sg.addColorStop(0,"#E9FAF6");sg.addColorStop(1,"#DDF4F1");
       fillRoundRect(ctx,bx,by,bw,bh,15,sg);
@@ -7483,7 +7484,7 @@ async function exportProjectImage(){
     });
 
     // ===== PROJECT INFO =====
-    const infoX=1022,infoY=506,infoW=860,infoH=292;
+    const infoX=1022,infoY=522,infoW=860,infoH=306;
     ctx.save();ctx.shadowColor="rgba(20,65,100,.10)";ctx.shadowBlur=16;ctx.shadowOffsetY=6;
     fillRoundRect(ctx,infoX,infoY,infoW,infoH,20,"#FFFFFF");ctx.restore();
     sectionHeader(infoX,infoY,infoW,"ข้อมูลโครงการ","info");
@@ -7497,10 +7498,10 @@ async function exportProjectImage(){
       ["วันแล้วเสร็จ",project.endDate?formatDate(project.endDate):"-","flag"]
     ];
     info.forEach((r,i)=>{
-      const yy=576+i*35;
+      const yy=592+i*36;
       // Approved reference uses six equal-height horizontal bands.
-      fillRoundRect(ctx,1044,yy-3,816,30,5,i%2===0?"#E7EFF6":"#F8FBFD");
-      drawText(ctx,r[0],1070,yy,21,navy,500);
+      fillRoundRect(ctx,1044,yy-3,816,31,5,i%2===0?"#E7EFF6":"#F8FBFD");
+      drawText(ctx,r[0],1070,yy,22,navy,500);
       ctx.fillStyle=gold;ctx.fillRect(1328,yy-1,3,23);
 
       let vx=1360;
@@ -7508,34 +7509,34 @@ async function exportProjectImage(){
         drawIcon(ctx,r[2],1379,yy+10,22,navy);
         vx=1407;
       }
-      drawWrappedText(ctx,r[1],vx,yy,430,27,21,"#263D58",400,1);
+      drawWrappedText(ctx,r[1],vx,yy,430,28,22,"#263D58",400,1);
     });
 
     // ===== NOTE =====
-    const noteX=38,noteY=824,noteW=1844,noteH=194;
+    const noteX=38,noteY=850,noteW=1844,noteH=164;
     ctx.save();ctx.shadowColor="rgba(20,65,100,.08)";ctx.shadowBlur=14;ctx.shadowOffsetY=5;
     fillRoundRect(ctx,noteX,noteY,noteW,noteH,20,"#FFFFFF");ctx.restore();
     ctx.strokeStyle=gold;ctx.lineWidth=3;roundRectPath(ctx,noteX,noteY,noteW,noteH,20);ctx.stroke();
     sectionHeader(noteX,noteY,noteW,"หมายเหตุ","note");
 
     const note=getProjectRemark(project)||getProjectDescription(project)||"ยังไม่มีหมายเหตุเพิ่มเติม";
-    const ng=ctx.createLinearGradient(58,900,1862,996);
+    const ng=ctx.createLinearGradient(58,922,1862,992);
     ng.addColorStop(0,"#FFFDF6");ng.addColorStop(1,"#FFF9E9");
-    fillRoundRect(ctx,58,900,1804,96,14,ng);
-    drawWrappedText(ctx,note,88,926,1725,35,27,navy,400,2);
+    fillRoundRect(ctx,58,922,1804,70,14,ng);
+    drawWrappedText(ctx,note,88,938,1725,34,27,navy,400,1);
 
     // ===== FOOTER =====
     const fg=ctx.createLinearGradient(0,0,W,0);
     fg.addColorStop(0,navy);fg.addColorStop(.72,"#087DB3");fg.addColorStop(1,green);
-    ctx.fillStyle=fg;ctx.fillRect(0,1040,W,40);
+    ctx.fillStyle=fg;ctx.fillRect(0,1028,W,52);
 
     // decorative footer diagonals only, no icon
     ctx.save();ctx.globalAlpha=.20;ctx.fillStyle="#48B9D0";
-    ctx.beginPath();ctx.moveTo(80,1040);ctx.lineTo(180,1040);ctx.lineTo(145,1080);ctx.lineTo(45,1080);ctx.closePath();ctx.fill();
-    ctx.beginPath();ctx.moveTo(1750,1040);ctx.lineTo(1840,1040);ctx.lineTo(1805,1080);ctx.lineTo(1715,1080);ctx.closePath();ctx.fill();ctx.restore();
+    ctx.beginPath();ctx.moveTo(80,1028);ctx.lineTo(180,1028);ctx.lineTo(145,1080);ctx.lineTo(45,1080);ctx.closePath();ctx.fill();
+    ctx.beginPath();ctx.moveTo(1750,1028);ctx.lineTo(1840,1028);ctx.lineTo(1805,1080);ctx.lineTo(1715,1080);ctx.closePath();ctx.fill();ctx.restore();
 
     const generatedDate=new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"long",year:"numeric"}).format(new Date());
-    drawText(ctx,generatedDate,58,1047,19,"#FFFFFF",400,"left");
+    drawText(ctx,generatedDate,58,1042,19,"#FFFFFF",400,"left");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
