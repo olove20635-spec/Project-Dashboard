@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V85 • Export Icon Polish</div>
+      <h1>Project Dashboard</h1><div class="build-version">V86 • Export Fine Alignment</div>
     </div>
 
 
@@ -7392,6 +7392,10 @@ async function exportProjectImage(){
     if(brandLogo){
       const mw=365,mh=96,r=Math.min(mw/brandLogo.width,mh/brandLogo.height);
       ctx.drawImage(brandLogo,64,20,brandLogo.width*r,brandLogo.height*r);
+      // V86: remove the unwanted horizontal rule carried by the logo artwork.
+      // Keep only the two logos; the project title area starts cleanly below them.
+      ctx.fillStyle="#FFFFFF";
+      ctx.fillRect(60,108,390,14);
     }
 
     fillRoundRect(ctx,64,122,11,98,6,gold);
@@ -7451,7 +7455,7 @@ async function exportProjectImage(){
       ctx.beginPath();ctx.moveTo(x+cardW-150,topY+cardH);ctx.lineTo(x+cardW,topY+cardH-105);ctx.lineTo(x+cardW,topY+cardH);ctx.closePath();ctx.fill();
       ctx.restore();
 
-      drawColorKpiIcon(ctx,c.type,x+98,topY+90,172);
+      drawColorKpiIcon(ctx,c.type,x+98,topY+90,(i===2?138:172));
       ctx.fillStyle=gold;ctx.fillRect(x+190,topY+25,4,106);
       drawText(ctx,c.title,x+222,topY+24,27,navy,600);
       drawWrappedText(ctx,c.value,x+222,topY+72,cardW-250,54,44,c.color,600,1);
@@ -7514,9 +7518,12 @@ async function exportProjectImage(){
     sectionHeader(payX,payY,payW,"สถานะการเบิกเงิน","payment");
 
     drawText(ctx,"เบิกแล้ว",82,576,26,navy,500);
-    drawText(ctx,money(pay.paidAmount)+" บาท",248,572,33,green,500);
+    // V86: fixed columns so the word "บาท" is vertically aligned on both rows.
+    drawText(ctx,money(pay.paidAmount),430,572,33,green,500,"right");
+    drawText(ctx,"บาท",446,572,33,green,500,"left");
     drawText(ctx,"คงเหลือ",82,626,26,navy,500);
-    drawText(ctx,money(pay.balance)+" บาท",248,622,33,green,500);
+    drawText(ctx,money(pay.balance),430,622,33,green,500,"right");
+    drawText(ctx,"บาท",446,622,33,green,500,"left");
 
     fillRoundRect(ctx,582,586,332,34,17,"#D8E3EC");
     if(pay.percent>0){const pg=ctx.createLinearGradient(582,0,914,0);pg.addColorStop(0,"#13C68E");pg.addColorStop(1,"#079C7B");fillRoundRect(ctx,582,586,332*pay.percent/100,34,17,pg);}
@@ -7615,7 +7622,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V85",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V86",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
