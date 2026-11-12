@@ -2988,7 +2988,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V98 • Header Logo Center</div>
+      <h1>Project Dashboard</h1><div class="build-version">V99 • Section Icons + Restore Brand Logo</div>
     </div>
 
 
@@ -7261,19 +7261,26 @@ function drawIcon(ctx,type,cx,cy,size,color="#0A315D"){
     ctx.beginPath();ctx.moveTo(cx-r*.50,cy-r*.66);ctx.lineTo(cx+r*.58,cy-r*.45);ctx.lineTo(cx+r*.18,cy);ctx.lineTo(cx-r*.50,cy-r*.10);ctx.closePath();ctx.stroke();
 
   }else if(type==="payment"){
-    // เหรียญซ้อนสำหรับหัวข้อการเบิกเงิน
-    ctx.strokeStyle=color;
-    for(let i=0;i<3;i++){
-      const ox=(i-1)*r*.38, oy=(i===1?-r*.18:r*.10);
-      ctx.beginPath();ctx.ellipse(cx+ox,cy+oy,r*.34,r*.14,0,0,Math.PI*2);ctx.stroke();
-      ctx.beginPath();ctx.moveTo(cx+ox-r*.34,cy+oy);ctx.lineTo(cx+ox-r*.34,cy+oy+r*.34);ctx.moveTo(cx+ox+r*.34,cy+oy);ctx.lineTo(cx+ox+r*.34,cy+oy+r*.34);ctx.stroke();
-    }
+    // V99: payment status — clean coin + banknote symbol, larger and clearer.
+    ctx.lineWidth=Math.max(3.2,size*.07);
+    ctx.beginPath();ctx.ellipse(cx-r*.18,cy-r*.22,r*.48,r*.20,0,0,Math.PI*2);ctx.stroke();
+    ctx.beginPath();ctx.ellipse(cx-r*.18,cy+r*.04,r*.48,r*.20,0,0,Math.PI*2);ctx.stroke();
+    ctx.beginPath();ctx.ellipse(cx-r*.18,cy+r*.30,r*.48,r*.20,0,0,Math.PI*2);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx-r*.66,cy-r*.22);ctx.lineTo(cx-r*.66,cy+r*.30);
+    ctx.moveTo(cx+r*.30,cy-r*.22);ctx.lineTo(cx+r*.30,cy+r*.30);ctx.stroke();
+    roundRectPath(ctx,cx+r*.05,cy+r*.02,r*.82,r*.48,r*.08);ctx.stroke();
+    ctx.beginPath();ctx.arc(cx+r*.46,cy+r*.26,r*.10,0,Math.PI*2);ctx.stroke();
 
   }else if(type==="info"){
-    // คลิปบอร์ด
-    roundRectPath(ctx,cx-r*.68,cy-r*.72,r*1.36,r*1.48,r*.10);ctx.stroke();
-    roundRectPath(ctx,cx-r*.28,cy-r*.88,r*.56,r*.30,r*.08);ctx.stroke();
-    for(let i=0;i<3;i++){const yy=cy-r*.28+i*r*.38;ctx.beginPath();ctx.moveTo(cx-r*.36,yy);ctx.lineTo(cx+r*.38,yy);ctx.stroke();}
+    // V99: project information — bold clipboard/document symbol.
+    ctx.lineWidth=Math.max(3.2,size*.07);
+    roundRectPath(ctx,cx-r*.62,cy-r*.66,r*1.24,r*1.36,r*.12);ctx.stroke();
+    roundRectPath(ctx,cx-r*.28,cy-r*.82,r*.56,r*.30,r*.08);ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(cx-r*.32,cy-r*.20);ctx.lineTo(cx+r*.34,cy-r*.20);
+    ctx.moveTo(cx-r*.32,cy+r*.12);ctx.lineTo(cx+r*.34,cy+r*.12);
+    ctx.moveTo(cx-r*.32,cy+r*.44);ctx.lineTo(cx+r*.18,cy+r*.44);
+    ctx.stroke();
 
   }else if(type==="note"){
     // ปฏิทิน/บันทึก
@@ -7413,21 +7420,11 @@ async function exportProjectImage(){
     ctx.restore();
 
     if(brandLogo){
-      // V98: clean logo block — keep both logos crisp, balanced and vertically centered.
-      // Draw inside a dedicated white area so decorative header shapes never touch the marks.
-      const logoBoxX=64, logoBoxY=20, logoBoxW=360, logoBoxH=82;
+      // V99: restore the original top-left brand-logo placement from V97.
+      const mw=365,mh=96,r=Math.min(mw/brandLogo.width,mh/brandLogo.height);
+      ctx.drawImage(brandLogo,64,20,brandLogo.width*r,brandLogo.height*r);
       ctx.fillStyle="#FFFFFF";
-      ctx.fillRect(logoBoxX-8,logoBoxY-8,logoBoxW+16,logoBoxH+20);
-      const r=Math.min(logoBoxW/brandLogo.width,logoBoxH/brandLogo.height);
-      const dw=brandLogo.width*r, dh=brandLogo.height*r;
-      const dx=logoBoxX+(logoBoxW-dw)/2;
-      const dy=logoBoxY+(logoBoxH-dh)/2;
-      ctx.imageSmoothingEnabled=true;
-      ctx.imageSmoothingQuality="high";
-      ctx.drawImage(brandLogo,dx,dy,dw,dh);
-      // Cover only any residual artwork below the actual logo block; no visible horizontal rule.
-      ctx.fillStyle="#FFFFFF";
-      ctx.fillRect(logoBoxX-8,logoBoxY+logoBoxH,logoBoxW+16,18);
+      ctx.fillRect(60,108,390,14);
     }
 
     fillRoundRect(ctx,64,122,11,112,6,gold);
@@ -7602,7 +7599,7 @@ async function exportProjectImage(){
       fillRoundRect(ctx,x,y,w,headerH,20,hg);
       ctx.fillStyle=hg;ctx.fillRect(x,y+38,w,24);
 
-      // V98: icon + heading share the exact vertical center of the 62px header bar.
+      // V99: icon + heading share the exact vertical center of the 62px header bar.
       const iconCx=x+50;
       const textX=x+(iconType==="note"?88:88);
       if(iconType==="note"){
@@ -7614,7 +7611,8 @@ async function exportProjectImage(){
         ctx.fillText("!",iconCx,cy+1);
         ctx.restore();
       }else{
-        drawIcon(ctx,iconType,iconCx,cy,40,gold);
+        const sectionIconSize=(iconType==="payment"||iconType==="info")?46:40;
+        drawIcon(ctx,iconType,iconCx,cy,sectionIconSize,gold);
       }
       ctx.save();
       ctx.fillStyle="#FFFFFF";
@@ -7749,7 +7747,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V98",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V99",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
