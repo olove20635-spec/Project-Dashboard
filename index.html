@@ -3164,7 +3164,7 @@ strong,b,
 }
 
 /* =========================================================
-   V124 — PROJECT NOTE: FIX EXCESSIVE TITLE/BODY GAP
+   V125 — PROJECT NOTE: FIX EXCESSIVE TITLE/BODY GAP
    Exact fix: keep the card/layout unchanged, only tighten the
    vertical spacing between "หมายเหตุ" and the note body.
    ========================================================= */
@@ -3181,7 +3181,7 @@ strong,b,
 
 
 /* =========================================================
-   V124 — PROJECT NOTE: EXACT STACKED LAYOUT FIX
+   V125 — PROJECT NOTE: EXACT STACKED LAYOUT FIX
    Remove inherited grid/flex spacing and place title + body as one compact block.
    ========================================================= */
 .project-note-card{
@@ -3207,6 +3207,31 @@ strong,b,
   min-height:0!important;
 }
 
+
+
+/* =========================================================
+   V125 — EXACT VISUAL FIX FROM SCREENSHOT
+   1) Orange project remark: pull body text upward toward title.
+   2) Task note: left-align text instead of centered.
+   ========================================================= */
+.project-note-card > .project-text-title{
+  margin:0!important;
+  padding:0!important;
+}
+.project-note-card > .project-text-content{
+  margin:0!important;
+  padding:0!important;
+  position:relative!important;
+  top:-8px!important;
+  transform:none!important;
+  text-align:left!important;
+}
+.task-note{
+  text-align:left!important;
+  padding-left:12px!important;
+  padding-right:12px!important;
+  text-indent:0!important;
+}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3220,7 +3245,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V124 • Note Layout Fix</div>
+      <h1>Project Dashboard</h1><div class="build-version">V125 • Note Layout Fix</div>
     </div>
 
 
@@ -8038,7 +8063,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V124",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V125",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
