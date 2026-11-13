@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Projects">
 
-<meta name="dashboard-build" content="20261113-v143-location-after-ksp-no-overlap">
+<meta name="dashboard-build" content="20261113-v144-location-closer-ksp">
 <title>Project Dashboard V19</title>
-<link rel="manifest" href="./manifest.json?build=20261113-v143-location-after-ksp-no-overlap">
+<link rel="manifest" href="./manifest.json?build=20261113-v144-location-closer-ksp">
 
 
 <div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
@@ -21,7 +21,7 @@
 <script>
 /* Build V8.2: persistence + iOS detail action fix. */
 (function(){
-  var BUILD = "20261113-v143-location-after-ksp-no-overlap";
+  var BUILD = "20261113-v144-location-closer-ksp";
   try {
     var url = new URL(window.location.href);
     if (url.searchParams.get("build") !== BUILD) {
@@ -3319,7 +3319,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V143 • Location After KSP</div>
+      <h1>Project Dashboard</h1><div class="build-version">V144 • Location Closer KSP</div>
     </div>
 
 
@@ -7816,9 +7816,8 @@ async function exportProjectImage(){
     const titleLineH=54;
     drawWrappedText(ctx,title,100,titleY,930,titleLineH,titleSize,navy,700,2);
 
-    // V143: location starts AFTER the full KSP/brand logo block.
-    // Brand logo block ends around x=429; keep a clear gap so pin/text never overlaps it.
-    const locationX=470;
+    // V144: pull location closer to KSP while keeping a small safe gap.
+    const locationX=435;
     const locationY=82;
     const locationMaxW=500;
     const pinX=locationX+8;
