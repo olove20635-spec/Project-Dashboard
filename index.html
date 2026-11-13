@@ -3319,7 +3319,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V148 • Payment Icon Image</div>
+      <h1>Project Dashboard</h1><div class="build-version">V149 • Payment Icon Image</div>
     </div>
 
 
@@ -8047,7 +8047,7 @@ async function exportProjectImage(){
         ctx.fillText("!",iconCx,cy+1);
         ctx.restore();
       }else if(iconType==="payment" && exportPaymentStatusImage){
-        // V148: transparent PNG — draw only the gold coins, no blue rectangular background.
+        // V149: transparent PNG — draw only the gold coins, no blue rectangular background.
         const im=exportPaymentStatusImage;
         const ih=46;
         const iw=ih*(im.width/im.height);
@@ -8055,7 +8055,17 @@ async function exportProjectImage(){
         ctx.drawImage(im,ix,iy,iw,ih);
       }else{
         const sectionIconSize=iconType==="info"?46:40;
-        drawIcon(ctx,iconType,iconCx,cy,sectionIconSize,gold);
+        // V149: project-info icon uses a richer metallic-gold tone to match the payment coins.
+        if(iconType==="info"){
+          const infoGold=ctx.createLinearGradient(iconCx-22,cy-22,iconCx+22,cy+22);
+          infoGold.addColorStop(0,"#FFF0A6");
+          infoGold.addColorStop(.28,"#FFD23F");
+          infoGold.addColorStop(.62,"#F5B400");
+          infoGold.addColorStop(1,"#D98A00");
+          drawIcon(ctx,iconType,iconCx,cy,sectionIconSize,infoGold);
+        }else{
+          drawIcon(ctx,iconType,iconCx,cy,sectionIconSize,gold);
+        }
       }
       ctx.save();
       ctx.fillStyle="#FFFFFF";
@@ -8197,7 +8207,7 @@ async function exportProjectImage(){
     // V80: date is left aligned, no icon and no “อัปเดต” prefix.
     drawText(ctx,generatedDate,56,1027,22,"#FFFFFF",500,"left");
     // temporary build tag for cache/version verification
-    drawText(ctx,"V148",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
+    drawText(ctx,"V149",W-42,1027,18,"rgba(255,255,255,.88)",500,"right");
 
     const safeName=String(project.name||"project").replace(/[\\/:*?"<>|]/g,"-").trim();
     const fileName=safeName+"-dashboard-16x9.png";
