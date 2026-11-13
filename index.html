@@ -3319,7 +3319,7 @@ strong,b,
   <div class="topbar">
     <div>
       <div class="eyebrow">PERSONAL WORKSPACE</div>
-      <h1>Project Dashboard</h1><div class="build-version">V145 • Location 35px Left</div>
+      <h1>Project Dashboard</h1><div class="build-version">V146 • Location 35px Left</div>
     </div>
 
 
@@ -7816,7 +7816,7 @@ async function exportProjectImage(){
     const titleLineH=54;
     drawWrappedText(ctx,title,100,titleY,930,titleLineH,titleSize,navy,700,2);
 
-    // V145: move location 35px further left.
+    // V146: move location 35px further left.
     const locationX=400;
     const locationY=82;
     const locationMaxW=500;
@@ -7872,22 +7872,32 @@ async function exportProjectImage(){
     }
     ctx.restore();
 
-    // Parallel decorative bands on BOTH sides of the photo.
+    // V146: photo frame adjusted to match the reference — clean white edge,
+    // then a tight blue inner band and gold outer band following both diagonals.
     ctx.save();
-    ctx.lineCap="butt";
+    ctx.lineCap="round";
     ctx.lineJoin="round";
 
-    // LEFT: gold outer band + blue inner band, following the diagonal cut.
-    ctx.strokeStyle="#F1C52D";ctx.lineWidth=10;
-    ctx.beginPath();ctx.moveTo(photoTL-42,photoY-10);ctx.lineTo(photoBL-42,photoY+photoH+8);ctx.stroke();
-    ctx.strokeStyle="#1777A8";ctx.lineWidth=12;
-    ctx.beginPath();ctx.moveTo(photoTL-18,photoY-10);ctx.lineTo(photoBL-18,photoY+photoH+8);ctx.stroke();
+    // Thin white frame directly around the photo polygon.
+    ctx.strokeStyle="#FFFFFF";ctx.lineWidth=7;
+    ctx.beginPath();
+    ctx.moveTo(photoTL,photoY+3);
+    ctx.lineTo(photoTR,photoY+3);
+    ctx.lineTo(photoBR,photoY+photoH-3);
+    ctx.lineTo(photoBL,photoY+photoH-3);
+    ctx.closePath();ctx.stroke();
 
-    // RIGHT: mirror the same gold / blue diagonal motif.
-    ctx.strokeStyle="#F1C52D";ctx.lineWidth=8;
-    ctx.beginPath();ctx.moveTo(photoTR+12,photoY-10);ctx.lineTo(photoBR+12,photoY+photoH+8);ctx.stroke();
-    ctx.strokeStyle="#1777A8";ctx.lineWidth=9;
-    ctx.beginPath();ctx.moveTo(photoTR+31,photoY-10);ctx.lineTo(photoBR+31,photoY+photoH+8);ctx.stroke();
+    // LEFT diagonal: gold outside, blue beside the photo.
+    ctx.strokeStyle="#F4C51D";ctx.lineWidth=11;
+    ctx.beginPath();ctx.moveTo(photoTL-30,photoY-8);ctx.lineTo(photoBL-30,photoY+photoH+8);ctx.stroke();
+    ctx.strokeStyle="#1480AE";ctx.lineWidth=10;
+    ctx.beginPath();ctx.moveTo(photoTL-14,photoY-8);ctx.lineTo(photoBL-14,photoY+photoH+8);ctx.stroke();
+
+    // RIGHT diagonal: blue beside the photo, gold outside — same reference style.
+    ctx.strokeStyle="#1480AE";ctx.lineWidth=10;
+    ctx.beginPath();ctx.moveTo(photoTR+14,photoY-8);ctx.lineTo(photoBR+14,photoY+photoH+8);ctx.stroke();
+    ctx.strokeStyle="#F4C51D";ctx.lineWidth=11;
+    ctx.beginPath();ctx.moveTo(photoTR+30,photoY-8);ctx.lineTo(photoBR+30,photoY+photoH+8);ctx.stroke();
     ctx.restore();
 
     // ===== KPI CARDS =====
